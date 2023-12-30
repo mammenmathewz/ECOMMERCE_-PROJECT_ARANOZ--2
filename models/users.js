@@ -56,11 +56,8 @@ const userSchema = new mongoose.Schema({
             type:String,
             required:true
         },
-        country:{
-            type:String,
-            required:true
-        },
-    },
+       
+    }
 
 })
 userSchema.index({ first_name: 'text', last_name:"text", email: 'text', phone: 'text', });

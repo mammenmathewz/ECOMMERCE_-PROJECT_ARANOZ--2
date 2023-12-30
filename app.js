@@ -5,6 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose')
 
+
+
 var adminSignin = require('./routes/admin/adminSignin');
 var userSignin = require('./routes/user/userSignin');
 var userProducts = require('./routes/user/products');
@@ -14,7 +16,7 @@ var app = express();
 
 //DB CONNECTION//
 
-mongoose.connect('mongodb://localhost:27017');
+mongoose.connect('mongodb://localhost:27017/Ecommerce_Aranoz');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -38,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/', adminSignin);
-app.use('/users', userSignin);
+app.use('/user', userSignin);
 app.use('/products', userProducts);
 
 // catch 404 and forward to error handler

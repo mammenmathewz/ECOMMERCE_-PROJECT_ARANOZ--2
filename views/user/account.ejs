@@ -134,14 +134,20 @@
 </header>
 
   <!--================Checkout Area =================-->
-  <section class="checkout_area padding_top">
+
+
+
+  <section class="checkout_area padding_top" >
+
+    <h1>My account</h1>
     <div class="container">
     
-      <div class="billing_details">
+    
+      <div class="billing_details  "style="background-color:rgb(187, 215, 146) ; border-radius: 5%; width: 50%;">
         <div class="row">
-          <div class="col-lg-8">
-            <h2 style="padding-bottom: 20px;">Sign up</h2>
-            <form class="row contact_form" action="signup" method="post" novalidate="novalidate">
+          <div class="col-lg-8" style="margin: auto;">
+            <h4 style="padding: 20px;">Edit details</h4>
+            <form class="row contact_form" action="" method="post" novalidate="novalidate">
               <div class="col-md-6 form-group p_star">
                 <input type="text" class="form-control" id="first" placeholder="first name"  name="first_name" />
                 
@@ -159,18 +165,10 @@
                 <div style="display: flex; justify-content: space-between;">
                   <input type="text" class="form-control" id="email" placeholder="email" name="email" style="flex-grow: 1; margin-right: 10px;" />
                 
-                  <button class="btn btn-outline-secondary">OTP</button>
+  
                 </div>
               </div>
-              
-              <div class="col-md-6 form-group p_star" style="margin-left: auto;">
-                <input type="password" class="form-control" placeholder="OTP" id="email" name="compemailany" />
-              
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <input type="password" class="form-control" placeholder="password" id="email" name="password" />
-               
-              </div>
+          
               <div class="col-md-12 form-group p_star">
                 <input type="text" class="form-control" id="add1" placeholder="address line 1" name="address1" />
                
@@ -193,8 +191,12 @@
               <div class="col-md-12 form-group">
                 <input type="text" class="form-control" id="zip" name="pincode" placeholder="Postcode/ZIP" />
               </div>
-              <div class="d-grid gap-2" style="margin-left: auto;margin-right: auto;">
-                <button class="btn btn-primary"  type="submit">Create Account</button>
+              
+                <button class="btn btn-primary"  type="submit" style="margin-left: auto;margin-right: auto; padding: 1%;">Update</button>
+                
+              
+              <div class="d-grid gap-2 " style="margin-left: auto;margin-right: auto;">
+                <!-- <button type="button" class="btn cancel" onclick="closeForm()">Close</button> -->
                 
               </div>
             </form>
@@ -202,8 +204,10 @@
         </div>
       </div>
     </div>
-  
+
   </section>
+  <a href="/user/logout"><button type="button" class="btn btn-outline-dark">logout</button></a>
+
   
   <!--::footer_part start::-->
   <footer class="footer_part">
@@ -330,6 +334,16 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   <script src="/js/price_rangs.js"></script>
   <!-- custom js -->
   <script src="/js/custom.js"></script>
+  <script>
+    function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+
+  </script>
 </body>
 
 </html>

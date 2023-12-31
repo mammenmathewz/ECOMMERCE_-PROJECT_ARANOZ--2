@@ -9,7 +9,7 @@ const mongoose = require('mongoose')
 
 var adminSignin = require('./routes/admin/adminSignin');
 var userSignin = require('./routes/user/userSignin');
-var userProducts = require('./routes/user/products');
+var userShop = require('./routes/user/shop');
 
 
 var app = express();
@@ -41,7 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', adminSignin);
 app.use('/user', userSignin);
-app.use('/products', userProducts);
+app.use('/home', userShop);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

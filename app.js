@@ -39,7 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/', adminSignin);
+app.use('/admin', adminSignin);
 app.use('/user', userSignin);
 app.use('/home', userShop);
 

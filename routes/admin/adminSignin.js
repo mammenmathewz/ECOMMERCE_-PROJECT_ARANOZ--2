@@ -82,7 +82,7 @@ router.post('/adminlogin', async (req, res) => {
   }
 });
 
-router.get('/adminlogout', (req, res) => {
+router.get('/admin/adminlogout', (req, res) => {
   if (req.session.admin) {
     req.session.admin = null;
     res.redirect('/admin');

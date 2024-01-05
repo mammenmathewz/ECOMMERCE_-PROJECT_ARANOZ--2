@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser')
 const session = require('express-session')
 
 
+
 router.use(cookieParser())
 router.use(session({
   secret: 'key that will sign cookie',
@@ -41,6 +42,40 @@ router.get('/', function (req, res, next) {
     res.render('admin/signin');
   }
 });
+
+router.get('/signup',function(req, res, next) {
+ 
+  if (req.session.user) {
+    res.redirect('/admin/dash');
+  } else {
+    res.render('admin/signup',);
+  }
+});
+
+router.post('/signup', async function(req, res) {
+  try {
+    // Get the data from the request body
+    const { email, password } = req.body;
+
+    // Create a new user with the provided email and password
+    const admin = new Admin({
+      email: email,
+      password: password,
+      
+    });
+
+    // Save the new user to the database
+    await admin.save();
+
+    // Redirect or respond as necessary
+    res.redirect('/admin/dash');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while signing up.');
+  }
+});
+
+
 
 router.get('/dash', checkAuthenticated, function (req, res, next) {
   res.render('admin/index',);

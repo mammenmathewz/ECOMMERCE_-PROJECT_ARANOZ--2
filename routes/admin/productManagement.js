@@ -5,6 +5,8 @@ var router = express.Router();
 const Product = require('/Users/mamme/BROCAMP PROJECTS/ECOMMERCE_ PROJECT/models/products')
 const multer = require('multer');
 
+
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './public/user/img/product');
@@ -82,6 +84,29 @@ router.get('/edit-product/:id', async (req, res) => {
       res.send('Error occurred while fetching product data');
   }
 });
+
+router.post('/updateproduct/:id', upload.array("images"), async (req, res) => {
+  try {
+      const id = req.params.id;
+      console.log(req.body)
+      const updatedProduct = {
+          brand: req.body.brand,
+          productname: req.body.productname,
+          description: req.body.description,
+          category: req.body.category,
+          regularprice: req.body.regularprice,
+          saleprice: req.body.saleprice,
+          images: req.files.map(file => "/user/img/product/" + file.originalname) // update images with new paths
+      };
+      await Product.findByIdAndUpdate(id, updatedProduct);
+      res.redirect('/admin/products/productmanagement'); // redirect to the product management page
+  } catch (error) {
+      console.log(error);
+      res.send('Error occurred while updating product data');
+  }
+});
+
+
 
 
 router.post('/delete-product/:id', async (req, res) => {

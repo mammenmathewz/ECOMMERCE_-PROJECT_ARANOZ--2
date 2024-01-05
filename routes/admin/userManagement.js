@@ -22,17 +22,23 @@ router.get('/', async(req,res)=>{
    }
 })
 
-// router.post('/blockUser/:userId', async (req, res) => {
-//     try {
-//         let user = await User.findById(req.params._id);
-//         user.block = true;
-//         await user.save();
-//         res.json({ success: true });
-//     } catch(err) {
-//         console.error(err);
-//         res.json({ success: false });
-//     }
-// });
+router.post('/blockUser/:userId', async (req, res) => {
+    try {
+        let user = await User.findById(req.params.userId);
+        console.log(user);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        user.block = req.body.blockStatus === 'block';
+        await user.save();
+        res.json({ success: true });
+    } catch(err) {
+        console.error(err);
+        res.json({ success: false });
+    }
+});
+
+
 
 
 module.exports = router;

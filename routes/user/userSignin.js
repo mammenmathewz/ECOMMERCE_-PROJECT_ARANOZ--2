@@ -150,7 +150,8 @@ router.post('/loginto', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   const { email, password } = req.body;
 
-  if (!user) {
+  if (!user || user.block) {
+    // Redirect if user not found or user is blocked
     return res.redirect('login');
   }
 

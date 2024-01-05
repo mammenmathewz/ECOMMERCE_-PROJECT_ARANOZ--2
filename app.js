@@ -44,6 +44,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
+
+
 app.use('/admin', adminSignin);
 app.use('/admin/usermanagement',adminUserManag)
 app.use('/admin/products',adminProductManag)

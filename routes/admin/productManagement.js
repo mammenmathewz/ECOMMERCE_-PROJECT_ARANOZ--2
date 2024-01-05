@@ -16,8 +16,28 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
+//manage products//
+router.get('/productmanagement', async(req,res)=>{
+  try{
+    if (req.session.admin) {
+     
+      let product = await Product.find({deleted: false})
+      res.render('admin/manageproducts',{product:product})
+   
+    }else{
+      res.redirect('/admin')
+    }
+  } catch (error){
+    console.log(error);
+    res.send('Error occurred while fetching data')
+  }
+})
+
+
+
+//Add products//
 router.get('/',(req,res)=>{
-    res.render('admin/productManagement')
+    res.render('admin/addproducts')
 })
 
 
@@ -42,6 +62,42 @@ router.post("/upload", upload.array("images"), async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(500).send('An error occurred while saving the product.');
+  }
+});
+
+
+//edit//
+
+router.get('/edit-product/:id', async (req, res) => {
+  try {
+      const id = req.params.id;
+      const product = await Product.findById(id);
+      if (product) {
+          res.render('admin/editproduct', { product: product }); // replace 'edit-product' with your actual edit page
+      } else {
+          res.send('Product not found');
+      }
+  } catch (error) {
+      console.log(error);
+      res.send('Error occurred while fetching product data');
+  }
+});
+
+
+router.post('/delete-product/:id', async (req, res) => {
+  try {
+      const id = req.params.id;
+      const product = await Product.findById(id);
+      if (product) {
+          product.deleted = true;
+          await product.save();
+          res.redirect('/admin/products/productmanagement');
+      } else {
+          res.send('Product not found');
+      }
+  } catch (error) {
+      console.log(error);
+      res.send('Error occurred while deleting product');
   }
 });
 

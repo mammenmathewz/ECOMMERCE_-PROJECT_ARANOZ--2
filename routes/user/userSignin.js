@@ -6,6 +6,7 @@ const session = require('express-session')
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto')
+const flash = require('express-flash')
 
 const saltRounds = 10;
 
@@ -19,8 +20,12 @@ router.use(session({
     maxAge: 24 * 60 * 60 * 1000 
   }
 }))
+router.use(flash());
+
+
 
 router.use(express.json())
+
 
 router.use(express.urlencoded({extended: true }))
 
@@ -34,6 +39,7 @@ function checkAuthenticated(req, res, next) {
   if (req.session.user) {
     next();
   } else {
+    req.flash('info', 'Please sign in.');
     res.redirect('/user/login');
   }
 }
@@ -67,11 +73,14 @@ router.post('/signup', async (req, res) => {
   // Check if user already exists
   const existingUser = await User.findOne({ email: req.body.email });
   if (existingUser) {
+    req.flash('info', 'User already exists');
     return res.redirect('signup');
   }
 //OTP
   if (req.body.otp !== otps[req.body.email]) {
-    return res.status(400).send('Invalid OTP.');
+
+    req.flash('info', 'invalide OTP');
+    return res.status(400).redirect('signup');
   }
 
 
@@ -100,6 +109,7 @@ router.post('/signup', async (req, res) => {
     try {
       await newUser.save();
       req.session.user = newUser; // Set the session user to the new user
+  
       res.redirect('login');
     } 
     catch (err) {
@@ -117,7 +127,7 @@ let otps = {};
 router.post('/generate-otp', async (req, res) => {
   const otp = crypto.randomBytes(3).toString('hex');
   otps[req.body.email] = otp;
-console.log(otp);
+console.log(otp,req.body.email);
   let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -150,8 +160,18 @@ router.post('/loginto', async (req, res) => {
   const user = await User.findOne({ email: req.body.email });
   const { email, password } = req.body;
 
-  if (!user || user.block) {
+  if (!user) {
     // Redirect if user not found or user is blocked
+    req.flash('info', 'User does not exist');
+      req.flash('type', 'alert alert-danger');
+
+    return res.redirect('login');
+  }
+  if (user.block) {
+    // Redirect if user not found or user is blocked
+    req.flash('info', 'Please contact us');
+    req.flash('type', 'alert alert-danger');
+
     return res.redirect('login');
   }
 
@@ -165,9 +185,12 @@ router.post('/loginto', async (req, res) => {
       // Passwords match
       req.session.user = user;
       console.log(user);
-      res.redirect('/user/account');
+      res.redirect('/home');
     } else {
       // Passwords don't match
+      req.flash('info', 'Invalide Password');
+      req.flash('type', 'alert alert-danger');
+      
       return res.redirect('login');
     }
   });
@@ -177,6 +200,9 @@ router.post('/loginto', async (req, res) => {
 router.get('/logout', (req, res) => {
   if (req.session.user) {
     req.session.user = null;
+    req.flash('info', 'Logout succesfull');
+    req.flash('type', 'alert alert-primary');
+
     res.redirect('login');
   } else {
     res.redirect('/error');

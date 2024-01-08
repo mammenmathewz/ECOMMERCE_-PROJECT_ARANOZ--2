@@ -108,6 +108,15 @@
         <div class="row">
           <div class="col-lg-8">
             <h2 style="padding-bottom: 20px;">Sign up</h2>
+            <div>
+              <% if (messages.info) { %>
+                  <div class="alert alert-danger" id="alert">
+                    <%= messages.info %>
+                  </div>
+                <% } %>
+                
+                
+          </div>
             <form class="row contact_form"  onsubmit="checkForm(event)" action="signup" method="post" novalidate="novalidate">
               <div class="col-md-6 form-group p_star">
                 <input type="text" class="form-control" id="first" placeholder="first name"  name="first_name" />
@@ -125,10 +134,10 @@
               <div class="col-md-6 form-group p_star">
                 <div style="display: flex; justify-content: space-between;">
                   <input type="email" class="form-control" id="email" placeholder="email" name="email" style="flex-grow: 1; margin-right: 10px;" />
-                
-                  <button class="btn btn-outline-secondary" type="button">OTP</button>
+                  <button class="btn btn-outline-secondary" type="button" id="otpButton">OTP</button>
                 </div>
               </div>
+              
               
               <div class="col-md-6 form-group p_star" style="margin-left: auto;">
                 <input type="password" class="form-control" placeholder="OTP" id="email" name="otp" />
@@ -260,17 +269,42 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   </footer>
   <!--::footer_part end::-->
   <script>
-    document.querySelector('.btn-outline-secondary').addEventListener('click', function(event) {
-      console.log("cliked");
-      event.preventDefault();
+    window.onload = function() {
+              setTimeout(function() {
+                var alert = document.getElementById('alert');
+                if(alert) alert.remove()
+              }, 3000);
+            }
+   
+  document.getElementById('otpButton').addEventListener('click', function(event) {
+
+    event.preventDefault();
+
+    
+    var emailInput = document.getElementById('email');
+
+    // Email validation regex
+    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Check if the email is valid
+    if (!emailRegex.test(emailInput.value)) {
+      // Show an error message
+      alert('Please enter a valid email address.');
+    } else {
+      // Log to the console
+      console.log("clicked");
+
+      
       fetch('generate-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email: document.querySelector('#email').value })
+        body: JSON.stringify({ email: emailInput.value })
       });
-    });
+      alert('OTP has been sent to your email');
+    }
+  });
 
 
     function checkForm(e) {
@@ -325,6 +359,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
   <script src="/user/js/price_rangs.js"></script>
   <!-- custom js -->
   <script src="/user/js/custom.js"></script>
+<script>
+  
+</script>
+
 </body>
 
 </html>

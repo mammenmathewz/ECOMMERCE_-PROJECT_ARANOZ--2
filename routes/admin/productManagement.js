@@ -51,6 +51,7 @@ router.post("/upload", upload.array("images"), async (req, res) => {
     category: req.body.category,
     regularprice: req.body.regularprice,
     saleprice: req.body.saleprice,
+    number:req.body.number,
     createdon: Date.now()
    
   });
@@ -85,6 +86,32 @@ router.get('/edit-product/:id', async (req, res) => {
   }
 });
 
+router.post('/deleteimage/:productId/:imageName', async (req, res) => {
+  try {
+      const productId = req.params.productId;
+      const imageName = req.params.imageName;
+
+      // Find the product by id
+      const product = await Product.findById(productId);
+
+      if (product) {
+          // Filter out the image to be deleted
+          product.images = product.images.filter(image => image !== imageName);
+
+          // Save the product with the updated images array
+          await product.save();
+
+          res.redirect('/admin/edit-product/' + productId);
+      } else {
+          res.send('Product not found');
+      }
+  } catch (error) {
+      console.log(error);
+      res.send('Error occurred while deleting image');
+  }
+});
+
+
 router.post('/updateproduct/:id', upload.array("images"), async (req, res) => {
   try {
       const id = req.params.id;
@@ -96,6 +123,7 @@ router.post('/updateproduct/:id', upload.array("images"), async (req, res) => {
           category: req.body.category,
           regularprice: req.body.regularprice,
           saleprice: req.body.saleprice,
+          number:req.body.number,
           images: req.files.map(file => "/user/img/product/" + file.originalname) // update images with new paths
       };
       await Product.findByIdAndUpdate(id, updatedProduct);

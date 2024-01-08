@@ -139,6 +139,19 @@
                         <div class="login_part_form_iner">
                             <h3>Welcome Back ! <br>
                                 Please Sign in now</h3>
+                                <div>
+                              
+                                        <% if (messages.info) { %>
+                                          <div class="<%= messages.type %>" id="alert">
+                                            <%= messages.info %>
+                                          </div>
+                                        <% } %>
+                                    
+                                      
+                                      
+                            
+                                </div>
+                                
                             <form class="row contact_form" action="loginto" method="post" novalidate="novalidate">
                                 <div class="col-md-12 form-group p_star">
                                     <input type="email" class="form-control" id="name" name="email" value=""
@@ -302,6 +315,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+        <script>
+            window.onload = function() {
+              setTimeout(function() {
+                var alert = document.getElementById('alert');
+                if(alert) alert.remove()
+              }, 3000);
+            }
+          </script>
+          
 </body>
 
 </html>

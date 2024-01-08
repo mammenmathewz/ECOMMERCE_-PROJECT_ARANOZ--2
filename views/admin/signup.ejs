@@ -54,6 +54,13 @@
                             </a>
                             <h3>Sign Up</h3>
                         </div>
+                        <div>
+                            <% if (messages.info) { %>
+                                <div class="<%= messages.type %>" id="alert">
+                                  <%= messages.info %>
+                                </div>
+                              <% } %>
+                        </div>
                         <form class="row contact_form" onsubmit="checkForm(event)" action="/admin/signup" method="post" novalidate="novalidate">
 
                            
@@ -104,6 +111,14 @@
           }
         }
         </script>
+            <script>
+                window.onload = function() {
+                  setTimeout(function() {
+                    var alert = document.getElementById('alert');
+                    if(alert) alert.remove()
+                  }, 3000);
+                }
+              </script>
 </body>
 
 </html>

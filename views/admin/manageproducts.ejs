@@ -167,7 +167,7 @@
                         <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                             <a href="#" class="dropdown-item">My Profile</a>
                             <a href="#" class="dropdown-item">Settings</a>
-                            <a href="admin/adminlogout" class="dropdown-item">Log Out</a>
+                            <!-- <a href="adminlogout" class="dropdown-item">Log Out</a> -->
                         </div>
                     </div>
                 </div>
@@ -183,7 +183,7 @@
 
                     <div class="col-12">
                         <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">Responsive Table</h6>
+                            <h6 class="mb-4">Manage Products</h6>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -195,7 +195,7 @@
                                             <th scope="col">Price</th>
                                             <th scope="col">Offer Price</th>
                                             <th scope="col">category</th>
-                                            <th scope="col">Options</th>
+                                           
 
 
                                     <tbody>
@@ -218,8 +218,10 @@
 
                                                 <td><%= product.saleprice %></td>
                                                 <td><%= product.category %></td>
-                                                <td>
+                                                <td style="display: flex; justify-content: center; gap: 5px;">
+                                                    <div>
                                                     <a href="edit-product/<%= product._id %>" class="btn btn-outline-primary">Edit</a>
+                                                </div>
 
                                                     <form action="/admin/products/delete-product/<%= product._id %>" method="post">
                                                         <button type="submit" class="btn btn-outline-danger">Delete</button>

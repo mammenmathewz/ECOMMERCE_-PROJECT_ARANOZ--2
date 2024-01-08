@@ -41,15 +41,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
-
-
-
-
+//Admin//
 app.use('/admin', adminSignin);
 app.use('/admin/usermanagement',adminUserManag)
 app.use('/admin/products',adminProductManag)
 
+//users//
 app.use('/user', userSignin);
 app.use('/home', userShop);
 

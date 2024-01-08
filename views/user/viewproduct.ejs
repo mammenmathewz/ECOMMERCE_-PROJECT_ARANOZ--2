@@ -115,16 +115,16 @@
                             
                             <div id="vertical">
                                 <div data-thumb="<%= product.images[0] %>">
-                                    <img src="<%= product.images[0] %>" width="280" height="400"  style="object-fit: scale-down;" />
+                                    <img src="<%= product.images[0] %>" width="280" height="400"  style="object-fit: scale-down; transition: transform 0.25s ease;" />
                                 </div>
-                                <div data-thumb="<%= product.images[0] %>">
-                                    <img src="<%= product.images[0] %>" width="280" height="400"  style="object-fit:scale-down;"/>
+                                <div data-thumb="<%= product.images[1] %>">
+                                    <img src="<%= product.images[1] %>" width="280" height="400"  style="object-fit:scale-down; transition: transform 0.25s ease;"/>
                                 </div>
-                                <div data-thumb="<%= product.images[0] %>">
-                                    <img src="<%= product.images[0] %>" width="280" height="400"  style="object-fit:scale-down;" />
+                                <div data-thumb="<%= product.images[2] %>">
+                                    <img src="<%= product.images[2] %>" width="280" height="400"  style="object-fit:scale-down;transition: transform 0.25s ease;" />
                                 </div>
-                                <div data-thumb="<%= product.images[0] %>">
-                                    <img src="<%= product.images[0] %>" width="280" height="400"  style="object-fit:scale-down;" />
+                                <div data-thumb="<%= product.images[3] %>">
+                                    <img src="<%= product.images[3] %>" width="280" height="400"  style="object-fit:scale-down; transition: transform 0.25s ease;" />
                                 </div>
                             </div>
                             
@@ -453,7 +453,7 @@
                                         </li>
                                     </ul>
                                     <p>Outstanding</p>
-                                    <form class="row contact_form" action="contact_process.php" method="post"
+                                    <form class="row contact_form" action="" method="post"
                                         novalidate="novalidate">
                                         <div class="col-md-12">
                                             <div class="form-group">
@@ -508,35 +508,35 @@
                     <div class="col-lg-12">
                         <div class="best_product_slider owl-carousel">
                             <div class="single_product_item">
-                                <img src="img/product/product_1.png" alt="">
+                                <img src="" alt="">
                                 <div class="single_product_text">
                                     <h4>Quartz Belt Watch</h4>
                                     <h3>$150.00</h3>
                                 </div>
                             </div>
                             <div class="single_product_item">
-                                <img src="img/product/product_2.png" alt="">
+                                <img src="" alt="">
                                 <div class="single_product_text">
                                     <h4>Quartz Belt Watch</h4>
                                     <h3>$150.00</h3>
                                 </div>
                             </div>
                             <div class="single_product_item">
-                                <img src="img/product/product_3.png" alt="">
+                                <img src="" alt="">
                                 <div class="single_product_text">
                                     <h4>Quartz Belt Watch</h4>
                                     <h3>$150.00</h3>
                                 </div>
                             </div>
                             <div class="single_product_item">
-                                <img src="img/product/product_4.png" alt="">
+                                <img src="" alt="">
                                 <div class="single_product_text">
                                     <h4>Quartz Belt Watch</h4>
                                     <h3>$150.00</h3>
                                 </div>
                             </div>
                             <div class="single_product_item">
-                                <img src="img/product/product_5.png" alt="">
+                                <img src="" alt="">
                                 <div class="single_product_text">
                                     <h4>Quartz Belt Watch</h4>
                                     <h3>$150.00</h3>
@@ -665,6 +665,7 @@
         <!-- particles js -->
         <script src="/user/js/owl.carousel.min.js"></script>
         <script src="/user/js/jquery.nice-select.min.js"></script>
+        
         <!-- slick js -->
         <script src="/user/js/slick.min.js"></script>
         <script src="/user/js/swiper.jquery.js"></script>
@@ -679,6 +680,31 @@
         <!-- custom js -->
         <script src="/user/js/theme.js"></script>
         <script src="/user/js/custom.js"></script>
+        <script>
+            window.onload = function() {
+  var container = document.getElementById('vertical');
+  var img = container.getElementsByTagName('img')[0];
+
+  container.onmousemove = function(e) {
+    var rect = this.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var y = e.clientY - rect.top;
+    img.style.transformOrigin = x + 'px ' + y + 'px';
+    img.style.transform = 'scale(2)';
+  }
+
+  container.onmouseleave = function() {
+    img.style.transformOrigin = 'center center';
+    img.style.transform = 'scale(1)';
+  }
+}
+
+        </script>
+
+
+
+ 
+
 </body>
 
 </html>

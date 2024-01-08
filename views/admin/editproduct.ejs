@@ -91,9 +91,7 @@
                 <a href="#" class="sidebar-toggler flex-shrink-0">
                     <i class="fa fa-bars"></i>
                 </a>
-                <form class="d-none d-md-flex ms-4">
-                    <input class="form-control border-0" type="search" placeholder="Search">
-                </form>
+                
                 <div class="navbar-nav align-items-center ms-auto">
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
@@ -195,12 +193,12 @@
                                     <label for="floatingTextarea">Product description</label>
                                 </div>
                                 <div>
-                                    <select class="form-select mb-3" name="category" style="margin-top: 3%;" aria-label=".form-select-lg example" value="<%= product.category %>">
-                                        <option selected>Product Category</option>
-                                        <option value="1">Men</option>
-                                        <option value="2">Women</option>
-                                        <option value="3">Unisex</option>
+                                    <select class="form-select mb-3" name="category" style="margin-top: 3%;" aria-label=".form-select-lg example">
+                                        <option <%= product.category === 'Mens' ? 'selected' : '' %> value="Mens">Mens</option>
+                                        <option <%= product.category === 'Womens' ? 'selected' : '' %> value="Womens">Womens</option>
+                                        <option <%= product.category === 'Unisex' ? 'selected' : '' %> value="Unisex">Unisex</option>
                                     </select>
+                                    
                                 </div>
                                 <div class="mb-3">
                                     <label for="regularPrice" class="form-label">Regular Price</label>
@@ -210,11 +208,25 @@
                                     <label for="offerPrice" class="form-label">Offer Price</label>
                                     <input id="offerPrice" name="saleprice" class="form-control mb-3" type="number" placeholder="" value="<%= product.saleprice %>" aria-label="default input example">
                                 </div>
+                                <div class="mb-3">
+                                    <label for="offerPrice" class="form-label">Number of Items</label>
+                                    <input id="offerPrice" name="number" class="form-control mb-3" type="number" placeholder="" value="<%= product.number %>" aria-label="default input example">
+                                </div>
                                 
                                 <div class="mb-3">
                                     <label for="formImage" class="form-label">Images</label>
-                                    <input class="form-control" type="file" id="formImage" name="images" value="<%= product.images %>" multiple>
+                                    <% product.images.forEach(function(image) { %>
+                                        <div>
+                                            <img src="<%= image %>" alt="Product Image" style="width: 100px; height: 100px;">
+                                            <form action="/admin/products/deleteimage/<%= product._id %>/<%= image %>" method="post">
+                                                <button type="submit">Delete</button>
+                                            </form>
+                                        </div>
+                                    <% }); %>
+                                    <input class="form-control" type="file" id="formImage" name="images" multiple>
                                 </div>
+                                
+                                
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                             

@@ -53,6 +53,13 @@
                             </a>
                             <h4>Sign In</h4>
                         </div>
+                        <div>
+                            <% if (messages.info) { %>
+                                <div class="<%= messages.type %>" id="alert">
+                                  <%= messages.info %>
+                                </div>
+                              <% } %>
+                        </div>
                         <form action="/admin/adminlogin" onsubmit="checkForm(event)" method="post">
                             <div class="form-floating mb-3" >
                                 <input type="email" class="form-control" id="floatingInput" name="email"  placeholder="name@example.com">
@@ -100,6 +107,14 @@
           }
         }
         </script>
+         <script>
+            window.onload = function() {
+              setTimeout(function() {
+                var alert = document.getElementById('alert');
+                if(alert) alert.remove()
+              }, 3000);
+            }
+          </script>
 </body>
 
 </html>

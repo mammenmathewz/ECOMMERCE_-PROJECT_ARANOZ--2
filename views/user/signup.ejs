@@ -117,57 +117,65 @@
                 
                 
           </div>
-            <form class="row contact_form"  onsubmit="checkForm(event)" action="signup" method="post" novalidate="novalidate">
+            <form class="row contact_form"  onsubmit="checkForm(event)" action="signup" method="post" >
               <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="first" placeholder="first name"  name="first_name" />
+                <input type="text" class="form-control" id="first" placeholder="first name"  name="first_name" required/>
                 
               </div>
               <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="last" placeholder="last name" name="last_name" />
+                <input type="text" class="form-control" id="last" placeholder="last name" name="last_name"  required/>
               
               </div>
              
               <div class="col-md-6 form-group p_star">
-                <input type="number" class="form-control" id="number" placeholder="phone no" name="phone" />
+                <input type="number" class="form-control" id="number" placeholder="phone no" name="phone"  required/>
                 
               </div>
               <div class="col-md-6 form-group p_star">
                 <div style="display: flex; justify-content: space-between;">
-                  <input type="email" class="form-control" id="email" placeholder="email" name="email" style="flex-grow: 1; margin-right: 10px;" />
+                  <input type="email" class="form-control" id="email" placeholder="email" name="email" style="flex-grow: 1; margin-right: 10px;"  required/>
                   <button class="btn btn-outline-secondary" type="button" id="otpButton">OTP</button>
+                  
                 </div>
+                <p id="otpTimer" style="color: tomato;"></p>
               </div>
               
               
               <div class="col-md-6 form-group p_star" style="margin-left: auto;">
-                <input type="password" class="form-control" placeholder="OTP" id="email" name="otp" />
+                <input type="password" class="form-control" placeholder="OTP" id="email" name="otp"  required/>
               
               </div>
               <div class="col-md-12 form-group p_star">
-                <input type="password" class="form-control" placeholder="password" id="email" name="password" />
+                <input type="password" class="form-control" placeholder="Password" id="password" name="password" style="margin-bottom: 2%;" required/>
+                <input type="checkbox" onclick="showPassword()"> Show Password
+            </div>
+            <div class="col-md-12 form-group p_star">
+                <input type="password" class="form-control" placeholder="Confirm Password" id="confirm_password"  name="confirm_password" required/>
+                
+            </div>
+            
+              
+              <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="add1" placeholder="address line 1" name="address1"  required/>
                
               </div>
               <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add1" placeholder="address line 1" name="address1" />
-               
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add1" placeholder="Address line 2" name="address2" />
+                <input type="text" class="form-control" id="add1" placeholder="Address line 2" name="address2"  required/>
                 
               </div>
               <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="city" placeholder="City" name="city" />
+                <input type="text" class="form-control" id="city" placeholder="City" name="city"  required/>
                 
               </div>
               <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="state" placeholder="State" name="state" />
+                <input type="text" class="form-control" id="state" placeholder="State" name="state"  required/>
             
               </div>
               <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="district" placeholder="District" name="district" />
+                <input type="text" class="form-control" id="district" placeholder="District" name="district"  required/>
               </div>
               <div class="col-md-12 form-group">
-                <input type="text" class="form-control" id="zip" name="pincode" placeholder="Postcode/ZIP" />
+                <input type="text" class="form-control" id="zip" name="pincode" placeholder="Postcode/ZIP"  required/>
               </div>
               <div class="d-grid gap-2" style="margin-left: auto;margin-right: auto;">
                 <button class="btn btn-primary"   type="submit" >Create Account</button>
@@ -276,11 +284,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
               }, 3000);
             }
    
-  document.getElementById('otpButton').addEventListener('click', function(event) {
-
+            document.getElementById('otpButton').addEventListener('click', function(event) {
     event.preventDefault();
 
-    
     var emailInput = document.getElementById('email');
 
     // Email validation regex
@@ -294,17 +300,57 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
       // Log to the console
       console.log("clicked");
 
-      
       fetch('generate-otp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email: emailInput.value })
+      })
+      .then(function(response) {
+        // Check if the request was successful
+        if(response.ok) {
+          alert('OTP has been sent to your email');
+          // Call the disableButton function after the OTP has been sent
+          disableButton();
+        } else {
+          throw new Error('Request failed');
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
       });
-      alert('OTP has been sent to your email');
     }
-  });
+});
+
+var otpButton = document.getElementById('otpButton');
+
+// Function to disable the button for 2 minutes
+function disableButton() {
+    // Disable the button
+    otpButton.disabled = true;
+
+    // Set the time for countdown (in seconds)
+    var timeLeft = 30;
+
+    // Set an interval for 1 second
+    var countdownTimer = setInterval(function() {
+        // Decrease the time left
+        timeLeft--;
+
+        // Display the time left on the button
+        document.getElementById('otpTimer').innerText = 'Please wait ' + timeLeft + ' seconds';
+
+        // If the time left is 0, enable the button and clear the interval
+        if(timeLeft <= 0) {
+            clearInterval(countdownTimer);
+            document.getElementById('otpTimer').innerText = 'Try again' ;
+            otpButton.disabled = false;
+            otpButton.innerText = 'OTP';
+        }
+    }, 1000);
+}
+
 
 
     function checkForm(e) {
@@ -326,6 +372,33 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         return;
     }
 }
+
+// Assuming you have a button with id 'otpButton'
+
+
+var password = document.getElementById("password");
+var confirm_password = document.getElementById("confirm_password");
+
+function validatePassword(){
+  if(password.value != confirm_password.value) {
+    confirm_password.setCustomValidity("Passwords Don't Match");
+  } else {
+    confirm_password.setCustomValidity('');
+  }
+}
+
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+
+function showPassword() {
+    var passwordInput = document.getElementById("password");
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+    } else {
+        passwordInput.type = "password";
+    }
+}
+
 
     </script>
   

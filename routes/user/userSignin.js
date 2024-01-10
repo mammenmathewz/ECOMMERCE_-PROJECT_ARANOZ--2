@@ -95,7 +95,7 @@ router.post('/signup', async (req, res) => {
       last_name: req.body.last_name,
       email: req.body.email,
       phone: req.body.phone,
-      password: hash, // Save the hashed password
+      password: hash, 
       address: {
           address1: req.body.address1,
           address2: req.body.address2,

@@ -225,8 +225,8 @@
                                     <% }); %>
                                     <input class="form-control" type="file" id="formImage" name="images" multiple>
                                 </div>
-                                
-                                
+                           
+                                                                
                                 <button type="submit" class="btn btn-primary">Update</button>
                             </form>
                             
@@ -280,6 +280,20 @@
 
     <!-- Template Javascript -->
     <script src="/Admin/js/main.js"></script>
+    <style>
+        .image-input-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .image-input-group img {
+            margin-right: 1rem;
+        }
+    </style>
+    
+   
+    
     <script>
         function checkForm(e) {
           let inputs = document.getElementsByTagName('input');
@@ -291,6 +305,10 @@
             }
           }
         }
+
+
+
+
         </script>
 </body>
 

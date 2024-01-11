@@ -10,6 +10,7 @@ const mongoose = require('mongoose')
 var adminSignin = require('./routes/admin/adminSignin');
 var adminUserManag = require('./routes/admin/userManagement');
 var adminProductManag = require('./routes/admin/productManagement');
+var brandManag = require('./routes/admin/brandManagement')
 
 
 var userSignin = require('./routes/user/userSignin');
@@ -48,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/admin', adminSignin);
 app.use('/admin/usermanagement',adminUserManag)
 app.use('/admin/products',adminProductManag)
+app.use('/admin/brand',brandManag)
 
 //users//
 app.use('/user', userSignin);

@@ -209,7 +209,9 @@
                                                     
                                                     
                                                 </td>
-                                                <td><%= product.brand %></td>
+                                                <td><%= product.brand ? product.brand.name : 'Brand' %></td>
+
+
                                                 <td><%= product.productname %></td>
 
 

@@ -21,7 +21,10 @@ var app = express();
 
 //DB CONNECTION//
 
-mongoose.connect('mongodb://localhost:27017/Ecommerce_Aranoz');
+require('dotenv').config();
+
+mongoose.connect(`mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`);
+
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -41,15 +44,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-
-
-
-
-
+//Admin//
 app.use('/admin', adminSignin);
 app.use('/admin/usermanagement',adminUserManag)
 app.use('/admin/products',adminProductManag)
 
+//users//
 app.use('/user', userSignin);
 app.use('/home', userShop);
 

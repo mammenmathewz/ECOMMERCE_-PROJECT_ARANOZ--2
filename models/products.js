@@ -24,6 +24,10 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    number: {
+        type: Number,
+        
+    },
     createdon: {
         type: Date,
         required: true

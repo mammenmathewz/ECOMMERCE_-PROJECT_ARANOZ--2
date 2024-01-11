@@ -5,6 +5,8 @@ var router = express.Router();
 const Product = require('/Users/mamme/BROCAMP PROJECTS/ECOMMERCE_ PROJECT/models/products')
 const multer = require('multer');
 
+
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './public/user/img/product');
@@ -49,6 +51,7 @@ router.post("/upload", upload.array("images"), async (req, res) => {
     category: req.body.category,
     regularprice: req.body.regularprice,
     saleprice: req.body.saleprice,
+    number:req.body.number,
     createdon: Date.now()
    
   });
@@ -82,6 +85,56 @@ router.get('/edit-product/:id', async (req, res) => {
       res.send('Error occurred while fetching product data');
   }
 });
+
+router.post('/deleteimage/:productId/:imageName', async (req, res) => {
+  try {
+      const productId = req.params.productId;
+      const imageName = req.params.imageName;
+
+      // Find the product by id
+      const product = await Product.findById(productId);
+
+      if (product) {
+          // Filter out the image to be deleted
+          product.images = product.images.filter(image => image !== imageName);
+
+          // Save the product with the updated images array
+          await product.save();
+
+          res.redirect('/admin/edit-product/' + productId);
+      } else {
+          res.send('Product not found');
+      }
+  } catch (error) {
+      console.log(error);
+      res.send('Error occurred while deleting image');
+  }
+});
+
+
+router.post('/updateproduct/:id', upload.array("images"), async (req, res) => {
+  try {
+      const id = req.params.id;
+      console.log(req.body)
+      const updatedProduct = {
+          brand: req.body.brand,
+          productname: req.body.productname,
+          description: req.body.description,
+          category: req.body.category,
+          regularprice: req.body.regularprice,
+          saleprice: req.body.saleprice,
+          number:req.body.number,
+          images: req.files.map(file => "/user/img/product/" + file.originalname) // update images with new paths
+      };
+      await Product.findByIdAndUpdate(id, updatedProduct);
+      res.redirect('/admin/products/productmanagement'); // redirect to the product management page
+  } catch (error) {
+      console.log(error);
+      res.send('Error occurred while updating product data');
+  }
+});
+
+
 
 
 router.post('/delete-product/:id', async (req, res) => {

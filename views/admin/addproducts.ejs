@@ -181,22 +181,22 @@
                             <form action="/admin/products/upload" method="post" onsubmit="checkForm(event)" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label for="brand" class="form-label">Brand</label>
-                                    <select id="brand" name="brand" class="form-control mb-3">
+                                    <select id="brand" name="brand" class="form-control mb-3" required>
                                         <% brands.forEach(function(brand) { %>
                                             <option value="<%= brand._id %>"><%= brand.name %></option>
                                         <% }); %>
-                                    </select>
+                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="productName" class="form-label">Product Name</label>
-                                    <input id="productName" name="productname" class="form-control mb-3" type="text" placeholder="" aria-label="default input example">
+                                    <input id="productName" name="productname" class="form-control mb-3" type="text" placeholder="" aria-label="default input example" required>
                                 </div>
                                 <div class="form-floating">
                                     <textarea class="form-control" name="description" placeholder="Details" id="floatingTextarea" style="height: 150px;"></textarea>
                                     <label for="floatingTextarea">Product description</label>
                                 </div>
                                 <div>
-                                    <select class="form-select mb-3" name="category" style="margin-top: 3%;" aria-label=".form-select-lg example">
+                                    <select class="form-select mb-3" name="category" style="margin-top: 3%;" aria-label=".form-select-lg example" required>
                                         <option value="Mens">Mens</option>
                                         <option value="Womens">Womens</option>
                                         <option value="Unisex">Unisex</option>
@@ -204,20 +204,20 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="regularPrice" class="form-label">Regular Price</label>
-                                    <input id="regularPrice" name="regularprice" class="form-control mb-3" type="number" placeholder="" aria-label="default input example">
+                                    <input id="regularPrice" name="regularprice" class="form-control mb-3" type="number" placeholder="" aria-label="default input example" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="offerPrice" class="form-label">Offer Price</label>
-                                    <input id="offerPrice" name="saleprice" class="form-control mb-3" type="number" placeholder="" aria-label="default input example">
+                                    <input id="offerPrice" name="saleprice" class="form-control mb-3" type="number" placeholder="" aria-label="default input example" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="offerPrice" class="form-label">Number of items</label>
-                                    <input id="offerPrice" name="number" class="form-control mb-3" type="number" placeholder="" aria-label="default input example">
+                                    <input id="offerPrice" name="number" class="form-control mb-3" type="number" placeholder="" aria-label="default input example" required>
                                 </div>
                                 
                                 <div class="mb-3">
                                     <label for="formImage" class="form-label">Images</label>
-                                    <input class="form-control" type="file" id="formImage" name="images" multiple>
+                                    <input class="form-control" type="file" id="formImage" name="images" multiple required>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>

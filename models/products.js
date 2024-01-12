@@ -4,14 +4,14 @@ const productSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Brand',
         required: true
-    },
+    }, 
     productname: {
         type: String,
         required: true
     },
     description: {
         type: String,
-        required: true
+  
     },
     category: {
         type: String,
@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema({
     },
     saleprice: {
         type: Number,
-        required: true
+        required: true 
     },
     number: {
         type: Number,

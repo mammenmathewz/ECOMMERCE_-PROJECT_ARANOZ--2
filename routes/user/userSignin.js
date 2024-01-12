@@ -186,6 +186,8 @@ router.post('/loginto', async (req, res) => {
       // Passwords match
       req.session.user = user;
       console.log(user);
+      req.flash('info', 'Login succesfull');
+      req.flash('type', 'alert alert-primary');
       res.redirect('/home');
     } else {
       // Passwords don't match

@@ -71,6 +71,7 @@
                             class="fa fa-table me-2"></i>Manage Products</a>
                     <a href="/admin/products" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Add
                         Products</a>
+                        <a href="/admin/brand" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Add Brand</a>
                     <!-- <a href="" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i></a> -->
                     <!-- <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>Pages</a>
@@ -192,7 +193,7 @@
                     onsubmit="checkForm(event)" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="brand" class="form-label">Brand</label>
-                        <select id="brand" name="brand" class="form-control mb-3" required>
+                        <select id="brand" name="brand" class="form-select mb-3" required>
                             <% brands.forEach(function(brand) { %>
                                 <option value="<%= brand._id %>" <%=brand._id.toString()==product.brand._id.toString()
                                     ? 'selected' : '' %>><%= brand.name %>

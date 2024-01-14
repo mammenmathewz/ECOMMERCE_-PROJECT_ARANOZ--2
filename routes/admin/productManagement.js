@@ -41,13 +41,14 @@ router.get('/productmanagement', async(req,res)=>{
 //Add products//
 router.get('/', async (req, res) => {
   try {
-      const brands = await Brand.find();
-      res.render('admin/addproducts', { brands: brands });
+    const brands = await Brand.find();
+    res.render('admin/addproducts', { brands: brands, message: req.flash('info'), type: req.flash('type') });
   } catch (err) {
-      console.error(err);
-      res.status(500).send('An error occurred while fetching the brands.');
+    console.error(err);
+    res.status(500).send('An error occurred while fetching the brands.');
   }
 });
+
 
 
 
@@ -76,6 +77,8 @@ router.post("/upload", upload.array("images"), async (req, res) => {
     });
 
     await product.save();
+    req.flash('info', 'Product added successfully');
+    
     res.redirect("/admin/products");
   } catch (err) {
     console.log(err);
@@ -142,6 +145,7 @@ router.post("/updateproduct/:productId", upload.array("images"), async (req, res
 
     // Save the updated product
     await product.save();
+    req.flash('info', 'Product updated successfully');
     res.redirect("/admin/products/productmanagement");
   } catch (err) {
     console.log(err);

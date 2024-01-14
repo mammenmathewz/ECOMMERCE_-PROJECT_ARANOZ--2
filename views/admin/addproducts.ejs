@@ -179,6 +179,14 @@
                     <div class="col-sm-12 col-xl-6">
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Add Product</h6>
+                            <div id="message">
+                                <% if (message && message.length > 0) { %>
+                                    <div class="alert-success">
+                                      <%= message %>
+                                    </div>
+                                  <% } %>
+                            </div>
+                              
                             <form action="/admin/products/upload" method="post" onsubmit="checkForm(event)" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label for="brand" class="form-label">Brand</label>
@@ -284,7 +292,14 @@
             }
           }
         }
+
+    
         </script>
+        <script>
+            setTimeout(function() {
+              document.getElementById('message').style.display = 'none';
+            }, 2000);
+          </script>
 </body>
 
 </html>

@@ -7,14 +7,6 @@ const mongoose = require('mongoose')
 
 
 
-var adminSignin = require('./routes/admin/adminSignin');
-var adminUserManag = require('./routes/admin/userManagement');
-var adminProductManag = require('./routes/admin/productManagement');
-var brandManag = require('./routes/admin/brandManagement')
-
-
-var userSignin = require('./routes/user/userSignin');
-var userShop = require('./routes/user/shop');
 
 
 
@@ -46,14 +38,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 //Admin//
-app.use('/admin', adminSignin);
-app.use('/admin/usermanagement',adminUserManag)
-app.use('/admin/products',adminProductManag)
-app.use('/admin/brand',brandManag)
-
-//users//
-app.use('/user', userSignin);
-app.use('/home', userShop);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

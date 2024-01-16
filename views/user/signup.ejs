@@ -109,11 +109,7 @@
           <div class="col-lg-8">
             <h2 style="padding-bottom: 20px;">Sign up</h2>
             <div>
-              <% if (messages.info) { %>
-                  <div class="alert alert-danger" id="alert">
-                    <%= messages.info %>
-                  </div>
-                <% } %>
+              
                 
                 
           </div>
@@ -142,7 +138,7 @@
               
               
               <div class="col-md-6 form-group p_star" style="margin-left: auto;">
-                <input type="password" class="form-control" placeholder="OTP" id="email" name="otp"  required/>
+                <input type="password" class="form-control" placeholder="OTP" id="otp" name="otp"  required/>
               
               </div>
               <div class="col-md-12 form-group p_star">
@@ -284,94 +280,72 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
               }, 3000);
             }
    
-            document.getElementById('otpButton').addEventListener('click', function(event) {
-    event.preventDefault();
 
-    var emailInput = document.getElementById('email');
+            
+const emailInput = document.getElementById('email');
+const otpButton = document.getElementById('otpButton');
+const otpTimer = document.getElementById('otpTimer');
 
-    // Email validation regex
-    var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Email validation regex
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Check if the email is valid
-    if (!emailRegex.test(emailInput.value)) {
-      // Show an error message
-      alert('Please enter a valid email address.');
-    } else {
-      // Log to the console
-      console.log("clicked");
+otpButton.addEventListener('click', (event) => {
+  event.preventDefault();
 
-      fetch('generate-otp', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: emailInput.value })
-      })
-      .then(function(response) {
-        // Check if the request was successful
-        if(response.ok) {
-          alert('OTP has been sent to your email');
-          // Call the disableButton function after the OTP has been sent
-          disableButton();
-        } else {
-          throw new Error('Request failed');
-        }
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-    }
+  alert('OTP has been sent to your email');
+        disableButton();
+  if (!emailRegex.test(emailInput.value)) {
+    alert('Please enter a valid email address.');
+  } else {
+    fetch('generateOtp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: emailInput.value })
+    })
+    .then((response) => {
+      if(response.ok) {
+       
+      } else {
+        throw new Error('Request failed');
+      }
+    })
+    .catch((error) => console.log(error));
+  }
 });
-
-var otpButton = document.getElementById('otpButton');
 
 // Function to disable the button for 2 minutes
 function disableButton() {
-    // Disable the button
-    otpButton.disabled = true;
-
-    // Set the time for countdown (in seconds)
-    var timeLeft = 30;
-
-    // Set an interval for 1 second
-    var countdownTimer = setInterval(function() {
-        // Decrease the time left
-        timeLeft--;
-
-        // Display the time left on the button
-        document.getElementById('otpTimer').innerText = 'Please wait ' + timeLeft + ' seconds';
-
-        // If the time left is 0, enable the button and clear the interval
-        if(timeLeft <= 0) {
-            clearInterval(countdownTimer);
-            document.getElementById('otpTimer').innerText = 'Try again' ;
-            otpButton.disabled = false;
-            otpButton.innerText = 'Resend';
-        }
-    }, 1000);
+  otpButton.disabled = true;
+  let timeLeft = 30;
+  const countdownTimer = setInterval(() => {
+    timeLeft--;
+    otpTimer.innerText = 'Please wait ' + timeLeft + ' seconds';
+    if(timeLeft <= 0) {
+      clearInterval(countdownTimer);
+      otpTimer.innerText = 'Try again';
+      otpButton.disabled = false;
+      otpButton.innerText = 'Resend';
+    }
+  }, 1000);
 }
 
-
-
-    function checkForm(e) {
-    let inputs = document.getElementsByTagName('input');
-    console.log(inputs)
-    for(let i=0; i<inputs.length; i++) {
-      if (!inputs[i].value.trim()) {
-        e.preventDefault();
-        alert('Please fill out the form completely');
-        return;
-      }
+function checkForm(e) {
+  const inputs = document.getElementsByTagName('input');
+  for(let i=0; i<inputs.length; i++) {
+    if (!inputs[i].value.trim()) {
+      e.preventDefault();
+      alert('Please fill out the form completely');
+      return;
     }
-    // Check if OTP and password fields are filled
-    let otp = document.querySelector('input[name="otp"]');
-    let password = document.querySelector('input[name="password"]');
-    if (!otp.value.trim() || !password.value.trim()) {
-        e.preventDefault();
-        alert('Please fill out the OTP and password fields');
-        return;
-    }
+  }
+  const otp = document.querySelector('input[name="otp"]');
+  const password = document.querySelector('input[name="password"]');
+  if (!otp.value.trim() || !password.value.trim()) {
+    e.preventDefault();
+    alert('Please fill out the OTP and password fields');
+  }
 }
+
 
 // Assuming you have a button with id 'otpButton'
 

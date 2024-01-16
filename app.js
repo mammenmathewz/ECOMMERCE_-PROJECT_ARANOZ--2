@@ -1,19 +1,51 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+require('dotenv').config();
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const session = require('express-session')
+const createError = require('http-errors'); // Add this line
+const app = express();
+const config = require('./config/config');
+config.mongooseConnection();
 
-var app = express();
+const userRouter = require('./routes/user');
+const adminRouter = require('./routes/admin')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(cookieParser());
+app.use(session({
+    name: 'user',
+    secret: 'user secret',
+    saveUninitialized:true,
+    resave:false,
+    cookie:{
+        maxAge:1000 * 60 * 24 * 10
+    }
+}));
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/',userRouter)
+app.use('/admin',adminRouter)
+
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

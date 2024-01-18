@@ -87,8 +87,8 @@ const postLogin = async(req,res)=>{
         
       } else {
         // Passwords don't match
-        req.flash('info', 'Invalid Password');
-        req.flash('type', 'alert alert-danger');
+        // req.flash('info', 'Invalid Password');
+        // req.flash('type', 'alert alert-danger');
         
         return res.redirect('/login');
       }

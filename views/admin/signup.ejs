@@ -55,11 +55,7 @@
                             <h3>Sign Up</h3>
                         </div>
                         <div>
-                            <% if (messages.info) { %>
-                                <div class="<%= messages.type %>" id="alert">
-                                  <%= messages.info %>
-                                </div>
-                              <% } %>
+                           
                         </div>
                         <form class="row contact_form" onsubmit="checkForm(event)" action="/admin/signup" method="post" novalidate="novalidate">
 

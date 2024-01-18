@@ -35,7 +35,7 @@ const isAdminLogin = async(req,res,next)=>{
 const isAdminLogout = async(req,res,next)=>{
     try {
         if(req.session.admin){
-            res.redirect('/admin/adminhome')
+            res.redirect('/admin/dash')
         }else{
             next()
         }

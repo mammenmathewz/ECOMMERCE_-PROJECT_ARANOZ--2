@@ -131,14 +131,23 @@
 
     <!-- Template Javascript -->
     <script src="/Admin/js/main.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         // JavaScript
         document.querySelectorAll('.user-switch').forEach(function (userSwitch) {
-            userSwitch.addEventListener('change', function () {
-                var userId = this.dataset.userId;
-                var blockStatus = this.value;
+    userSwitch.addEventListener('change', function () {
+        var userId = this.dataset.userId;
+        var blockStatus = this.value;
 
+        swal({
+            title: 'Are you sure?',
+            text: "Do you really want to change the block status?",
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willChange) => {
+            if (willChange) {
                 fetch('/admin/block' + userId, {
                     method: 'POST',
                     headers: {
@@ -148,14 +157,23 @@
                 }).then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            alert('User block status has been updated.');
+                            swal('User block status has been updated.', {
+                                icon: 'success',
+                            });
                         } else {
-                            alert('Failed to update user block status.');
+                            swal('Failed to update user block status.', {
+                                icon: 'error',
+                            });
                         }
                     });
-            });
+            } else {
+                swal('Your action has been cancelled.').then(() => {
+                    location.reload();
+                });
+            }
         });
-
+    });
+});
     </script>
 </body>
 

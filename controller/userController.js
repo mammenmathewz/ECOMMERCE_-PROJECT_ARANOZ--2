@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto')
+const flash = require('express-flash')
 
 const saltRounds = 10;
 
@@ -60,15 +61,15 @@ const postLogin = async(req,res)=>{
 
     if (!user) {
       
-      // req.flash('info', 'User does not exist');
-      // req.flash('type', 'alert alert-danger');
+      req.flash('info', 'User does not exist');
+      req.flash('type', 'alert alert-danger');
 
       return res.redirect('/login');
     }
     if (user.block) {
       // Redirect if user not found or user is blocked
-      // req.flash('info', 'Please contact us');
-      // req.flash('type', 'alert alert-danger');
+      req.flash('info', 'Please contact us');
+      req.flash('type', 'alert alert-danger');
 
       return res.redirect('/login');
     }
@@ -87,8 +88,8 @@ const postLogin = async(req,res)=>{
         
       } else {
         // Passwords don't match
-        // req.flash('info', 'Invalid Password');
-        // req.flash('type', 'alert alert-danger');
+        req.flash('info', 'Invalid Password');
+        req.flash('type', 'alert alert-danger');
         
         return res.redirect('/login');
       }

@@ -77,7 +77,9 @@
                                                 </div>
 
                                                     <form action="/admin/delete-product/<%= product._id %>" method="post">
-                                                        <button type="submit" class="btn btn-outline-danger">Delete</button>
+                                                        <button class="delete-button btn btn-outline-danger" type="submit" >Delete</button>
+
+
                                                     </form>
                                                     
 
@@ -133,24 +135,38 @@
     <!-- Template Javascript -->
     <script src="/Admin/js/main.js"></script>
 
-    <script>
-        document.getElementById('flexSwitchCheckDefault').addEventListener('change', function () {
-            if (!this.checked) {
-                // Assuming 'userId' is the id of the user you want to block
-                fetch('/blockUser/' + user._id, {
-                    method: 'POST'
-                }).then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('User has been blocked.');
-                        } else {
-                            alert('Failed to block user.');
-                        }
-                    });
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    
+    document.querySelectorAll('.delete-button').forEach(function(button) {
+    button.addEventListener('click', function(event) {
+        event.preventDefault();  // Prevent the form from submitting immediately
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Want to delete this item!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If the user clicked "Yes, delete it!", submit the form
+                event.target.form.submit();
+            } else {
+                // If the user clicked "Cancel", do something else
+                Swal.fire('Cancelled', 'Your action has been cancelled.', 'info').then(()=>{
+                    location.reload();
+                })
             }
         });
+    });
+});
 
-    </script>
+</script>
     
 </body>
 

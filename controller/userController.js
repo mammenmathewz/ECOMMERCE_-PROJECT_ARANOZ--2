@@ -57,13 +57,11 @@ const postLogin = async(req,res)=>{
      
     const user = await User.findOne({ email: req.body.email });
     const { email, password } = req.body;
-    req.session.user= user;
-
+  
     if (!user) {
       
       req.flash('info', 'User does not exist');
       req.flash('type', 'alert alert-danger');
-
       return res.redirect('/login');
     }
     if (user.block) {
@@ -88,8 +86,8 @@ const postLogin = async(req,res)=>{
         
       } else {
         // Passwords don't match
-        req.flash('info', 'Invalid Password');
-        req.flash('type', 'alert alert-danger');
+        req.flash('info', 'Invalide Password');
+      req.flash('type', 'alert alert-danger');
         
         return res.redirect('/login');
       }
@@ -129,18 +127,16 @@ const getSignup = async(req,res)=>{
 const postSignup = async(req,res)=>{
     const existingUser = await User.findOne({ email: req.body.email });
   if (existingUser) {
-    // req.flash('info', 'User already exists');
+    req.flash('info', 'User already exists');
     return res.redirect('signup');
   }
-//OTP
+
   if (req.body.otp !== otps[req.body.email]) {
 
-    // req.flash('info', 'invalide OTP');
+    req.flash('info', 'invalide OTP');
     return res.status(400).redirect('signup');
   }
 
-
-  // If user does not exist, proceed with signup
   bcrypt.hash(req.body.password, saltRounds, async function(err, hash) {
     if (err) {
       console.log(err);
@@ -164,7 +160,7 @@ const postSignup = async(req,res)=>{
 
     try {
       await newUser.save();
-      req.session.user = newUser; // Set the session user to the new user
+      req.session.user = newUser; 
   
       res.redirect('login');
     } 

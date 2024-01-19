@@ -53,6 +53,13 @@
                             </a>
                             <h4>Sign In</h4>
                         </div>
+                     
+                            <% if (messages.info) { %>
+                                <div class="<%= messages.type %>" id="alert">
+                                  <%= messages.info %>
+                                </div>
+                              <% } %>
+                        
                        
                         <form action="/admin/login" onsubmit="checkForm(event)" method="post">
                             <div class="form-floating mb-3" >

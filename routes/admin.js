@@ -2,6 +2,7 @@ const express = require('express');
 const adminRouter = express.Router();
 const bodyParser = require('body-parser')
 const multer = require('multer');
+const flash = require('express-flash')
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -18,6 +19,7 @@ const storage = multer.diskStorage({
 const auth = require('../middleware/auth')
 const adminController = require('../controller/adminController')
 
+adminRouter.use(flash());
 adminRouter.use(bodyParser.json());
 adminRouter.use(bodyParser.urlencoded({extended:true}));
 

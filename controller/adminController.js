@@ -2,6 +2,7 @@ const Admin = require('../models/admins');
 const User = require('../models/users')
 const Product = require('../models/products')
 const Brand = require('../models/brand') 
+const flash = require('express-flash')
 
 
 
@@ -23,15 +24,15 @@ const postAdminLogin = async(req,res)=>{
         const admin = await Admin.findOne({ email });
     
         if (!admin) {
-        //   req.flash('info', 'User does not exist');
-        //   req.flash('type', 'alert alert-danger');
+          req.flash('info', 'User does not exist');
+          req.flash('type', 'alert alert-danger');
           return res.status(401).redirect('/admin/');
         }
     
         // Validate password
         if (password !== admin.password) {
-        //   req.flash('info', 'Invalide Password');
-        //   req.flash('type', 'alert alert-danger');
+          req.flash('info', 'Invalide Password');
+          req.flash('type', 'alert alert-danger');
           return res.status(401).redirect('/admin/');
           
         }

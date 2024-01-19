@@ -2,10 +2,11 @@
 const express = require('express');
 const userRouter = express.Router();
 const bodyParser = require('body-parser')
+const flash = require('express-flash')
 
 
 const auth = require('../middleware/auth')
-
+userRouter.use(flash());
 userRouter.use(bodyParser.json());
 userRouter.use(bodyParser.urlencoded({extended:true}));
 

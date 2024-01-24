@@ -81,7 +81,6 @@ const postLogin = async(req,res)=>{
       if (result) {
         // Passwords match
         req.session.user = user;
-
         res.redirect('/');
         
       } else {
@@ -100,12 +99,14 @@ const postLogin = async(req,res)=>{
 
 const getAccount = async(req,res)=>{
   try{
-      res.render('user/account')
-  
+    const user = await User.findById(req.session.user._id);
+    console.log(user);
+    res.render('user/account', { user: user });
   } catch (err){
     console.log(err);
   }
 }
+
 
 const userLogout = async(req,res)=>{
   try {
@@ -203,6 +204,8 @@ const postOtp =async(req,res)=>{
   }
 
 }
+
+
 
 
 module.exports = {

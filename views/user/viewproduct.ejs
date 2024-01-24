@@ -55,7 +55,11 @@
                                     <input class="input-number" type="text" value="1" min="0" max="10">
                                     <span class="number-increment"> <i class="ti-plus"></i></span>
                                 </div>
-                                <a href="#" class="btn_3">add to cart</a>
+                                <form action="/addcart/<%= product._id %>" method="post">
+                                    <button type="submit" class="btn_3">Add to Cart</button>
+                                  </form>
+                                  
+
                                 <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
                             </div>
                         </div>

@@ -11,6 +11,7 @@ userRouter.use(bodyParser.json());
 userRouter.use(bodyParser.urlencoded({extended:true}));
 
 const userController = require('../controller/userController'); 
+const cartController = require('../controller/cartController')
 
 
 userRouter.get('/',userController.getHome)
@@ -23,4 +24,7 @@ userRouter.get('/logout',auth.isUserLogin,userController.userLogout)
 userRouter.get('/signup',auth.isUserLogout,userController.getSignup)
 userRouter.post('/signup',auth.isUserLogout,userController.postSignup)
 userRouter.post('/generateOtp',auth.isUserLogout,userController.postOtp)
+userRouter.get('/cart',auth.isUserLogin,cartController.getCart)
+userRouter.post('/addcart/:id', auth.isUserLogin, cartController.addCart);
+
 module.exports = userRouter;

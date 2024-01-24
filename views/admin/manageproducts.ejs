@@ -142,7 +142,7 @@
     
     document.querySelectorAll('.delete-button').forEach(function(button) {
     button.addEventListener('click', function(event) {
-        event.preventDefault();  // Prevent the form from submitting immediately
+        event.preventDefault();  
 
         Swal.fire({
             title: 'Are you sure?',
@@ -154,10 +154,10 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                // If the user clicked "Yes, delete it!", submit the form
+            
                 event.target.form.submit();
             } else {
-                // If the user clicked "Cancel", do something else
+          
                 Swal.fire('Cancelled', 'Your action has been cancelled.', 'info').then(()=>{
                     location.reload();
                 })

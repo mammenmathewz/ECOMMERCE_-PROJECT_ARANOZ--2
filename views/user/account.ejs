@@ -5,179 +5,101 @@
 <%- include('../partials/navbar') %>
   <!--================Checkout Area =================-->
 
-  <div style="margin-top: 100px; margin-left: 100px;">
-    <h1>My account</h1>
-  <div class="container">
-  <div style="margin-left: 100px;">
-    <h4>page is under maintenance</h4>
-
-  </div>
-  </div>
+ 
 
 
-
-
-  <!-- <section class="checkout_area padding_top" >
-
-   
-    
-      <div class="billing_details  "style="background-color:rgb(187, 215, 146) ; border-radius: 5%; width: 50%;">
-        <div class="row">
-          <div class="col-lg-8" style="margin: auto;">
-            <h4 style="padding: 20px;">Edit details</h4>
-            <form class="row contact_form" action="" method="post" novalidate="novalidate">
-              <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="first" placeholder="first name"  name="first_name" />
-                
-              </div>
-              <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="last" placeholder="last name" name="last_name" />
-              
-              </div>
-             
-              <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="number" placeholder="phone no" name="phone" />
-                
-              </div>
-              <div class="col-md-6 form-group p_star">
-                <div style="display: flex; justify-content: space-between;">
-                  <input type="text" class="form-control" id="email" placeholder="email" name="email" style="flex-grow: 1; margin-right: 10px;" />
-                
+  <section style="background-color: #ffffff; margin-top: 5%;">
+    <div class="container py-5">
+     
   
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                class="rounded-circle img-fluid" style="width: 150px;">
+              <h5 class="my-3"> <%= user.first_name + " " + user.last_name %></h5>
+             <div class="d-flex justify-content-center mb-2">
+    <button type="button" style="margin-right: 1%;" class="btn btn-primary">Edit Profile</button>
+    <button type="button" class="btn btn-outline-primary ms-1">My orders</button>
+</div>
+<div class="d-flex justify-content-center mb-2">
+    <a href="/logout"><button type="button" class="btn btn-outline-dark">logout</button></a>
+</div>
+
+            </div>
+          </div>
+          
+        </div>
+
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+             
+             
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Email</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"><%= user.email %></p>
                 </div>
               </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Phone</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"><%= user.phone %></p>
+                </div>
+              </div>
+              
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Address</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"><%= user.address.address1+" "+user.address.address2 %></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">Pincode</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"><%= user.address.pincode %></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">City</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"><%= user.address.city %></p>
+                </div>
+              </div>
+              <hr>
+              <div class="row">
+                <div class="col-sm-3">
+                  <p class="mb-0">State</p>
+                </div>
+                <div class="col-sm-9">
+                  <p class="text-muted mb-0"><%= user.address.state %></p>
+                </div>
+              </div>
+            </div>
+          </div>
           
-              <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add1" placeholder="address line 1" name="address1" />
-               
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add1" placeholder="Address line 2" name="address2" />
-                
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="city" placeholder="City" name="city" />
-                
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="state" placeholder="State" name="state" />
-            
-              </div>
-              <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="district" placeholder="District" name="district" />
-              </div>
-              <div class="col-md-12 form-group">
-                <input type="text" class="form-control" id="zip" name="pincode" placeholder="Postcode/ZIP" />
-              </div>
-              
-                <button class="btn btn-primary"  type="submit" style="margin-left: auto;margin-right: auto; padding: 1%;">Update</button>
-                
-              
-              <div class="d-grid gap-2 " style="margin-left: auto;margin-right: auto;">
-                <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
-                
-              </div>
-            </form>
-          </div>
         </div>
       </div>
     </div>
-
-  </section> -->
- 
+  </section>
   
-  <!--::footer_part start::-->
-  <!-- <footer class="footer_part">
-    <div class="container">
-      <div class="row justify-content-around">
-        <div class="col-sm-6 col-lg-2">
-          <div class="single_footer_part">
-            <h4>Top Products</h4>
-            <ul class="list-unstyled">
-              <li><a href="">Managed Website</a></li>
-              <li><a href="">Manage Reputation</a></li>
-              <li><a href="">Power Tools</a></li>
-              <li><a href="">Marketing Service</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <div class="single_footer_part">
-            <h4>Quick Links</h4>
-            <ul class="list-unstyled">
-              <li><a href="">Jobs</a></li>
-              <li><a href="">Brand Assets</a></li>
-              <li><a href="">Investor Relations</a></li>
-              <li><a href="">Terms of Service</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <div class="single_footer_part">
-            <h4>Features</h4>
-            <ul class="list-unstyled">
-              <li><a href="">Jobs</a></li>
-              <li><a href="">Brand Assets</a></li>
-              <li><a href="">Investor Relations</a></li>
-              <li><a href="">Terms of Service</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-2">
-          <div class="single_footer_part">
-            <h4>Resources</h4>
-            <ul class="list-unstyled">
-              <li><a href="">Guides</a></li>
-              <li><a href="">Research</a></li>
-              <li><a href="">Experts</a></li>
-              <li><a href="">Agencies</a></li>
-            </ul>
-          </div>
-        </div>
-        <div class="col-sm-6 col-lg-4">
-          <div class="single_footer_part">
-            <h4>Newsletter</h4>
-            <p>Heaven fruitful doesn't over lesser in days. Appear creeping
-            </p>
-            <div id="mc_embed_signup">
-              <form target="_blank"
-                action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01"
-                method="get" class="subscribe_form relative mail_part">
-                <input type="email" name="email" id="newsletter-form-email" placeholder="Email Address"
-                  class="placeholder hide-on-focus" onfocus="this.placeholder = ''"
-                  onblur="this.placeholder = ' Email Address '">
-                <button type="submit" name="submit" id="newsletter-submit"
-                  class="email_icon newsletter-submit button-contactForm">subscribe</button>
-                <div class="mt-10 info"></div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <div class="copyright_part">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8">
-            <div class="copyright_text">
-           
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="footer_icon social_icon">
-              <ul class="list-unstyled">
-                <li><a href="#" class="single_social_icon"><i class="fab fa-facebook-f"></i></a></li>
-                <li><a href="#" class="single_social_icon"><i class="fab fa-twitter"></i></a></li>
-                <li><a href="#" class="single_social_icon"><i class="fas fa-globe"></i></a></li>
-                <li><a href="#" class="single_social_icon"><i class="fab fa-behance"></i></a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </footer> -->
+ 
   <!--::footer_part end::-->
 
   <!-- jquery plugins here-->
@@ -218,8 +140,42 @@ function closeForm() {
   document.getElementById("myForm").style.display = "none";
 }
 
+// document.querySelector('.btn-outline-primary').addEventListener('click', function() {
+//     fetch('/myorders') // Replace with your myorders route
+//         .then(response => response.json())
+//         .then(data => {
+//             // Assuming data is an object containing user's order details
+//             // Update the div with new data
+//             document.querySelector('.card-body').innerHTML = `
+//                 <div class="row">
+//                     <div class="col-sm-3">
+//                         <p class="mb-0">Order ID</p>
+//                     </div>
+//                     <div class="col-sm-9">
+//                         <p class="text-muted mb-0">${data.orderId}</p>
+//                     </div>
+//                 </div>
+//                 <hr>
+//                 <div class="row">
+//                     <div class="col-sm-3">
+//                         <p class="mb-0">Product Name</p>
+//                     </div>
+//                     <div class="col-sm-9">
+//                         <p class="text-muted mb-0">${data.productName}</p>
+//                     </div>
+//                 </div>
+//                 // Add more fields as needed
+//             `;
+//         })
+//         .catch(error => {
+//             // Handle error
+//             console.error(error);
+//         });
+// });
+
+
   </script>
-    <a  href="/logout"><button type="button" class="btn btn-outline-dark">logout</button></a>
+
 </body>
 
 </html>

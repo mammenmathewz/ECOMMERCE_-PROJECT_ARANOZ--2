@@ -53,3 +53,35 @@ console.log(productId);  // Add this line
     }
   });
 });
+
+
+$(document).on('click', '.decrement-button', function(e) {
+  e.preventDefault();
+
+  const productId = $(this).closest('.row').find('.remove-from-cart').data('id');
+  console.log(productId);  // Add this line
+
+  const quantityElement = $(this).siblings('h6[name="quantity"]');
+  let quantity = parseInt(quantityElement.text());
+
+  // Do not allow the quantity to go below 1
+  if (quantity <= 1) {
+    return;
+  }
+
+  $.ajax({
+    url: '/decrementQuantity/' + productId,
+    type: 'PUT',
+    success: function(result) {
+      // Decrement the quantity in the DOM
+      quantity--;
+      quantityElement.text(quantity);
+
+      // Update the total price in the DOM
+      $('.priceChange').text('€ ' + result.total.toFixed(2));
+    },
+    error: function(err) {
+      console.error(err);
+    }
+  });
+});

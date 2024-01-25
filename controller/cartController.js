@@ -143,6 +143,40 @@ const increment = async(req,res)=>{
   }
 }
 
+const decrement = async(req,res)=>{
+  try{
+    const userId = req.session.user._id;
+    const productId = req.params.productId;
+    let cart = await Cart.findOne({ user: userId }).populate('items.productId');
+
+    if (!cart) {
+      return res.status(404).send('Cart not found');
+    }
+  
+    console.log('Cart items:', cart.items.map(item => item.productId._id.toString()));
+
+    // Find the item to be decremented
+    const item = cart.items.find(item => item.productId._id.toString() === productId);
+
+    if (!item) {
+      return res.status(404).send('Item not found in cart');
+    }
+  
+    // Decrement the quantity of the item, but not below 1
+    if (item.quantity > 1) {
+      item.quantity--;
+      // Update the total price
+      cart.total -= item.productId.saleprice;  
+    }
+
+    await cart.save();
+    res.json({ total: cart.total });
+  
+  } catch(error){
+    console.log(error);
+  }
+}
+
 
 
 
@@ -150,5 +184,6 @@ module.exports={
     getCart,
     addCart,
     deleteItem,
-    increment
+    increment,
+    decrement
 }

@@ -27,5 +27,6 @@ userRouter.post('/generateOtp',auth.isUserLogout,userController.postOtp)
 userRouter.get('/cart',auth.isUserLogin,cartController.getCart)
 userRouter.post('/addcart/:id', auth.isUserLogin, cartController.addCart);
 userRouter.delete('/removeFromCart/:id', auth.isUserLogin, cartController.deleteItem);
+userRouter.put('/incrementQuantity/:productId',auth.isUserLogin,cartController.increment)
 
 module.exports = userRouter;

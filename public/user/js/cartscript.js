@@ -25,3 +25,31 @@ $(document).on('click', '.remove-from-cart', function(e) {
     }
   });
 });
+
+
+$(document).on('click', '.increment-button', function(e) {
+  e.preventDefault();
+
+
+  const productId = $(this).closest('.row').find('.remove-from-cart').data('id');
+console.log(productId);  // Add this line
+
+  const quantityElement = $(this).siblings('h6[name="quantity"]');
+  let quantity = parseInt(quantityElement.text());
+
+  $.ajax({
+    url: '/incrementQuantity/' + productId,
+    type: 'PUT',
+    success: function(result) {
+      // Increment the quantity in the DOM
+      quantity++;
+      quantityElement.text(quantity);
+
+      // Update the total price in the DOM
+      $('.priceChange').text('€ ' + result.total.toFixed(2));
+    },
+    error: function(err) {
+      console.error(err);
+    }
+  });
+});

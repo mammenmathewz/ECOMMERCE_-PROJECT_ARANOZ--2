@@ -1,5 +1,5 @@
 const Admin = require('../models/admins');
-const User = require('../models/users')
+const { User, Address } = require('../models/users')
 const Product = require('../models/products')
 const Brand = require('../models/brand') 
 const flash = require('express-flash')

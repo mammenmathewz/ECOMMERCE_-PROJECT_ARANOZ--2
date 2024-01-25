@@ -12,6 +12,7 @@ userRouter.use(bodyParser.urlencoded({extended:true}));
 
 const userController = require('../controller/userController'); 
 const cartController = require('../controller/cartController')
+const orderController = require('../controller/orderController')
 
 
 userRouter.get('/',userController.getHome)
@@ -29,5 +30,7 @@ userRouter.post('/addcart/:id', auth.isUserLogin, cartController.addCart);
 userRouter.delete('/removeFromCart/:id', auth.isUserLogin, cartController.deleteItem);
 userRouter.put('/incrementQuantity/:productId',auth.isUserLogin,cartController.increment)
 userRouter.put('/decrementQuantity/:productId',auth.isUserLogin,cartController.decrement)
+userRouter.get('/checkout',auth.isUserLogin,orderController.getOrder)
+userRouter.post('/addAddress',auth.isUserLogin,orderController.addAddress)
 
 module.exports = userRouter;

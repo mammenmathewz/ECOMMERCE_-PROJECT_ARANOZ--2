@@ -1,7 +1,7 @@
 require('dotenv').config();
 const Product = require('../models/products')
 const brand = require('../models/brand')
-const User = require('../models/users')
+const { User, Address } = require('../models/users')
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const nodemailer = require('nodemailer');
@@ -126,50 +126,43 @@ const getSignup = async(req,res)=>{
 }
 
 const postSignup = async(req,res)=>{
-    const existingUser = await User.findOne({ email: req.body.email });
+  const existingUser = await User.findOne({ email: req.body.email });
   if (existingUser) {
-    req.flash('info', 'User already exists');
-    return res.redirect('signup');
+      req.flash('info', 'User already exists');
+      return res.redirect('signup');
   }
 
   if (req.body.otp !== otps[req.body.email]) {
-
-    req.flash('info', 'invalide OTP');
-    return res.status(400).redirect('signup');
+      req.flash('info', 'Invalid OTP');
+      return res.status(400).redirect('signup');
   }
 
   bcrypt.hash(req.body.password, saltRounds, async function(err, hash) {
-    if (err) {
-      console.log(err);
-      return res.status(500).send('An error occurred while hashing the password.');
-    }
-    const newUser = new User({
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
-      email: req.body.email,
-      phone: req.body.phone,
-      password: hash, 
-      address: {
-          address1: req.body.address1,
-          address2: req.body.address2,
-          city: req.body.city,
-          state: req.body.state,
-          district: req.body.district,
-          pincode: req.body.pincode
+      if (err) {
+          console.log(err);
+          return res.status(500).send('An error occurred while hashing the password.');
       }
-    });
+      const newUser = new User({
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
+          email: req.body.email,
+          phone: req.body.phone,
+          password: hash,
+          created: Date.now(),
+          block: false
+      });
 
-    try {
-      await newUser.save();
-      req.session.user = newUser; 
-  
-      res.redirect('login');
-    } 
-    catch (err) {
-      res.json({ message: err.message, type: 'danger' });
-    }
+      try {
+          await newUser.save();
+          req.session.user = newUser; 
+          res.redirect('login');
+      } 
+      catch (err) {
+          res.json({ message: err.message, type: 'danger' });
+      }
   });
 }
+
 
 let otps = {};
 

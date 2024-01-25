@@ -27,30 +27,91 @@ const getCart = async(req, res) => {
   
 
 const addCart = async(req, res) => {
-    try {
-      const userId = req.session.user._id;
-      const productId = req.params.id;
-      console.log(userId,  productId);
-      let cart = await Cart.findOne({ user: userId }); // Find the cart by userId
-  
-      // If the cart does not exist, create a new one
-      if (!cart) {
-        cart = new Cart({ user: userId, items: [] });
-      }
-  
-      // Add new product to the cart
-      cart.items.push({ productId: productId, quantity: 1 });
-  
-      await cart.save(); // Save the cart
-      res.redirect('/cart'); // Redirect to the home page
-    } catch (error) {
-      console.log(error);
-      res.send('Error occurred while adding to cart');
+  try {
+    const userId = req.session.user._id;
+    const productId = req.params.id;
+    let cart = await Cart.findOne({ user: userId });
+
+    if (!cart) {
+      cart = new Cart({ user: userId, items: [] });
     }
-  }
+
+    // Check if the product is already in the cart
+    const productInCart = cart.items.find(item => item.productId.toString() === productId);
+    if (productInCart) {
+      return res.send('Product is already in the cart');
+    }
+
+    // Fetch the product to get its price
+    const product = await Product.findById(productId).populate('brand');
+    const price = product.saleprice;
+
   
+
+    // Add new product to the cart
+    cart.items.push({ productId: productId, quantity: 1 });
+
+    // Update the total price
+    cart.total += price;
+
+    // Populate the productId in the cart
+    await cart.populate('items.productId');
+
+    await cart.save();
+
+    res.redirect('/cart');
+  } catch (error) {
+    console.log(error);
+    res.send('Error occurred while adding to cart');
+  }
+}
+
+const deleteItem = async(req,res)=>{
+  try {
+    const userId = req.session.user._id;
+    const productId = req.params.id;
+    let cart = await Cart.findOne({ user: userId });
+
+    if (!cart) {
+      return res.status(404).send('Cart not found');
+    }
+
+    // Find the item to be removed
+    const item = cart.items.find(item => item.productId.toString() === productId);
+    if (!item) {
+      return res.status(404).send('Item not found in cart');
+    }
+
+    // Fetch the product to get its price
+    const product = await Product.findById(productId).populate('brand');
+    const price = product.saleprice;
+
+    // Subtract the total price of the item from the cart's total
+    cart.total -= item.quantity * price;
+
+    // Remove the item from the cart
+    cart.items = cart.items.filter(item => item.productId.toString() !== productId);
+
+    // If all items are removed, set the total price to 0
+    if (cart.items.length === 0) {
+      cart.total = 0;
+    }
+
+    // Populate the productId in the cart
+    await cart.populate('items.productId');
+
+    await cart.save();
+    res.json({ total: cart.total, items: cart.items }); // Send back the updated total and items
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error occurred while removing from cart');
+  }
+}
+
+
 
 module.exports={
     getCart,
-    addCart
+    addCart,
+    deleteItem
 }

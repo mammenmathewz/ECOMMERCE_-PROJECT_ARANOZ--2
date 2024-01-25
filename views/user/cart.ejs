@@ -22,7 +22,7 @@
                     <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
                     <h6 class="mb-0 text-muted"> <%= cart.items.length %> items</h6>
                   </div>
-                  <hr class="my-4">
+                
 
                   <% cart.items.forEach(function(item) { %>
                     <div class="row mb-4 d-flex justify-content-between align-items-center">
@@ -53,14 +53,16 @@
                         <h6 class="mb-0">€ <%= item.productId.saleprice %></h6>
                       </div>
                       <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                        <a href="/removeFromCart/<%= item.productId._id %>" class="text-muted"><i class="fas fa-times"></i></a>
+                        <a href="#" class="remove-from-cart text-muted" data-id="<%= item.productId._id %>"><i class="fas fa-times"></i></a>
+
                       </div>
+                   
                     </div>
-                    <hr class="my-4">
+                   
                   <% }); %>
                   
                   
-                  <hr class="my-4">
+             
 
               
 
@@ -96,7 +98,7 @@
 
                   <div class="d-flex justify-content-between mb-5">
                     <h5 class="text-uppercase">Total price</h5>
-                    <h5>€ <%= cart.total.toFixed(2) %></h5>
+                    <h5 class="priceChange"> € <%= cart.total %></h5>
                   </div>
                   
 
@@ -121,33 +123,35 @@
 
   <!-- jquery plugins here-->
   <!-- jquery -->
-  <script src="js/jquery-1.12.1.min.js"></script>
+  <script src="/user/js/jquery-1.12.1.min.js"></script>
   <!-- popper js -->
-  <script src="js/popper.min.js"></script>
+  <script src="/user/js/popper.min.js"></script>
   <!-- bootstrap js -->
-  <script src="js/bootstrap.min.js"></script>
+  <script src="/user/js/bootstrap.min.js"></script>
   <!-- easing js -->
-  <script src="js/jquery.magnific-popup.js"></script>
+  <script src="/user/js/jquery.magnific-popup.js"></script>
   <!-- swiper js -->
-  <script src="js/swiper.min.js"></script>
+  <script src="/user/js/swiper.min.js"></script>
   <!-- swiper js -->
-  <script src="js/masonry.pkgd.js"></script>
+  <script src="/user/js/masonry.pkgd.js"></script>
   <!-- particles js -->
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.nice-select.min.js"></script>
+  <script src="/user/js/owl.carousel.min.js"></script>
+  <script src="/user/js/jquery.nice-select.min.js"></script>
   <!-- slick js -->
-  <script src="js/slick.min.js"></script>
-  <script src="js/jquery.counterup.min.js"></script>
-  <script src="js/waypoints.min.js"></script>
-  <script src="js/contact.js"></script>
-  <script src="js/jquery.ajaxchimp.min.js"></script>
-  <script src="js/jquery.form.js"></script>
-  <script src="js/jquery.validate.min.js"></script>
-  <script src="js/mail-script.js"></script>
-  <script src="js/stellar.js"></script>
-  <script src="js/price_rangs.js"></script>
+  <script src="/userjs/slick.min.js"></script>
+  <script src="/userjs/jquery.counterup.min.js"></script>
+  <script src="/userjs/waypoints.min.js"></script>
+  <script src="/userjs/contact.js"></script>
+  <script src="/userjs/jquery.ajaxchimp.min.js"></script>
+  <script src="/userjs/jquery.form.js"></script>
+  <script src="/userjs/jquery.validate.min.js"></script>
+  <script src="/userjs/mail-script.js"></script>
+  <script src="/userjs/stellar.js"></script>
+  <script src="/userjs/price_rangs.js"></script>
   <!-- custom js -->
   <script src="js/custom.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/user/js/cartscript.js"></script>
 </body>
 
 </html>

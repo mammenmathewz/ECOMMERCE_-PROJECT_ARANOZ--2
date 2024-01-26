@@ -33,4 +33,5 @@ userRouter.put('/decrementQuantity/:productId',auth.isUserLogin,cartController.d
 userRouter.get('/checkout',auth.isUserLogin,orderController.getOrder)
 userRouter.post('/addAddress',auth.isUserLogin,orderController.addAddress)
 userRouter.post('/confirmOrder',auth.isUserLogin,orderController.confirmOrder)
+userRouter.get('/confirmation/:orderId',auth.isUserLogin,orderController.getConfirmation)
 module.exports = userRouter;

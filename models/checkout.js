@@ -13,13 +13,12 @@ const orderSchema = new mongoose.Schema({
         type: Number, 
         default: 1
       },
-      
-      date: {
+        
+    }],
+    date: {
         type: Date,
         defualt: Date.now(),
     },
-        
-    }],
     total: { 
         type: Number, 
         default: 0
@@ -33,9 +32,10 @@ const orderSchema = new mongoose.Schema({
       default:0
   },
   selectedAddress: {
-    type: String,
- 
+    type: Number
 },
+
+
   is_delivered: {
     type: Boolean,
     default: false,

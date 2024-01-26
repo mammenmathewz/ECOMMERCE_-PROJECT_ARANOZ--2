@@ -26,10 +26,10 @@ const getOrder = async(req,res)=>{
 
 const addAddress = async(req,res)=>{
     try {
-        // Assume user is logged in and session exists
+     
         const user = await User.findById(req.session.user._id);
 
-        // Create a new address
+        
         const newAddress = {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
@@ -41,10 +41,9 @@ const addAddress = async(req,res)=>{
             pin: req.body.pin
         };
 
-        // Add the address to the user's addresses
         user.address.push(newAddress);
 
-        // Save the user
+     
         await user.save();
 
         // Continue with your checkout process...
@@ -60,10 +59,9 @@ const confirmOrder = async(req,res)=>{
         // Get user ID from request body (or session, if authenticated)
         const userId = req.session.user
 
-        console.log(req.body);
-
         // Fetch cart for user
         const cart = await Cart.findOne({ user: userId }).populate('user').populate('items.productId');
+        
        
         if (!cart) {
             return res.status(400).send('No cart found for this user');
@@ -71,10 +69,17 @@ const confirmOrder = async(req,res)=>{
 
         const { selector, addressRadio } = req.body;
 
-        // Create new order with cart data
+        // Fetch user for address
+        const user = await User.findById(userId).populate('address');
+
+        const selectedAddressIndex = user.address.findIndex(address => address._id.toString() === req.body.selectedAddress); // Use addressRadio to get the selected address
+        console.log(selectedAddressIndex);
+
+
+        // Create new order with cart data and selected address
         const newOrder = new Order({
             paymentMethod: selector,
-            selectedAddress: addressRadio,
+            selectedAddress: selectedAddressIndex,  // Include full address details
             user: userId,
             items: cart.items,
             total: cart.total,
@@ -85,6 +90,7 @@ const confirmOrder = async(req,res)=>{
 
         // Save new order to database
         await newOrder.save();
+        const order = await Order.findById(newOrder._id).populate('items.productId');
 
         // Optionally, clear the user's cart after successful order placement
         cart.items = [];
@@ -94,7 +100,7 @@ const confirmOrder = async(req,res)=>{
         await cart.save();
 
         // Send success response
-        res.send('Successfully placed order');
+        res.redirect(`/confirmation/${newOrder._id}`);
     } catch (error) {
         // Handle errors
         res.status(500).send({ message: error.message });
@@ -102,8 +108,29 @@ const confirmOrder = async(req,res)=>{
 }
 
 
+const getConfirmation = async(req,res)=>{
+    try {
+        // Fetch the order with populated product details
+        const order = await Order.findById(req.params.orderId).populate('items.productId');
+
+        // Fetch the user
+        const user = await User.findById(order.user);
+
+        // Get the selected address using the index stored in selectedAddress
+        const selectedAddress = user.address[order.selectedAddress];
+
+        // Pass the user, order, and selectedAddress to the view
+        res.render('user/confirmation', { user, order, selectedAddress });
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+}
+
+
+
 module.exports={
     getOrder,
     addAddress,
-    confirmOrder
+    confirmOrder,
+    getConfirmation
 }

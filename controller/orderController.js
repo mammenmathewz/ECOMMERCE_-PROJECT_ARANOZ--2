@@ -2,6 +2,7 @@ const Product = require('../models/products')
 const Brand = require('../models/brand') 
 const Cart = require('../models/cart')
 const { User } = require('../models/users')
+const Order = require('../models/checkout')
 
 const getOrder = async(req,res)=>{
     try{
@@ -54,8 +55,55 @@ const addAddress = async(req,res)=>{
     }
 }
 
+const confirmOrder = async(req,res)=>{
+    try {
+        // Get user ID from request body (or session, if authenticated)
+        const userId = req.session.user
+
+        console.log(req.body);
+
+        // Fetch cart for user
+        const cart = await Cart.findOne({ user: userId }).populate('user').populate('items.productId');
+       
+        if (!cart) {
+            return res.status(400).send('No cart found for this user');
+        }
+
+        const { selector, addressRadio } = req.body;
+
+        // Create new order with cart data
+        const newOrder = new Order({
+            paymentMethod: selector,
+            selectedAddress: addressRadio,
+            user: userId,
+            items: cart.items,
+            total: cart.total,
+            discount: cart.discount,
+            grandTotal: cart.grandTotal,
+            // Add other fields as necessary
+        });
+
+        // Save new order to database
+        await newOrder.save();
+
+        // Optionally, clear the user's cart after successful order placement
+        cart.items = [];
+        cart.total = 0;
+        cart.discount = 0;
+        cart.grandTotal = 0;
+        await cart.save();
+
+        // Send success response
+        res.send('Successfully placed order');
+    } catch (error) {
+        // Handle errors
+        res.status(500).send({ message: error.message });
+    }
+}
+
 
 module.exports={
     getOrder,
-    addAddress
+    addAddress,
+    confirmOrder
 }

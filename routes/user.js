@@ -32,5 +32,5 @@ userRouter.put('/incrementQuantity/:productId',auth.isUserLogin,cartController.i
 userRouter.put('/decrementQuantity/:productId',auth.isUserLogin,cartController.decrement)
 userRouter.get('/checkout',auth.isUserLogin,orderController.getOrder)
 userRouter.post('/addAddress',auth.isUserLogin,orderController.addAddress)
-
+userRouter.post('/confirmOrder',auth.isUserLogin,orderController.confirmOrder)
 module.exports = userRouter;

@@ -32,6 +32,10 @@ const orderSchema = new mongoose.Schema({
       type:Number,
       default:0
   },
+  selectedAddress: {
+    type: String,
+ 
+},
   is_delivered: {
     type: Boolean,
     default: false,
@@ -52,11 +56,12 @@ const orderSchema = new mongoose.Schema({
     default: false,
   },
   
-  paymentType: {
+  paymentMethod: {
     type: String,
   },
-  paymentStatus: {
-    type:String
+  paymentMethod: {
+    type: String,
+    
 },
 orderStatus: {
   type:String

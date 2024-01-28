@@ -26,6 +26,7 @@
       </div>
       <div class="modal-body">
         <form class="row contact_form" action="/addAddress" method="post" novalidate="novalidate">
+            <input type="hidden" name="redirect" value="/checkout">
             <div class="col-md-6 form-group p_star">
                 <input type="text" class="form-control" id="first" name="first_name" placeholder="First name" />
                 
@@ -190,5 +191,20 @@ function updateButton() {
             function updateAddress(addressId) {
                 document.getElementById('hiddenAddress').value = addressId;
             }
+
+            document.getElementById('paymentBtn').addEventListener('click', function(e) {
+    var addressSelected = document.querySelector('input[name="addressRadio"]:checked');
+    if (!cashOnDelivery.checked && !paypal.checked || !addressSelected) {
+        e.preventDefault();
+        if (!cashOnDelivery.checked && !paypal.checked) {
+            alert('Please select a payment method.');
+        }
+        if (!addressSelected) {
+            alert('Please select an address.');
+        }
+    }
+});
+
+
             </script>
             

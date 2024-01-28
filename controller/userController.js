@@ -107,6 +107,14 @@ const getAccount = async(req,res)=>{
   }
 }
 
+const myOrder = async(req,res)=>{
+  try {
+    res.render('user/myorder');
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 
 const userLogout = async(req,res)=>{
   try {
@@ -211,6 +219,7 @@ module.exports = {
     userLogout,
     getSignup,
     postSignup,
-    postOtp
+    postOtp,
+    myOrder
    
 }

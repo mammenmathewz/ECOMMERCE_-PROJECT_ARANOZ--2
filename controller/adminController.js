@@ -2,6 +2,7 @@ const Admin = require('../models/admins');
 const { User, Address } = require('../models/users')
 const Product = require('../models/products')
 const Brand = require('../models/brand') 
+const Order = require("../models/checkout");
 const flash = require('express-flash')
 
 
@@ -315,9 +316,8 @@ const addBrands = async(req,res)=>{
 
     const existingBrand = await Brand.findOne({ name: req.body.name });
     if (existingBrand) {
-      // req.flash('info', 'User already exists');
-      return res.send('hufsdi')
-    }
+      return res.status(400).send('Brand already exists');
+  }
     console.log(req.body);
     const brandName = req.body.name;
  // make sure 'name' matches the form input field name
@@ -350,6 +350,83 @@ const deleteBrand = async(req,res)=>{
       }
 }
 
+const getOrderManagement = async(req,res)=>{
+  try{
+      // Fetch all orders with populated product details and user data
+      const orders = await Order.find({}).populate("items.productId").populate("user");
+      const active = 'orders'; 
+      // Pass the orders to the view
+      res.render('admin/ordermanagement', { orders,active });
+  } catch(error){
+    console.log(error);
+  }
+}
+
+const switchStatus = async(req,res)=>{
+  const orderId = req.params.id; // Get the order ID from the URL
+    const status = req.body.status; // Get the new status from the request body
+    console.log(status);
+
+    try {
+        const order = await Order.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        
+        order.is_delivered = false;
+        order.user_cancelled = false;
+        order.admin_cancelled = false;
+        order.is_returned = false;
+
+        // Set the selected status to true
+        switch (status) {
+            case 'Delivered':
+                order.is_delivered = true;
+                break;
+            case 'User Cancelled':
+                order.user_cancelled = true;
+                break;
+            case 'Admin Cancelled':
+                order.admin_cancelled = true;
+                break;
+            case 'Returned':
+                order.is_returned = true;
+                break;
+            case 'Pending':
+              order.is_delivered = false;
+              order.user_cancelled = false;
+              order.admin_cancelled = false;
+              order.is_returned = false;
+              break;
+            default:
+                return res.status(400).json({ message: 'Invalid status' });
+        }
+
+        await order.save();
+        res.status(200).json(order);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+}
+
+const viewOrder = async(req,res)=>{
+  try {
+    // Get the user's ID from the session
+    const userId = req.session.userId;
+    console.log(userId);
+
+    // Find orders for the specific user
+    const orders = await Order.find({ user: userId }).populate('user').populate('items.productId');
+    console.log(orders);
+
+    // Render the 'user/myorder' view with the orders
+    res.render('user/myorder', { orders: orders });
+} catch (error) {
+    console.log(error);
+}
+}
+
 module.exports={
     getAdminLogin,
     postAdminLogin,
@@ -368,6 +445,9 @@ module.exports={
     deleteProduct,
     getBrands,
     addBrands,
-    deleteBrand
+    deleteBrand,
+    getOrderManagement,
+    switchStatus,
+    viewOrder
 
 }

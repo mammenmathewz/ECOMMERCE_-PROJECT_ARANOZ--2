@@ -16,9 +16,9 @@ const orderSchema = new mongoose.Schema({
         
     }],
     date: {
-        type: Date,
-        defualt: Date.now(),
-    },
+      type: Date,
+      default: Date.now, 
+  },
     total: { 
         type: Number, 
         default: 0

@@ -20,11 +20,83 @@
                 class="rounded-circle img-fluid" style="width: 150px;">
               <h5 class="my-3"> <%= user.first_name + " " + user.last_name %></h5>
              <div class="d-flex justify-content-center mb-2">
-    <button type="button" style="margin-right: 1%;" class="btn btn-primary">Edit Profile</button>
-    <button type="button" class="btn btn-outline-primary ms-1">My orders</button>
+ 
+    <div class="btn-group" role="group" style="gap: 3%;">
+      <button type="button"  style="margin-right: 1%;" class="btn btn-outline-primary btn-edit">Edit Profile</button>
+      <button type="button" class="btn btn-outline-primary btn-order">My orders</button>
+      
+  </div>
 </div>
 <div class="d-flex justify-content-center mb-2">
     <a href="/logout"><button type="button" class="btn btn-outline-dark">logout</button></a>
+</div>
+<button data-toggle="modal"  class="btn_3" data-target="#addressModal">CLICK TO ADD NEW ADDRESS</button>
+
+<!-- Modal -->
+<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addressModalLabel">Add New Address</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="row contact_form" action="/addAddress" method="post" novalidate="novalidate">
+          <input type="hidden" name="redirect" value="/account">
+            <div class="col-md-6 form-group p_star">
+                <input type="text" class="form-control" id="first" name="first_name" placeholder="First name" />
+                
+            </div>
+            <div class="col-md-6 form-group p_star">
+                <input type="text" class="form-control" id="last" name="last_name" placeholder="Last name"/>
+                
+            </div>
+
+            <div class="col-md-6 form-group p_star">
+                <input type="text" class="form-control" id="number" name="phone" placeholder="Phone number"/>
+               
+            </div>
+
+
+            <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="add1" name="address1" placeholder="Address line 01"/>
+               
+            </div>
+            <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="add2" name="address2" placeholder="Address line 02"/>
+              
+            </div>
+            <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="city" name="city" placeholder="Town/City"/>
+               
+            </div>
+            <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="district" name="district" placeholder="District"/>
+                
+            </div>
+            <div class="col-md-12 form-group p_star">
+                <input type="text" class="form-control" id="state" name="state" placeholder="State"/>
+               
+            </div>
+
+            <div class="col-md-12 form-group">
+                <input type="text" class="form-control" id="zip" name="pin"
+                    placeholder="Postcode/ZIP" />
+            </div>
+
+           <button style="margin-left: auto; margin-right: auto;" class="tp_btn" type="submit">ADD NEW ADDRESS </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     
+      </div>
+    </div>
+  </div>
+
+  
 </div>
 
             </div>
@@ -35,62 +107,24 @@
         <div class="col-lg-8">
           <div class="card mb-4">
             <div class="card-body">
+              <% if(user.address && user.address.length > 0) { %>
+                <% user.address.forEach(function(address) { %>
+                  <a style="margin-left: 80%;">delete</a>
+                    <p><%= address.first_name %> <%= address.last_name %></p>
+                    <p><%= address.phone %></p>
+                    <p><%= address.address1 %></p>
+                    <p><%= address.address2 %></p>
+                    <p><%= address.district %></p>
+                    <p><%= address.state %></p>
+                    <p><%= address.pin %></p>
+                    <hr>
+                <% }); %>
+            <% } else { %>
+                <p>No addresses available.</p>
+            <% } %>
+            
              
-             
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Email</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%= user.email %></p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Phone</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%= user.phone %></p>
-                </div>
-              </div>
               
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Address</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%= user.address.address1+" "+user.address.address2 %></p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Pincode</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%= user.address.pincode %></p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">City</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%= user.address.city %></p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">State</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%= user.address.state %></p>
-                </div>
-              </div>
             </div>
           </div>
           
@@ -131,6 +165,8 @@
   <script src="/user/js/price_rangs.js"></script>
   <!-- custom js -->
   <script src="/user/js/custom.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
   <script>
     function openForm() {
   document.getElementById("myForm").style.display = "block";
@@ -173,6 +209,12 @@ function closeForm() {
 //         });
 // });
 
+$(".btn-order").click(function(e) {
+    e.preventDefault();
+    $.get("/myorder", function(data) {
+        $(".col-lg-8").html(data);
+    });
+});
 
   </script>
 

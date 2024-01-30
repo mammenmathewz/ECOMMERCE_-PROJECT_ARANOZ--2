@@ -7,6 +7,7 @@ const session = require('express-session');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto')
 const flash = require('express-flash')
+const Order = require("../models/checkout");
 
 const saltRounds = 10;
 
@@ -119,13 +120,17 @@ const getAccount = async(req,res)=>{
   }
 }
 
-const myOrder = async(req,res)=>{
+const myOrder = async(req, res) => {
   try {
-    res.render('user/myorder');
-  } catch (error) {
+    const user_id= req.session.user._id;
+    const orders = await Order.find({ user: user_id }).populate("items.productId").populate("user");
+    res.render('user/myorder', { orders });
+  } catch(error) {
     console.log(error);
   }
 }
+
+
 
 
 const userLogout = async(req,res)=>{

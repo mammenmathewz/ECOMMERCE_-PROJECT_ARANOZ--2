@@ -1,23 +1,120 @@
-<div class="col-lg-8">
-    <div class="card mb-4">
-      <div class="card-body">
-       <h2>user datataafvdfgvdfs</h2>
+
+<div class="col-lg-8 col-md-10 col-sm-12">
+   
+        <h2>My Orders</h2>
+        <div class="table-responsive"> <!-- Add this div -->
+            <table class="table">
+                <tbody>
+                    <% orders.forEach(function(order) { %>
+                        <tr>
+                            <td><%= order._id.toString().slice(-4) %></td>
+                            <td>
+                                <% if (order.is_delivered) { %>
+                                  <p class="btn btn-success m-2"> Delivered </p>
+                                  <% } else if (order.user_cancelled) { %>
+                                  <p class="btn btn-danger m-2"> User Cancelled</p>
+                                  
+                                  <% } else if (order.admin_cancelled) { %>
+                                     <p class="btn btn-danger m-2">   Admin Cancelled</p>
+                                  <% } else if (order.is_returned) { %>
+                                     <p class="btn btn-warning m-2">   Returned</p>
+                                     
+                                  <% } else { %>
+                                      <p class=" btn btn-info m-2">Pending</p>   
+                                  <% } %>
+                              </td>
+                              <td><%="€"+ order.total %></td>
+                            <td><a class="seeMore" style="cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+          <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
+        </svg></a></td>
+                        </tr>
+                        <% order.items.forEach(function(item) { %>
+                            <tr class="extra" style="display:none;">
+                                <td><li><%= item.productId.productname +"×"%><%= item.quantity %></li></td>
+                            </tr>
+                        <% }); %>
+                        <tr class="extra" style="display:none;">
+                            <td>
+                                <select class="form-control" id="status<%= order._id %>">
+                                    <option value="">Status</option>
+                                    <option value="User Cancelled">Cancel</option>
+                                    <option value="Returned">Return</option>
+                                </select>
+                            </td>
+                        </tr>
+                        
+                    <% }); %>
+                    </tbody>
+            </table>
+        </div> 
      
     
  
     
-        
-      </div>
-    </div>
+      
     
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-  <script>
-   $(".btn-edit").click(function(e) {
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+  $(".btn-edit").click(function (e) {
     e.preventDefault();
     window.location.href = '/account';
+  });
+
+
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function(){
+  $(".seeMore").click(function(){
+    $(this).closest('tr').nextUntil('tr:not(.extra)').toggle();
+  });
 });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("select.form-control").change(function(){
+        var status = $(this).val(); // Get the status from the selected option
+        var orderId = $(this).attr('id').substring(6); // Get the order ID from the id attribute
 
-
-  </script>
+        swal({
+            title: "Are you sure?",
+            text: "You are about to change the status to: " + status,
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
+        .then((willChange) => {
+            if (willChange) {
+                $.ajax({
+                    url: "/admin/change-order-status/" + orderId,
+                    type: "POST",
+                    data: {
+                        status: status
+                    },
+                    success: function(response) {
+                        swal("Status has been changed!", {
+                            icon: "success",
+                        });
+                        location.reload();
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        swal("Error changing status!", {
+                            icon: "error",
+                        });
+                    }
+                });
+            } else {
+                swal("Status change cancelled!");
+            }
+        });
+    });
+});
+</script>

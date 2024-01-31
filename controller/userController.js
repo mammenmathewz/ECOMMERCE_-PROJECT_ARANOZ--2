@@ -160,6 +160,7 @@ const postSignup = async(req,res)=>{
 
   if (req.body.otp !== otps[req.body.email]) {
       req.flash('info', 'Invalid OTP');
+      req.flash('type', 'alert alert-danger');
       return res.status(400).redirect('signup');
   }
 
@@ -191,6 +192,7 @@ const postSignup = async(req,res)=>{
 
 
 let otps = {};
+
 
 const postOtp =async(req,res)=>{
   try {
@@ -224,7 +226,40 @@ const postOtp =async(req,res)=>{
 
 }
 
+const resetPassword = async(req,res)=>{
+  try{
+     const { email, otp, newPassword } = req.body;
 
+  // Check if the OTP matches
+  if (otp !== otps[email]) {
+      req.flash('info', 'Invalid OTP');
+      return res.status(400).redirect('login');
+  }
+
+  // Hash the new password
+  bcrypt.hash(newPassword, saltRounds, async function(err, hash) {
+      if (err) {
+          console.log(err);
+          return res.status(500).send('An error occurred while hashing the password.');
+      }
+
+      // Update the user's password
+      try {
+          await User.updateOne({ email: email }, { password: hash });
+          req.flash('info', 'Password reset successful');
+          req.flash('type', 'alert alert-success');
+          res.redirect('login');
+      } catch (err) {
+          console.log(err);
+          res.status(500).send('An error occurred while updating the password.');
+      }
+  });
+
+
+  } catch(error){
+    console.log(error);
+  }
+}
 
 
 module.exports = {
@@ -238,6 +273,7 @@ module.exports = {
     getSignup,
     postSignup,
     postOtp,
-    myOrder
+    myOrder,
+    resetPassword
    
 }

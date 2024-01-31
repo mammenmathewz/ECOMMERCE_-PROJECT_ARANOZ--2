@@ -2,12 +2,12 @@
 
 
 
-<%- include('../partials/navbar') %>
-    <!-- Header part end-->
+    <%- include('../partials/navbar') %>
+        <!-- Header part end-->
 
 
-    <!-- breadcrumb start-->
-    <!-- <section class="breadcrumb breadcrumb_bg">
+        <!-- breadcrumb start-->
+        <!-- <section class="breadcrumb breadcrumb_bg">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-8">
@@ -21,117 +21,254 @@
             </div>
         </div>
     </section> -->
-    <!-- breadcrumb start-->
+        <!-- breadcrumb start-->
 
-    <!--================login_part Area =================-->
-    <section class="login_part padding_top">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_text text-center">
-                        <div class="login_part_text_iner">
-                            <h2>New to our Shop?</h2>
-                            <p>There are advances being made in science and technology
-                                everyday, and a good example of this is the</p>
-                            <a href="/signup" class="btn_3">Create an Account</a>
+        <!--================login_part Area =================-->
+        <section class="login_part padding_top">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="login_part_text text-center">
+                            <div class="login_part_text_iner">
+                                <h2>New to our Shop?</h2>
+                                <p>There are advances being made in science and technology
+                                    everyday, and a good example of this is the</p>
+                                <a href="/signup" class="btn_3">Create an Account</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
-                    <div class="login_part_form">
-                        <div class="login_part_form_iner">
-                            <h3>Welcome Back ! <br>
-                                Please Sign in now</h3>
+                    <div class="col-lg-6 col-md-6">
+                        <div class="login_part_form">
+                            <div class="login_part_form_iner">
+                                <h3>Welcome Back ! <br>
+                                    Please Sign in now</h3>
                                 <div>
-                              
-                                      
-                                   
+
+
+
                                     <% if (messages.info) { %>
                                         <div class="<%= messages.type %>" id="alert">
-                                          <%= messages.info %>
+                                            <%= messages.info %>
                                         </div>
-                                      <% } %>
-                                      
-                                      
-                            
+                                        <% } %>
+
+
+
                                 </div>
-                                
-                            <form class="row contact_form" action="login" method="post" novalidate="novalidate">
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="email" class="form-control" id="name" name="email" value=""
-                                        placeholder="email" required>
-                                </div>
-                                <div class="col-md-12 form-group p_star">
-                                    <input type="password" class="form-control" id="password" name="password" value=""
-                                        placeholder="Password" required>
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <div class="creat_account d-flex align-items-center">
-                                        <input type="checkbox" id="f-option" name="selector">
-                                        <label for="f-option">Remember me</label>
+
+                                <form class="row contact_form" action="login" method="post" novalidate="novalidate">
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="email" class="form-control" id="name" name="email" value=""
+                                            placeholder="email" required>
                                     </div>
-                                    <button type="submit" value="submit" class="btn_3">
-                                        log in
-                                    </button>
-                                    <a class="lost_pass" href="#">forget password?</a>
+                                    <div class="col-md-12 form-group p_star">
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            value="" placeholder="Password" required>
+                                    </div>
+                                    <div class="col-md-12 form-group">
+                                        <div class="creat_account d-flex align-items-center">
+                                            <input type="checkbox" id="f-option" name="selector">
+                                            <label for="f-option">Remember me</label>
+                                        </div>
+                                        <button type="submit" value="submit" class="btn_3">
+                                            log in
+                                        </button>
+                                        <!-- Button to Open the Modal -->
+                                       
+
+                                    </div>
+                                </form>
+                                <a class="lost_pass" data-toggle="modal"
+                                data-target="#passwordResetModal">forget password?</a>
+
+                            <!-- The Modal -->
+                            <div class="modal" id="passwordResetModal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+
+                                        <!-- Modal Header -->
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Reset Password</h4>
+                                            <button type="button" class="close"
+                                                data-dismiss="modal">×</button>
+                                        </div>
+
+                                        <!-- Modal Body -->
+                                        <div class="modal-body">
+                                            <form id="resetPasswordForm" action="/reset-password"
+                                                method="post">
+                                                <% if (messages.info) { %>
+                                                    <div class="alert alert-danger" id="alert">
+
+                                                        <%= messages.info %>
+                                                    </div>
+                                                    <% } %>
+                                                        <div class="form-group">
+                                                            <label for="email">Email:</label>
+                                                            <input type="email" class="form-control"
+                                                                id="email" placeholder="email" name="email"
+                                                                required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="otp">OTP:</label>
+                                                            <div class="input-group">
+                                                                <input type="text" class="form-control"
+                                                                    id="otp" placeholder="Enter OTP"
+                                                                    name="otp" required>
+                                                                <div class="input-group-append">
+                                                                    <button type="button" class="btn"
+                                                                        style="background-color: #ff3368; color: white;"
+                                                                        id="generateOtp">Generate
+                                                                        OTP</button>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <p id="otpTimer" style="color: tomato;"></p>
+                                                            <label for="newPassword">New Password:</label>
+                                                            <input type="password" class="form-control"
+                                                                id="newPassword"
+                                                                placeholder="Enter new password"
+                                                                name="newPassword" required>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Reset
+                                                            Password</button>
+                                            </form>
+
+                                        </div>
+
+                                        <!-- Modal Footer -->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger"
+                                                data-dismiss="modal">Close</button>
+                                        </div>
+
+                                    </div>
                                 </div>
-                            </form>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-    <!--================login_part end =================-->
+        </section>
+        <!--================login_part end =================-->
 
-    <!--::footer_part start::-->
-    <%- include('../partials/footer') %>
-    <!--::footer_part end::-->
+        <!--::footer_part start::-->
+        <%- include('../partials/footer') %>
+            <!--::footer_part end::-->
 
-      <!-- jquery plugins here-->
-  <!-- jquery -->
-  <script src="/user/js/jquery-1.12.1.min.js"></script>
-  <!-- popper js -->
-  <script src="/user/js/popper.min.js"></script>
-  <!-- bootstrap js -->
-  <script src="/user/js/bootstrap.min.js"></script>
-  <!-- easing js -->
-  <script src="/user/js/jquery.magnific-popup.js"></script>
-  <!-- swiper js -->
-  <script src="/user/js/swiper.min.js"></script>
-  <!-- swiper js -->
-  <script src="/user/js/masonry.pkgd.js"></script>
-  <!-- particles js -->
-  <script src="/user/js/owl.carousel.min.js"></script>
-  <script src="/user/js/jquery.nice-select.min.js"></script>
-  <!-- slick js -->
-  <script src="/user/js/slick.min.js"></script>
-  <script src="/user/js/jquery.counterup.min.js"></script>
-  <script src="/user/js/waypoints.min.js"></script>
-  <script src="/user/js/contact.js"></script>
-  <script src="/user/js/jquery.ajaxchimp.min.js"></script>
-  <script src="/user/js/jquery.form.js"></script>
-  <script src="/user/js/jquery.validate.min.js"></script>
-  <script src="/user/js/mail-script.js"></script>
-  <script src="/user/js/stellar.js"></script>
-  <script src="/user/js/price_rangs.js"></script>
-  <!-- custom js -->
-  <script src="/user/js/custom.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-        crossorigin="anonymous"></script>
-        <script>
-            window.onload = function() {
-              setTimeout(function() {
-                var alert = document.getElementById('alert');
-                if(alert) alert.remove()
-              }, 3000);
-            }
-          </script>
-          
-</body>
+            <!-- jquery plugins here-->
+            <!-- jquery -->
+            <script src="/user/js/jquery-1.12.1.min.js"></script>
+            <!-- popper js -->
+            <script src="/user/js/popper.min.js"></script>
+            <!-- bootstrap js -->
+            <script src="/user/js/bootstrap.min.js"></script>
+            <!-- easing js -->
+            <script src="/user/js/jquery.magnific-popup.js"></script>
+            <!-- swiper js -->
+            <script src="/user/js/swiper.min.js"></script>
+            <!-- swiper js -->
+            <script src="/user/js/masonry.pkgd.js"></script>
+            <!-- particles js -->
+            <script src="/user/js/owl.carousel.min.js"></script>
+            <script src="/user/js/jquery.nice-select.min.js"></script>
+            <!-- slick js -->
+            <script src="/user/js/slick.min.js"></script>
+            <script src="/user/js/jquery.counterup.min.js"></script>
+            <script src="/user/js/waypoints.min.js"></script>
+            <script src="/user/js/contact.js"></script>
+            <script src="/user/js/jquery.ajaxchimp.min.js"></script>
+            <script src="/user/js/jquery.form.js"></script>
+            <script src="/user/js/jquery.validate.min.js"></script>
+            <script src="/user/js/mail-script.js"></script>
+            <script src="/user/js/stellar.js"></script>
+            <script src="/user/js/price_rangs.js"></script>
+            <!-- custom js -->
+            <script src="/user/js/custom.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+                integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+                integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+                crossorigin="anonymous"></script>
+            <script>
+                window.onload = function () {
+                    setTimeout(function () {
+                        var alert = document.getElementById('alert');
+                        if (alert) alert.remove()
+                    }, 3000);
+                }
 
-</html>
+
+            </script>
+
+            <script>
+                const emailInput = document.getElementById('email');
+                const otpButton = document.getElementById('generateOtp'); // Corrected here
+                const otpTimer = document.getElementById('otpTimer');
+
+                // Email validation regex
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                otpButton.addEventListener('click', (event) => {
+                    event.preventDefault();
+
+                    if (!emailRegex.test(emailInput.value)) {
+                        document.getElementById('mess').innerText = 'Please enter a valid email address.';
+                    } else {
+                        disableButton();
+                        fetch('generateOtp', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email: emailInput.value })
+                        })
+                            .then((response) => {
+                                if (response.ok) {
+                                    document.getElementById('mess').innerText = 'OTP has been sent to your email';
+                                } else {
+                                    throw new Error('Request failed');
+                                }
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                                document.getElementById('mess').innerText = 'An error occurred please come back later';
+                            });
+                    }
+                });
+
+                // Function to disable the button for 2 minutes
+                function disableButton() {
+                    otpButton.disabled = true;
+                    startCountdown();
+                }
+
+                function startCountdown() {
+                    let timeLeft = 30;
+                    const countdownTimer = setInterval(() => {
+                        timeLeft--;
+                        otpTimer.innerText = 'Please wait ' + timeLeft + ' seconds';
+                        if (timeLeft <= 0) {
+                            otpButton.innerText = 'Resend';
+                            clearInterval(countdownTimer);
+                            otpTimer.innerText = 'Try again';
+                            otpButton.disabled = false;
+                        }
+                    }, 1000);
+                }
+
+                function checkForm(e) {
+                    const otp = document.querySelector('input[name="otp"]');
+                    const password = document.querySelector('input[name="password"]');
+                    if (!otp.value.trim() || !password.value.trim()) {
+                        e.preventDefault();
+                        alert('Please fill out the OTP and password fields');
+                    }
+                }
+            </script>
+
+            </body>
+
+            </html>

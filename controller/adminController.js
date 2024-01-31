@@ -364,51 +364,62 @@ const getOrderManagement = async(req,res)=>{
 
 const switchStatus = async(req,res)=>{
   const orderId = req.params.id; // Get the order ID from the URL
-    const status = req.body.status; // Get the new status from the request body
-    console.log(status);
+  const status = req.body.status; // Get the new status from the request body
+  console.log(status);
 
-    try {
-        const order = await Order.findById(orderId);
-        if (!order) {
-            return res.status(404).json({ message: 'Order not found' });
-        }
-
-        
-        order.is_delivered = false;
-        order.user_cancelled = false;
-        order.admin_cancelled = false;
-        order.is_returned = false;
-
-        // Set the selected status to true
-        switch (status) {
-            case 'Delivered':
-                order.is_delivered = true;
-                break;
-            case 'User Cancelled':
-                order.user_cancelled = true;
-                break;
-            case 'Admin Cancelled':
-                order.admin_cancelled = true;
-                break;
-            case 'Returned':
-                order.is_returned = true;
-                break;
-            case 'Pending':
-              order.is_delivered = false;
-              order.user_cancelled = false;
-              order.admin_cancelled = false;
-              order.is_returned = false;
-              break;
-            default:
-                return res.status(400).json({ message: 'Invalid status' });
-        }
-
-        await order.save();
-        res.status(200).json(order);
-    } catch (err) {
-        res.status(500).json({ message: err.message });
+  try {
+    const order = await Order.findById(orderId).populate('items.productId');
+    if (!order) {
+        return res.status(404).json({ message: 'Order not found' });
     }
+
+    order.is_delivered = false;
+    order.user_cancelled = false;
+    order.admin_cancelled = false;
+    order.is_returned = false;
+
+    // Set the selected status to true
+    switch (status) {
+        case 'Delivered':
+            order.is_delivered = true;
+            break;
+        case 'User Cancelled':
+            order.user_cancelled = true;
+            incrementProductQuantity(order.items);
+            break;
+        case 'Admin Cancelled':
+            order.admin_cancelled = true;
+            incrementProductQuantity(order.items);
+            break;
+        case 'Returned':
+            order.is_returned = true;
+            incrementProductQuantity(order.items);
+            break;
+        case 'Pending':
+          order.is_delivered = false;
+          order.user_cancelled = false;
+          order.admin_cancelled = false;
+          order.is_returned = false;
+          break;
+        default:
+            return res.status(400).json({ message: 'Invalid status' });
+    }
+
+    await order.save();
+    res.status(200).json(order);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 }
+
+async function incrementProductQuantity(items) {
+  for (let item of items) {
+    const product = await Product.findById(item.productId._id);
+    product.number += item.quantity;
+    await product.save();
+  }
+}
+
 
 const viewOrder = async(req,res)=>{
   try {

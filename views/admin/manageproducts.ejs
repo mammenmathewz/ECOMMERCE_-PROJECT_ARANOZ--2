@@ -43,6 +43,8 @@
                                             <th scope="col">Product</th>
                                             <th scope="col">Brand</th>
                                             <th scope="col">Product Name</th>
+                                            <th scope="col">Number of products</th>
+
                                             <th scope="col">Price</th>
                                             <th scope="col">Offer Price</th>
                                             <th scope="col">category</th>
@@ -65,10 +67,9 @@
 
                                                 <td><%= product.productname %></td>
 
+                                                <td><%= product.number %></td>
 
                                                 <td><%= product.regularprice %></td>
-
-
                                                 <td><%= product.saleprice %></td>
                                                 <td><%= product.category %></td>
                                                 <td style="display: flex; justify-content: center; gap: 5px;">

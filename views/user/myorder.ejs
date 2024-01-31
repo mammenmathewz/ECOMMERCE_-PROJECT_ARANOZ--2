@@ -103,7 +103,9 @@ $(document).ready(function(){
                         swal("Status has been changed!", {
                             icon: "success",
                         });
-                        location.reload();
+                         setTimeout(() => {
+                            location.reload();
+                         }, 10);
                     },
                     error: function(xhr, ajaxOptions, thrownError) {
                         swal("Error changing status!", {

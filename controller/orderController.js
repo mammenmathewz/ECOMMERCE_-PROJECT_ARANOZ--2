@@ -88,6 +88,12 @@ const confirmOrder = async (req, res) => {
     const order = await Order.findById(newOrder._id).populate(
       "items.productId"
     );
+    
+    for (let item of cart.items) {
+      const product = await Product.findById(item.productId);
+      product.number -= item.quantity;
+      await product.save();
+    }
 
     cart.items = [];
     cart.total = 0;

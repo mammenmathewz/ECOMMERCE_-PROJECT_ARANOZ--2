@@ -27,12 +27,12 @@ const getProducts = async(req, res) => {
       const skip = (page - 1) * limit;
 
       // Count the total number of products
-      const totalProducts = await Product.countDocuments({deleted: false});
+      const totalProducts = await Product.countDocuments({deleted: false, number: { $gte: 1 }});
 
       // Calculate the total number of pages
       const pages = Math.ceil(totalProducts / limit);
 
-      let product = await Product.find({deleted: false}).limit(limit).skip(skip);
+      let product = await Product.find({deleted: false, number: { $gte: 1 }}).limit(limit).skip(skip);
 
       // Pass the current page and total pages to the EJS template
       res.render('user/products', {product: product, currentPage: page, pages: pages});
@@ -40,7 +40,8 @@ const getProducts = async(req, res) => {
       console.log(error);
       res.send('Error occurred while fetching data');
   }
-};
+}
+
 
 
 const getProduct = async(req,res)=>{

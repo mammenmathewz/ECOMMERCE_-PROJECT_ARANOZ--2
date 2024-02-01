@@ -121,6 +121,23 @@ const getAccount = async(req,res)=>{
   }
 }
 
+const editUser = async(req, res) => {
+  try {
+      const id = req.params.id; // get the user's ID from the request parameters
+      const user = await User.findById(id); // find the user by their ID
+
+      if (!user) {
+          return res.status(404).send('User not found');
+      }
+
+      // render the 'edituser' view, passing the user data to it
+      res.render('admin/edituser', { user: user });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error');
+  }
+};
+
 const myOrder = async(req, res) => {
   try {
     const user_id= req.session.user._id;
@@ -274,6 +291,7 @@ module.exports = {
     postSignup,
     postOtp,
     myOrder,
-    resetPassword
+    resetPassword,
+    editUser
    
 }

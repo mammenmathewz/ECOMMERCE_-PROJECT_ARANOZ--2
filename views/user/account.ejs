@@ -111,12 +111,12 @@
               <% if(user.address && user.address.length > 0) { %>
                 <% user.address.forEach(function(address) { %>
                   
-                 <div>
-                  <a style="margin-left: 80%;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                 <div >
+                  <a  data-id="<%= address._id %>"  style="margin-left: 80%; cursor: pointer;"><svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                   </svg></a>
-                  <a style="margin-left: 80%; margin-top: 4%;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                  <a style="margin-left: 80%; cursor: pointer;"><svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="margin-top: 1%;" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                     <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
                   </svg></a>
                  </div>
@@ -186,39 +186,32 @@
 function closeForm() {
   document.getElementById("myForm").style.display = "none";
 }
+$(document).ready(function() {
+    $('a').click(function() {
+        var id = $(this).data('id'); // assuming each 'a' tag has a data-id attribute with the unique ID of the user
 
-// document.querySelector('.btn-outline-primary').addEventListener('click', function() {
-//     fetch('/myorders') // Replace with your myorders route
-//         .then(response => response.json())
-//         .then(data => {
-//             // Assuming data is an object containing user's order details
-//             // Update the div with new data
-//             document.querySelector('.card-body').innerHTML = `
-//                 <div class="row">
-//                     <div class="col-sm-3">
-//                         <p class="mb-0">Order ID</p>
-//                     </div>
-//                     <div class="col-sm-9">
-//                         <p class="text-muted mb-0">${data.orderId}</p>
-//                     </div>
-//                 </div>
-//                 <hr>
-//                 <div class="row">
-//                     <div class="col-sm-3">
-//                         <p class="mb-0">Product Name</p>
-//                     </div>
-//                     <div class="col-sm-9">
-//                         <p class="text-muted mb-0">${data.productName}</p>
-//                     </div>
-//                 </div>
-//                 // Add more fields as needed
-//             `;
-//         })
-//         .catch(error => {
-//             // Handle error
-//             console.error(error);
-//         });
-// });
+        $.ajax({
+            url: '/editUser/' + id, // the URL of your server-side route that fetches the user data
+            type: 'GET',
+            success: function(data) {
+                // populate the fields in the modal with the data
+                $('#first').val(data.first_name);
+                $('#last').val(data.last_name);
+                $('#number').val(data.phone);
+                $('#add1').val(data.address1);
+                $('#add2').val(data.address2);
+                $('#city').val(data.city);
+                $('#district').val(data.district);
+                $('#state').val(data.state);
+                $('#zip').val(data.pin);
+
+                // open the modal
+                $('#addressModal').modal('show');
+            }
+        });
+    });
+});
+
 
 $(".btn-order").click(function(e) {
     e.preventDefault();

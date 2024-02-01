@@ -115,28 +115,38 @@ const getAccount = async(req,res)=>{
   try{
     const user = await User.findById(req.session.user._id);
     console.log(user);
-    res.render('user/account', { user: user });
+    // Pass userId and addressId to the EJS template
+    res.render('user/account', { user: user, userId: req.session.user._id, addressId: 'your_address_id' });
   } catch (err){
     console.log(err);
   }
 }
 
+
 const editUser = async(req, res) => {
   try {
-      const id = req.params.id; // get the user's ID from the request parameters
-      const user = await User.findById(id); // find the user by their ID
+    const userId = req.params.userId; // get the user's ID from the request parameters
+    const addressId = req.params.addressId; // get the address ID from the request parameters
 
-      if (!user) {
-          return res.status(404).send('User not found');
-      }
+    const user = await User.findById(userId); // find the user by their ID
 
-      // render the 'edituser' view, passing the user data to it
-      res.render('admin/edituser', { user: user });
-  } catch (error) {
-      console.error(error);
-      res.status(500).send('Server error');
-  }
-};
+    if (!user) {
+        return res.status(404).send('User not found');
+    }
+
+    const address = user.address.id(addressId); // find the address by its ID
+
+    if (!address) {
+        return res.status(404).send('Address not found');
+    }
+
+    // render the 'edituser' view, passing the user and address data to it
+    res.render('user/edituser', { user: user, address: address });
+} catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+}}
+
 
 const myOrder = async(req, res) => {
   try {

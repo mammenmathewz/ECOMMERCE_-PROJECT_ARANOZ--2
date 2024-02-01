@@ -35,6 +35,6 @@ userRouter.post('/addAddress',auth.isUserLogin,orderController.addAddress)
 userRouter.post('/confirmOrder',auth.isUserLogin,orderController.confirmOrder)
 userRouter.get('/confirmation/:orderId',auth.isUserLogin,orderController.getConfirmation)
 userRouter.get('/myorder',auth.isUserLogin,userController.myOrder)
-userRouter.get('/editUser/:id',auth.isUserLogin,userController.editUser)
+userRouter.get('/editUser/:userId/address/:addressId', auth.isUserLogin, userController.editUser);
 userRouter.post('/reset-password',auth.isUserLogout,userController.resetPassword)
 module.exports = userRouter;

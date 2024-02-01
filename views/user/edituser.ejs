@@ -1,0 +1,52 @@
+<%- include('../partials/head') %>
+
+
+<!-- Header part end-->
+<%- include('../partials/navbar') %>
+
+
+
+<div class="container" style="margin-top: 10%;">
+    <form class="row contact_form" action="/updateaddress" method="post" novalidate="novalidate">
+        <input type="hidden" name="redirect" value="/account">
+          <div class="col-md-6 form-group p_star">
+              <input type="text" class="form-control" id="first" name="first_name" placeholder="First name"  value="<%= address.first_name %>"/>
+              
+          </div>
+          <div class="col-md-6 form-group p_star">
+              <input type="text" class="form-control" id="last" name="last_name" placeholder="Last name" value="<%= address.last_name %>"/>
+              
+          </div>
+    
+          <div class="col-md-6 form-group p_star">
+              <input type="text" class="form-control" id="number" name="phone" placeholder="Phone number" value="<%= address.phone %>"/>
+             
+          </div>
+    
+    
+          <div class="col-md-12 form-group p_star">
+              <input type="text" class="form-control" id="add1" name="address1" placeholder="Address line 01"  value="<%= address.address1 %>"/>
+             
+          </div>
+          <div class="col-md-12 form-group p_star">
+              <input type="text" class="form-control" id="add2" name="address2" placeholder="Address line 02" value="<%=address.address2 %>"/>
+            
+          </div>
+         
+          <div class="col-md-12 form-group p_star">
+              <input type="text" class="form-control" id="district" name="district" placeholder="District" value="<%= address.district  %>"/>
+              
+          </div>
+          <div class="col-md-12 form-group p_star">
+              <input type="text" class="form-control" id="state" name="state" placeholder="State" value="<%= address.state  %>"/>
+             
+          </div>
+    
+          <div class="col-md-12 form-group">
+              <input type="text" class="form-control" id="zip" name="pin"
+                  placeholder="Postcode/ZIP" value="<%= address.pin  %>"/>
+          </div>
+    
+         <button style="margin-left: auto; margin-right: auto;" class="tp_btn" type="submit">UPDATE ADDRESS </button>
+      </form>
+</div>

@@ -420,22 +420,27 @@ async function incrementProductQuantity(items) {
   }
 }
 
+//for user// // /// //
 
-const viewOrder = async(req,res)=>{
+
+
+const vieworder = async(req,res)=>{
   try {
-    // Get the user's ID from the session
-    const userId = req.session.userId;
-    console.log(userId);
+    // Fetch the order by its ID, populate product details and user data
+    console.log(req.params.orderId);
+    const order = await Order.findById(req.params.orderId).populate("items.productId").populate("user");
 
-    // Find orders for the specific user
-    const orders = await Order.find({ user: userId }).populate('user').populate('items.productId');
-    console.log(orders);
+    // Check if order exists
+    if (!order) {
+      return res.status(404).send({ message: 'Order not found' });
+    }
 
-    // Render the 'user/myorder' view with the orders
-    res.render('user/myorder', { orders: orders });
-} catch (error) {
+    // Render the 'vieworder' page with the order details
+    res.render('admin/viewmore', { order, active: 'orders' });
+  } catch (error) {
     console.log(error);
-}
+    res.status(500).send({ message: 'Server error' });
+  }
 }
 
 module.exports={
@@ -459,6 +464,6 @@ module.exports={
     deleteBrand,
     getOrderManagement,
     switchStatus,
-    viewOrder
+    vieworder
 
 }

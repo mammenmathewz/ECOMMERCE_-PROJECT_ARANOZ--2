@@ -43,5 +43,5 @@ adminRouter.post('/addbrand',auth.isAdminLogin,adminController.addBrands)
 adminRouter.post('/delete-brand/:id',auth.isAdminLogin,adminController.deleteBrand)
 adminRouter.get('/orders',auth.isAdminLogin,adminController.getOrderManagement)
 adminRouter.post('/change-order-status/:id',auth.isAdminLogin,adminController.switchStatus)
-adminRouter.get('/vieworder',auth.isAdminLogin,adminController.viewOrder)
+adminRouter.get('/vieworder/:orderId',auth.isAdminLogin,adminController.vieworder)
 module.exports = adminRouter;

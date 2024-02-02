@@ -7,7 +7,7 @@
 
 
 <div class="container" style="margin-top: 10%;">
-    <form class="row contact_form" action="/updateaddress" method="post" novalidate="novalidate">
+    <form class="row contact_form" action="/updateaddress/<%= userId %>/address/<%= addressId %>" method="post" novalidate="novalidate">
         <input type="hidden" name="redirect" value="/account">
           <div class="col-md-6 form-group p_star">
               <input type="text" class="form-control" id="first" name="first_name" placeholder="First name"  value="<%= address.first_name %>"/>

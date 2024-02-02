@@ -37,4 +37,11 @@ userRouter.get('/confirmation/:orderId',auth.isUserLogin,orderController.getConf
 userRouter.get('/myorder',auth.isUserLogin,userController.myOrder)
 userRouter.get('/editUser/:userId/address/:addressId', auth.isUserLogin, userController.editUser);
 userRouter.post('/reset-password',auth.isUserLogout,userController.resetPassword)
+userRouter.post('/updateaddress/:userId/address/:addressId',auth.isUserLogin,userController.updateAddress)
+userRouter.delete('/deleteaddress/:userId/address/:addressId', auth.isUserLogin, userController.deleteAddress);
+userRouter.get('/vieworder',auth.isUserLogin,userController.viewOrder)
+
+
+
+
 module.exports = userRouter;

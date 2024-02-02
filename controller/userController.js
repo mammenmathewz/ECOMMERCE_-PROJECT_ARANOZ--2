@@ -141,11 +141,69 @@ const editUser = async(req, res) => {
     }
 
     // render the 'edituser' view, passing the user and address data to it
-    res.render('user/edituser', { user: user, address: address });
+
+    res.render('user/edituser', { user: user, address: address, userId: userId, addressId: addressId });
+
 } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
 }}
+
+const updateAddress = async (req, res) => {
+  try {
+    const userId = req.params.userId; // get the user's ID from the request parameters
+    const addressId = req.params.addressId; // get the address ID from the request parameters
+
+    const user = await User.findById(userId); // find the user by their ID
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const address = user.address.id(addressId); // find the address by its ID
+
+    if (!address) {
+      return res.status(404).send('Address not found');
+    }
+
+    // update the address with the new data from the request body
+    address.set(req.body);
+
+    // save the updated user
+    await user.save();
+
+    req.flash('info', 'Address updated successfully');
+    req.flash('type', 'alert alert-success');
+    res.redirect('/account')
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+};
+
+const deleteAddress = async (req, res) => {
+  try {
+    const userId = req.params.userId; // get the user's ID from the request parameters
+    const addressId = req.params.addressId; // get the address ID from the request parameters
+
+    const user = await User.findById(userId); // find the user by their ID
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // remove the address
+    user.address.pull(addressId);
+
+    // save the updated user
+    await user.save();
+
+    res.status(200).json({ message: 'Address deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
 
 
 const myOrder = async(req, res) => {
@@ -288,6 +346,22 @@ const resetPassword = async(req,res)=>{
   }
 }
 
+const viewOrder = async(req,res)=>{
+  try {
+    // Get the user's ID from the session
+    const userId = req.session.userId;
+    console.log(userId);
+
+    // Find orders for the specific user
+    const orders = await Order.find({ user: userId }).populate('user').populate('items.productId');
+    console.log(orders);
+
+    // Render the 'user/myorder' view with the orders
+    res.render('user/myorder', { orders: orders });
+} catch (error) {
+    console.log(error);
+}
+}
 
 module.exports = {
     getHome,
@@ -302,6 +376,9 @@ module.exports = {
     postOtp,
     myOrder,
     resetPassword,
-    editUser
+    editUser,
+    updateAddress,
+    deleteAddress,
+    viewOrder,
    
 }

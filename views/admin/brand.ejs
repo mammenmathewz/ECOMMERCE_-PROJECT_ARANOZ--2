@@ -106,43 +106,40 @@
 
             <!-- Template Javascript -->
             <script src="js/main.js"></script>
-            <!-- <script>
-        function checkForm(e) {
-          let inputs = document.getElementsByTagName('input');
-          for(let i=0; i<inputs.length; i++) {
-            if (!inputs[i].value.trim()) {
-              e.preventDefault();
-              alert('Please fill out the form completely');
-              return;
-            }
-          }
-        }
-        </script> -->
-<script>
-    document.getElementById('brandForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    let name = document.getElementById('brand').value;
-
-    fetch('/admin/addBrand', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: 'name=' + encodeURIComponent(name),
-})
-.then(response => response.json())
-.then(data => {
-    console.log(data);
-    window.location.reload(); // Add this line
-})
-.catch((error) => {
-    console.error('Error:', error);
-});
-
-});
-
-</script>
+       
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>
+            document.getElementById('brandForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+        
+                let name = document.getElementById('brand').value;
+        
+                fetch('/admin/addBrand', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'name=' + encodeURIComponent(name),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Display using SweetAlert
+                    swal("Response", data.message, "info"); // Access the message from the JSON response
+        
+                    // Update the DOM
+                    let brandList = document.getElementById('brandList'); // Get the brand list element
+                    let newBrand = document.createElement('li'); // Create a new list item
+                    newBrand.textContent = name; // Set the text content to the new brand name
+                    brandList.appendChild(newBrand); // Append the new brand to the brand list
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            });
+        </script>
+        
+        
 </body>
 
 </html>

@@ -116,16 +116,29 @@ const adminLogout = async(req,res)=>{
 }
 
 //USER FUNCTIONS//
-
 const getUsers = async(req,res)=>{
-    try{
-        let users = await User.find({});
-        res.render('admin/usermanag', { users: users ,active: 'users'});
-    } catch (error) {
-        console.log(error);
-        res.send('Error occurred while fetching data')
-    }
-} 
+  try{
+    const page = req.query.page || 1; // Get the page number from the query parameters
+    const limit = 10; // Set the number of users per page
+    const skip = (page - 1) * limit; // Calculate the number of users to skip
+
+    // Fetch the users for the current page
+    let users = await User.find({})
+      .skip(skip)
+      .limit(limit);
+
+    // Calculate the total number of pages
+    const count = await User.countDocuments({});
+    const pages = Math.ceil(count / limit);
+
+    // Pass the users, current page, and total pages to the view
+    res.render('admin/usermanag', { users: users, active: 'users', currentPage: page, pages });
+  } catch (error){
+    console.log(error);
+    res.send('Error occurred while fetching data');
+  }
+}
+
 
 const blockUser = async(req,res)=>{
     try {
@@ -144,16 +157,31 @@ const blockUser = async(req,res)=>{
 }
 
 const getProducts = async(req,res)=>{
-    try{
-      
-          let product = await Product.find({deleted: false}).populate('brand');
-          let brands = await Brand.find(); // Fetch the brands
-          res.render('admin/manageproducts', { product: product, brands: brands,active: 'productmanagement' }); // Pass the brands to your view
-     } catch (error){
-        console.log(error);
-        res.send('Error occurred while fetching data');
-      }
+  try{
+    const page = req.query.page || 1; // Get the page number from the query parameters
+    const limit = 10; // Set the number of products per page
+    const skip = (page - 1) * limit; // Calculate the number of products to skip
+
+    // Fetch the products for the current page
+    let product = await Product.find({deleted: false})
+      .skip(skip)
+      .limit(limit)
+      .populate('brand');
+
+    // Calculate the total number of pages
+    const count = await Product.countDocuments({deleted: false});
+    const pages = Math.ceil(count / limit);
+
+    let brands = await Brand.find(); // Fetch the brands
+
+    // Pass the products, current page, and total pages to the view
+    res.render('admin/manageproducts', { product: product, brands: brands, active: 'productmanagement', currentPage: page, pages });
+  } catch (error){
+    console.log(error);
+    res.send('Error occurred while fetching data');
+  }
 }
+
 
 const editProduct = async(req,res)=>{
     try {
@@ -313,11 +341,11 @@ const getBrands = async(req,res)=>{
 }
 
 const addBrands = async(req,res)=>{
-
-    const existingBrand = await Brand.findOne({ name: req.body.name });
-    if (existingBrand) {
-      return res.status(400).send('Brand already exists');
+  const existingBrand = await Brand.findOne({ name: req.body.name });
+  if (existingBrand) {
+    return res.status(400).json({ message: 'Brand already exists' });
   }
+  
     console.log(req.body);
     const brandName = req.body.name;
  // make sure 'name' matches the form input field name
@@ -352,15 +380,32 @@ const deleteBrand = async(req,res)=>{
 
 const getOrderManagement = async(req,res)=>{
   try{
-      // Fetch all orders with populated product details and user data
-      const orders = await Order.find({}).populate("items.productId").populate("user");
+      const page = req.query.page || 1; // Get the page number from the query parameters
+      const limit = 10; // Set the number of orders per page
+      const skip = (page - 1) * limit; // Calculate the number of orders to skip
+
+      // Fetch the orders for the current page and sort by date
+      const orders = await Order.find({})
+        .sort({ date: -1 })
+        .skip(skip)
+        .limit(limit)
+        .populate("items.productId")
+        .populate("user");
+
+      // Calculate the total number of pages
+      const count = await Order.countDocuments({});
+      const pages = Math.ceil(count / limit);
+
       const active = 'orders'; 
-      // Pass the orders to the view
-      res.render('admin/ordermanagement', { orders,active });
+
+      // Pass the orders, current page, and total pages to the view
+      res.render('admin/ordermanagement', { orders, active, currentPage: page, pages });
   } catch(error){
     console.log(error);
   }
 }
+
+
 
 const switchStatus = async(req,res)=>{
   const orderId = req.params.id; // Get the order ID from the URL

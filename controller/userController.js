@@ -125,22 +125,22 @@ const getAccount = async(req,res)=>{
 
 const editUser = async(req, res) => {
   try {
-    const userId = req.params.userId; // get the user's ID from the request parameters
-    const addressId = req.params.addressId; // get the address ID from the request parameters
+    const userId = req.params.userId; 
+    const addressId = req.params.addressId; 
 
-    const user = await User.findById(userId); // find the user by their ID
+    const user = await User.findById(userId); 
 
     if (!user) {
         return res.status(404).send('User not found');
     }
 
-    const address = user.address.id(addressId); // find the address by its ID
+    const address = user.address.id(addressId);
 
     if (!address) {
         return res.status(404).send('Address not found');
     }
 
-    // render the 'edituser' view, passing the user and address data to it
+   
 
     res.render('user/edituser', { user: user, address: address, userId: userId, addressId: addressId });
 
@@ -209,12 +209,16 @@ const deleteAddress = async (req, res) => {
 const myOrder = async(req, res) => {
   try {
     const user_id= req.session.user._id;
-    const orders = await Order.find({ user: user_id }).populate("items.productId").populate("user");
+    const orders = await Order.find({ user: user_id })
+                              .populate("items.productId")
+                              .populate("user")
+                              .sort({ date: -1 }); // Sort by date in descending order
     res.render('user/myorder', { orders });
   } catch(error) {
     console.log(error);
   }
 }
+
 
 const changePassword_Profile = async(req,res)=>{
   try{

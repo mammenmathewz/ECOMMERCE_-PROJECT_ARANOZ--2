@@ -50,47 +50,47 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="row contact_form" action="/addAddress" method="post" novalidate="novalidate">
+        <form class="row contact_form" action="/addAddress" method="post" >
           <input type="hidden" name="redirect" value="/account">
             <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="first" name="first_name" placeholder="First name" />
+                <input type="text" class="form-control" id="first" name="first_name" placeholder="First name" required/>
                 
             </div>
             <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="last" name="last_name" placeholder="Last name"/>
+                <input type="text" class="form-control" id="last" name="last_name" placeholder="Last name" required/>
                 
             </div>
 
             <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="number" name="phone" placeholder="Phone number"/>
+                <input type="text" class="form-control" id="number" name="phone" placeholder="Phone number" required/>
                
             </div>
 
 
             <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add1" name="address1" placeholder="Address line 01"/>
+                <input type="text" class="form-control" id="add1" name="address1" placeholder="Address line 01" required/>
                
             </div>
             <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add2" name="address2" placeholder="Address line 02"/>
+                <input type="text" class="form-control" id="add2" name="address2" placeholder="Address line 02" required/>
               
             </div>
             <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="city" name="city" placeholder="Town/City"/>
+                <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" required/>
                
             </div>
             <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="district" name="district" placeholder="District"/>
+                <input type="text" class="form-control" id="district" name="district" placeholder="District"required/>
                 
             </div>
             <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="state" name="state" placeholder="State"/>
+                <input type="text" class="form-control" id="state" name="state" placeholder="State" required/>
                
             </div>
 
             <div class="col-md-12 form-group">
                 <input type="text" class="form-control" id="zip" name="pin"
-                    placeholder="Postcode/ZIP" />
+                    placeholder="Postcode/ZIP" required/>
             </div>
 
            <button style="margin-left: auto; margin-right: auto;" class="tp_btn" type="submit">ADD NEW ADDRESS </button>

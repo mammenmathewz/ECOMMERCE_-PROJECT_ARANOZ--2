@@ -22,8 +22,10 @@
              <div class="d-flex justify-content-center mb-2">
  
     <div class="btn-group" role="group" style="gap: 3%;">
-      <button type="button"  style="margin-right: 1%;" class="btn btn-outline-primary btn-edit">Edit Profile</button>
+      <a href="/account"><button type="button"  style="margin-right: 1%;" class="btn btn-outline-primary btn-edit">Edit Profile</button></a>
       <button type="button" class="btn btn-outline-primary btn-order">My orders</button>
+      <button type="button" class="btn btn-outline-primary btn-password">Reset Password</button>
+
       
       
   </div>
@@ -200,6 +202,14 @@ function closeForm() {
 $(".btn-order").click(function(e) {
     e.preventDefault();
     $.get("/myorder", function(data) {
+        $(".col-lg-8").html(data);
+    });
+});
+
+
+$(".btn-password").click(function(e) {
+    e.preventDefault();
+    $.get("/changepass", function(data) {
         $(".col-lg-8").html(data);
     });
 });

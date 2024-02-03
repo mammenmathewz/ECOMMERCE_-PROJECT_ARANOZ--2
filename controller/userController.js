@@ -216,6 +216,19 @@ const myOrder = async(req, res) => {
   }
 }
 
+const changePassword_Profile = async(req,res)=>{
+  try{
+      const user_id= req.session.user._id;
+      // Fetch the user from the database
+      const user = await User.findById(user_id);
+      // Pass the user's email to the view
+      res.render('user/changepassword', { email: user.email });
+  } catch(error){
+    console.log(error);
+  }
+}
+
+
 
 
 
@@ -363,6 +376,36 @@ const viewOrder = async(req,res)=>{
 }
 }
 
+const resetPasswordWithoutOTP = async(req, res) => {
+  try {
+      const { email, newPassword } = req.body;
+      console.log(req.body);
+      if (typeof newPassword !== 'string' || typeof saltRounds !== 'number') {
+        return res.status(400).send('Invalid data.');
+    }
+      // Hash the new password
+      bcrypt.hash(newPassword, saltRounds, async function(err, hash) {
+          if (err) {
+              console.log(err);
+              return res.status(500).send('An error occurred while hashing the password.');
+          }
+
+          // Update the user's password
+          try {
+              await User.updateOne({ email: email }, { password: hash });
+              req.flash('info', 'Password reset success');
+              req.flash('type', 'alert alert-success');
+              res.redirect('/account');
+          } catch (err) {
+              console.log(err);
+              res.status(500).send('An error occurred while updating the password.');
+          }
+      });
+  } catch (error) {
+      console.log(error);
+  }
+}
+
 module.exports = {
     getHome,
     getProducts,
@@ -380,5 +423,7 @@ module.exports = {
     updateAddress,
     deleteAddress,
     viewOrder,
+    changePassword_Profile,
+    resetPasswordWithoutOTP
    
 }

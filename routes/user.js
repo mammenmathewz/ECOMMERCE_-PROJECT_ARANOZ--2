@@ -40,6 +40,8 @@ userRouter.post('/reset-password',auth.isUserLogout,userController.resetPassword
 userRouter.post('/updateaddress/:userId/address/:addressId',auth.isUserLogin,userController.updateAddress)
 userRouter.delete('/deleteaddress/:userId/address/:addressId', auth.isUserLogin, userController.deleteAddress);
 userRouter.get('/vieworder',auth.isUserLogin,userController.viewOrder)
+userRouter.get('/changepass',auth.isUserLogin,userController.changePassword_Profile)
+userRouter.post('/newpassword',auth.isUserLogin,userController.resetPasswordWithoutOTP)
 
 
 

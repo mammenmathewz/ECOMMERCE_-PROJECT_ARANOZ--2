@@ -23,7 +23,7 @@ const getHome =async(req,res)=>{
 
 const getProducts = async(req, res) => {
   try {
-      const { page = 1, limit = 2 } = req.query;
+      const { page = 1, limit = 8 } = req.query;
       const skip = (page - 1) * limit;
 
       // Count the total number of products
@@ -409,6 +409,47 @@ const resetPasswordWithoutOTP = async(req, res) => {
       console.log(error);
   }
 }
+const filterCategory = async(req, res) => {
+  try {
+      const { page = 1, limit = 8 } = req.query;
+      let { categories } = req.query;
+      const skip = (page - 1) * limit;
+
+      // If categories is undefined, set it to an empty array
+      if (!categories) {
+          categories = [];
+      }
+
+      let query = { deleted: false, number: { $gte: 1 } };
+
+      // If 'Mens' or 'Womens' is selected, add 'Unisex' to the categories
+      if (categories.includes('Mens') || categories.includes('Womens')) {
+          categories.push('Unisex');
+      }
+
+      // If no categories are selected, show all products
+      if (categories.length > 0) {
+          query.category = { $in: categories };
+      }
+
+      // Count the total number of products in the given categories
+      const totalProducts = await Product.countDocuments(query);
+
+      // Calculate the total number of pages
+      const pages = Math.ceil(totalProducts / limit);
+
+      let product = await Product.find(query).limit(limit).skip(skip);
+
+      // Send a JSON response
+      res.json({ product: product, currentPage: page, pages: pages });
+  } catch (error) {
+      console.log(error);
+      res.status(500).send('Error occurred while fetching data');
+  }
+}
+
+
+
 
 module.exports = {
     getHome,
@@ -428,6 +469,7 @@ module.exports = {
     deleteAddress,
     viewOrder,
     changePassword_Profile,
-    resetPasswordWithoutOTP
+    resetPasswordWithoutOTP,
+    filterCategory
    
 }

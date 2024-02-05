@@ -23,36 +23,18 @@
                             <div class="widgets_inner">
                                 <ul class="list">
                                     <li>
-                                        <a href="#">Frozen Fish</a>
-                                        <span>(250)</span>
+                                        <a href="#" class="category">Mens</a>
+                                        <input type="checkbox" name="" id="" class="category-checkbox">
                                     </li>
                                     <li>
-                                        <a href="#">Dried Fish</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Fish</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Meat Alternatives</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Fish</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Meat Alternatives</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Meat</a>
-                                        <span>(250)</span>
+                                        <a href="#" class="category">Womens</a>
+                                        <input type="checkbox" name="" id="" class="category-checkbox">
                                     </li>
                                 </ul>
                             </div>
                         </aside>
+                        
+                        
 
                         <aside class="left_widgets p_filter_widgets">
                             <div class="l_w_title">
@@ -159,16 +141,7 @@
                                         <option value="2">product</option>
                                     </select>
                                 </div>
-                                <div class="single_product_menu d-flex">
-                                    <h5>show :</h5>
-                                    <div class="top_pageniation">
-                                        <ul>
-                                            <li>1</li>
-                                            <li>2</li>
-                                            <li>3</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                              
                                 <div class="single_product_menu d-flex">
                                     <div class="input-group">
                                         <input type="text" class="form-control" placeholder="search"
@@ -328,6 +301,68 @@
     <script src="/user/js/price_rangs.js"></script>
     <!-- custom js -->
     <script src="/user/js/custom.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <script>$(document).ready(function() {
+        var selectedCategories = [];
+        var currentPage = 1;
+        var limit = 8;
+    
+        $('.category-checkbox').change(function() {
+            var category = $(this).siblings('a').text();
+    
+            // Add or remove the category from the selectedCategories array
+            if ($(this).is(':checked')) {
+                selectedCategories.push(category);
+            } else {
+                var index = selectedCategories.indexOf(category);
+                if (index > -1) {
+                    selectedCategories.splice(index, 1);
+                }
+            }
+    
+            $.ajax({
+                url: '/filterCategory',
+                type: 'GET',
+                data: { categories: selectedCategories, page: currentPage, limit: limit },
+                success: function(data) {
+                    // Clear the current products
+                    $('.latest_product_inner').empty();
+    
+                    // Loop through the products and add them to the page
+                    data.product.forEach(function(product) {
+                        $('.latest_product_inner').append(`
+                            <div class="col-lg-4 col-sm-6">
+                                <div class="single_product_item">
+                                    <div style="margin-left: 20%;"> 
+                                        <a href="/viewproduct/${product._id}">
+                                            <img src="${product.images[0]}" alt="watch" style="object-fit:scale-down"; height="300px">
+                                        </a>
+                                    </div>
+                                    <div class="single_product_text">
+                                        <h4>${product.productname}</h4>
+                                        <h3>$ ${product.saleprice}</h3>
+                                        <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+    
+                    // Update the current page and total pages
+                    currentPage = data.currentPage;
+                    var totalPages = data.pages;
+    
+                    // Update the page navigation based on the current page and total pages
+                    // This will depend on how your page navigation is set up
+                }
+            });
+        });
+    });
+    
+
+    </script>
 </body>
 
 </html>

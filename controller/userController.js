@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Product = require('../models/products')
-const brand = require('../models/brand')
+const Brand = require('../models/brand')
 const { User, Address } = require('../models/users')
 const bcrypt = require('bcrypt');
 const session = require('express-session');
@@ -20,10 +20,9 @@ const getHome =async(req,res)=>{
         res.send('Error occurred while fetching data')
       }
 }
-
 const getProducts = async(req, res) => {
   try {
-      const { page = 1, limit = 8 } = req.query;
+      const { page = 1, limit = 3 } = req.query;
       const skip = (page - 1) * limit;
 
       // Count the total number of products
@@ -34,13 +33,17 @@ const getProducts = async(req, res) => {
 
       let product = await Product.find({deleted: false, number: { $gte: 1 }}).limit(limit).skip(skip);
 
-      // Pass the current page and total pages to the EJS template
-      res.render('user/products', {product: product, currentPage: page, pages: pages});
+      // Fetch the brands
+      let brands = await Brand.find();
+
+      // Pass the current page, total pages, and brands to the EJS template
+      res.render('user/products', {product: product, currentPage: page, pages: pages, brands: brands});
   } catch (error) {
       console.log(error);
       res.send('Error occurred while fetching data');
   }
 }
+
 
 
 
@@ -409,36 +412,39 @@ const resetPasswordWithoutOTP = async(req, res) => {
       console.log(error);
   }
 }
-const filterCategory = async(req, res) => {
+const filterAndSortProducts = async(req, res) => {
   try {
-      const { page = 1, limit = 8 } = req.query;
-      let { categories } = req.query;
+      const { page = 1, limit = 6, sort = '1', categories, brands } = req.query;
       const skip = (page - 1) * limit;
-
-      // If categories is undefined, set it to an empty array
-      if (!categories) {
-          categories = [];
-      }
 
       let query = { deleted: false, number: { $gte: 1 } };
 
-      // If 'Mens' or 'Womens' is selected, add 'Unisex' to the categories
-      if (categories.includes('Mens') || categories.includes('Womens')) {
-          categories.push('Unisex');
-      }
-
-      // If no categories are selected, show all products
-      if (categories.length > 0) {
+      // Handle category filtering
+      if (categories) {
+          if (categories.includes('Mens') || categories.includes('Womens')) {
+              categories.push('Unisex');
+          }
           query.category = { $in: categories };
       }
 
-      // Count the total number of products in the given categories
+      // Handle brand filtering
+      if (brands) {
+          const brandDocs = await Brand.find({ name: { $in: brands } });
+          const brandIds = brandDocs.map(doc => doc._id);
+          query.brand = { $in: brandIds };
+      }
+
+      // Handle sorting
+      let sortOrder = sort === '1' ? 1 : -1;
+      let sortQuery = { saleprice: sortOrder };
+
+      // Count the total number of products
       const totalProducts = await Product.countDocuments(query);
 
       // Calculate the total number of pages
       const pages = Math.ceil(totalProducts / limit);
 
-      let product = await Product.find(query).limit(limit).skip(skip);
+      let product = await Product.find(query).sort(sortQuery).limit(limit).skip(skip);
 
       // Send a JSON response
       res.json({ product: product, currentPage: page, pages: pages });
@@ -447,6 +453,9 @@ const filterCategory = async(req, res) => {
       res.status(500).send('Error occurred while fetching data');
   }
 }
+
+
+
 
 
 
@@ -470,6 +479,5 @@ module.exports = {
     viewOrder,
     changePassword_Profile,
     resetPasswordWithoutOTP,
-    filterCategory
-   
+    filterAndSortProducts
 }

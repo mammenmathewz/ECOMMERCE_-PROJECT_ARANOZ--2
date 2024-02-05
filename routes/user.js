@@ -42,8 +42,7 @@ userRouter.delete('/deleteaddress/:userId/address/:addressId', auth.isUserLogin,
 userRouter.get('/vieworder',auth.isUserLogin,userController.viewOrder)
 userRouter.get('/changepass',auth.isUserLogin,userController.changePassword_Profile)
 userRouter.post('/newpassword',auth.isUserLogin,userController.resetPasswordWithoutOTP)
-userRouter.get('/filterCategory',userController.filterCategory)
-
+userRouter.get('/filterAndSortProducts',userController.filterAndSortProducts)
 
 
 

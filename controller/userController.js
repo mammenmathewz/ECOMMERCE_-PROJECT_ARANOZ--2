@@ -385,33 +385,46 @@ const viewOrder = async(req,res)=>{
 
 const resetPasswordWithoutOTP = async(req, res) => {
   try {
-      const { email, newPassword } = req.body;
-      console.log(req.body);
-      if (typeof newPassword !== 'string' || typeof saltRounds !== 'number') {
-        return res.status(400).send('Invalid data.');
-    }
-      // Hash the new password
-      bcrypt.hash(newPassword, saltRounds, async function(err, hash) {
-          if (err) {
-              console.log(err);
-              return res.status(500).send('An error occurred while hashing the password.');
-          }
+    const { email, currentPassword, newPassword } = req.body;
 
-          // Update the user's password
-          try {
-              await User.updateOne({ email: email }, { password: hash });
-              req.flash('info', 'Password reset success');
-              req.flash('type', 'alert alert-success');
-              res.redirect('/account');
-          } catch (err) {
-              console.log(err);
-              res.status(500).send('An error occurred while updating the password.');
-          }
-      });
+    // Find the user
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(400).redirect('/account',);
+      
+    }
+
+    // Check the current password
+    const match = await bcrypt.compare(currentPassword, user.password);
+    if (!match) {
+      req.flash('info', 'Current password is wrong');
+      req.flash('type', 'alert alert-danger');
+      return res.status(400).redirect('/account');
+    }
+    
+    // Hash the new password
+    bcrypt.hash(newPassword, saltRounds, async function(err, hash) {
+      if (err) {
+        console.log(err);
+        return res.status(500).send('An error occurred while hashing the password.');
+      }
+
+      // Update the user's password
+      user.password = hash;
+      await user.save();
+
+      req.flash('info', 'Password reset success');
+      req.flash('type', 'alert alert-success');
+      res.redirect('/account');
+    });
   } catch (error) {
-      console.log(error);
+    console.log(error);
+    res.status(500).send('An error occurred.');
   }
-}
+};
+
+
+
 const filterAndSortProducts = async(req, res) => {
   try {
       const { page = 1, limit = 6, sort = '1', categories, brands } = req.query;

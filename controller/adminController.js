@@ -342,32 +342,32 @@ const getBrands = async(req,res)=>{
 }
 
 const addBrands = async(req,res)=>{
-  const existingBrand = await Brand.findOne({ name: req.body.name });
+  const existingBrand = await Brand.findOne({ name: { $regex: new RegExp(`^${req.body.name}$`, 'i') } });
   if (existingBrand) {
     return res.status(400).json({ message: 'Brand already exists' });
   }
   
-    console.log(req.body);
-    const brandName = req.body.name;
- // make sure 'name' matches the form input field name
+  console.log(req.body);
+  const brandName = req.body.name;
   
-    // Create a new brand
-    const brand = new Brand({ name: brandName });
+  // Create a new brand
+  const brand = new Brand({ name: brandName });
   
-    try {
-      // Save the brand to the database
-      await brand.save();
+  try {
+    // Save the brand to the database
+    await brand.save();
   
-      // Fetch the updated list of brands
-      const brands = await Brand.find();
+    // Fetch the updated list of brands
+    const brands = await Brand.find();
   
-      // Send the updated list of brands back to the client
-      res.json(brands);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('An error occurred while saving the brand.');
-    }
+    // Send the updated list of brands back to the client
+    res.json(brands);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('An error occurred while saving the brand.');
+  }
 }
+
 
 const deleteBrand = async(req,res)=>{
     try {

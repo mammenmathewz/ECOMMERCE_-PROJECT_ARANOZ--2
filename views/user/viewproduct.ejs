@@ -11,72 +11,87 @@
     <!--================End Home Banner Area =================-->
 
     <!--================Single Product Area =================-->
+    <style>
+        .zoom {
+            transition: transform .2s; /* Animation */
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .zoom:hover {
+            transform: scale(2.0); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        }
+    </style>
     
+
     <div class="product_image_area section_padding">
-        
-            <div class="container">
-                <div class="row s_product_inner justify-content-between">
-                   
-                   
-                    <div class="col-lg-7 col-xl-7">
-                        <div class="product_slider_img">
-                            <div id="vertical">
-                                <% for(let i = 0; i < product.images.length; i++) { %>
-                                    <div data-thumb="<%= product.images[i] %>">
-                                        <img src="<%= product.images[i] %>" width="280" height="400" style="object-fit: scale-down; transition: transform 0.25s ease;" />
-                                    </div>
-                                <% } %>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-5 col-xl-4">
-                        <div class="s_product_text">
-                            <h5>previous <span>|</span> next</h5>
-                            <h3>
-                                <%= product.brand.name  %>:    
-                            </h3><h4> <%= product.productname %></h4>
-                            <h2>$ <%= product.saleprice %>
-                            </h2>
-                            <ul class="list">
-                                <li>
-                                    <a class="active" href="#">
-                                        <span>Category</span> : <%= product.category %></a>
-                                </li>
-                                <li>
-                                    <a href="#"> <span>Availibility</span> : In Stock</a>
-                                </li>
-                            </ul>
-                            <p>
-                                <%= product.description %>
-                            </p>
-                            <% if (messages.error) { %>
-                                <div class="alert alert-danger" id="errorMessage">
-                                    <%= messages.error %>
+        <div class="container">
+            <div class="row s_product_inner justify-content-between">
+                <div class="col-lg-7 col-xl-7">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <% for(let i = 0; i < product.images.length; i++) { %>
+                                <li data-target="#carouselExampleIndicators" data-slide-to="<%= i %>" class="<%= i === 0 ? 'active' : '' %>"></li>
+                            <% } %>
+                        </ol>
+                        <div class="carousel-inner">
+                            <% for(let i = 0; i < product.images.length; i++) { %>
+                                <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
+                                    <img class="d-block w-100 zoom" src="<%= product.images[i] %>" alt="<%= product.productname %> Image <%= i+1 %>" style="width: 405px; height: 518px; object-fit: contain;">
                                 </div>
                             <% } %>
-                            <div class="card_area d-flex justify-content-between align-items-center">
-                                <div class="product_count">
-                                    <span class="inumber-decrement"> <i class="ti-minus"></i></span>
-                                    <input class="input-number" type="text" value="1" min="0" max="10">
-                                    <span class="number-increment"> <i class="ti-plus"></i></span>
-                                   
-                                </div>
-                               
-                                <form action="/addcart/<%= product._id %>" method="post">
-                                    <button type="submit" class="btn_3">Add to Cart</button>
-                                  </form>
-                                  
-
-                                <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
-                            </div>
                         </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
-                   
                 </div>
-            </div>
-
-        </div>
+                
+                
+                <div class="col-lg-5 col-xl-4">
+                    <div class="s_product_text">
+                        <h3><%= product.productname %></h3>
+                        <h2>$<%= product.saleprice.toFixed(2) %></h2>
+                        <ul class="list">
+                          <li>
+                            <a class="active" href="#">
+                              <span>Category</span>  : <%= product.category %></a>
+                          </li>
+                          <li>
+                            <a href="#"> <span>Availibility</span> : In Stock</a>
+                          </li>
+                        </ul>
+                        <% if (messages.error) { %>
+                            <div class="alert alert-danger" id="errorMessage">
+                                <%= messages.error %>
+                            </div>
+                        <% } %>
+                        <p>
+                            <%= product.description %>
+                        </p>
+                        <div class="card_area d-flex justify-content-between align-items-center">
+                          <div class="product_count">
+                            <span class="inumber-decrement"> <i class="ti-minus"></i></span>
+                            <input class="input-number" type="text" value="1" min="0" max="10">
+                            <span class="number-increment"> <i class="ti-plus"></i></span>
+                          </div>
+                          <form action="/addcart/<%= product._id %>" method="post">
+                            <button type="submit" class="btn_3">Add to Cart</button>
+                          </form>
+                          <a href="#" class="like_us"> <i class="ti-heart"></i> </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
      
         <!--================End Single Product Area =================-->
 
@@ -495,28 +510,11 @@
         <!-- custom js -->
         <script src="/user/js/theme.js"></script>
         <script src="/user/js/custom.js"></script>
+        <script src="https://unpkg.com/js-image-zoom/js-image-zoom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-image-zoom/js-image-zoom.min.js"></script>
         <script>
-window.onload = function() {
-  var container = document.getElementById('vertical');
-  var divs = container.getElementsByTagName('div');
 
-  for (var i = 0; i < divs.length; i++) {
-    divs[i].onmousemove = function(e) {
-      var img = this.getElementsByTagName('img')[0];
-      var rect = this.getBoundingClientRect();
-      var x = e.clientX - rect.left;
-      var y = e.clientY - rect.top;
-      img.style.transformOrigin = x + 'px ' + y + 'px';
-      img.style.transform = 'scale(2)';
-    }
-
-    divs[i].onmouseleave = function() {
-      var img = this.getElementsByTagName('img')[0];
-      img.style.transformOrigin = 'center center';
-      img.style.transform = 'scale(1)';
-    }
-  }
-}
+            
 setTimeout(function() {
         var element = document.getElementById('errorMessage');
         if(element) {

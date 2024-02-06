@@ -4,6 +4,7 @@ const Product = require('../models/products')
 const Brand = require('../models/brand') 
 const Order = require("../models/checkout");
 const flash = require('express-flash')
+const moment = require('moment');
 
 
 
@@ -467,8 +468,6 @@ async function incrementProductQuantity(items) {
 
 
 
-//for user// // /// //
-
 
 
 const vieworder = async(req,res)=>{
@@ -482,13 +481,17 @@ const vieworder = async(req,res)=>{
       return res.status(404).send({ message: 'Order not found' });
     }
 
-    // Render the 'vieworder' page with the order details
-    res.render('admin/viewmore', { order, active: 'orders' });
+    // Format the date using moment
+    const formattedDate = moment(order.date).format('DD-MM-YYYY HH:MM');
+
+    // Render the 'vieworder' page with the order details and the formatted date
+    res.render('admin/viewmore', { order, active: 'orders', date: formattedDate });
   } catch (error) {
     console.log(error);
     res.status(500).send({ message: 'Server error' });
   }
 }
+
 
 module.exports={
     getAdminLogin,

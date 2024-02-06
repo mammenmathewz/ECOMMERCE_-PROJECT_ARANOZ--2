@@ -3,6 +3,11 @@ const Brand = require("../models/brand");
 const Cart = require("../models/cart");
 const { User } = require("../models/users");
 const Order = require("../models/checkout");
+const moment = require('moment');
+
+
+
+
 const getOrder = async (req, res) => {
   try {
     const userId = req.session.user._id;
@@ -130,8 +135,11 @@ const getConfirmation = async (req, res) => {
     // Get the selected address using the index stored in selectedAddress
     const selectedAddress = user.address[order.selectedAddress];
 
-    // Pass the user, order, and selectedAddress to the view
-    res.render("user/confirmation", { user, order, selectedAddress });
+    // Format the date using moment
+    const formattedDate = moment(order.date).format('DD-MM-YYYY HH:mm');
+
+    // Pass the user, order, selectedAddress, and formattedDate to the view
+    res.render("user/confirmation", { user, order, selectedAddress, date: formattedDate });
   } catch (error) {
     res.status(500).send({ message: error.message });
   }

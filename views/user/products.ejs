@@ -108,33 +108,7 @@
                             </div>
                             <% }) %>
 
-                            <div class="col-lg-12">
-                                <div class="pageination">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination justify-content-center">
-                                            <% if (currentPage > 1) { %>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
-                                                        <i class="ti-angle-double-left"></i>
-                                                    </a>
-                                                </li>
-                                            <% } %>
-                                            <% for(let i = 1; i <= pages; i++) { %>
-                                                <li class="page-item <%= i == currentPage ? 'active' : '' %>">
-                                                    <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-                                                </li>
-                                            <% } %>
-                                            <% if (currentPage < pages) { %>
-                                                <li class="page-item">
-                                                    <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
-                                                        <i class="ti-angle-double-right"></i>
-                                                    </a>
-                                                </li>
-                                            <% } %>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
+                            
                             
                             
                               
@@ -143,6 +117,33 @@
             </div>
         </div>
     </section>
+    <div class="col-lg-12">
+        <div class="pageination">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <% if (currentPage > 1) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+                                <i class="ti-angle-double-left"></i>
+                            </a>
+                        </li>
+                    <% } %>
+                    <% for(let i = 1; i <= pages; i++) { %>
+                        <li class="page-item <%= i == currentPage ? 'active' : '' %>">
+                            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+                    <% if (currentPage < pages) { %>
+                        <li class="page-item">
+                            <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+                                <i class="ti-angle-double-right"></i>
+                            </a>
+                        </li>
+                    <% } %>
+                </ul>
+            </nav>
+        </div>
+    </div>
     <!--================End Category Product Area =================-->
 
     <!-- product_list part start-->
@@ -238,28 +239,27 @@
 
 
     <script>
-        $(document).ready(function() {
-    var selectedCategories = [];
-    var selectedBrands = [];
-    var sortOption = '';
-    var currentPage = 1;
-    var limit = 8;
+$(document).ready(function() {
+  var selectedCategories = [];
+  var selectedBrands = [];
+  var sortOption = '';
+  var currentPage = 1;
+  var limit = 2;
 
-    // Set up an event handler for the pagination links
-    $(document).on('click', '.pagination a', function(event) {
-        // Prevent the default action
-        event.preventDefault();
+  // Set up an event handler for the pagination links
+  $(document).on('click', '.pagination a', function(event) {
+    // Prevent the default action
+    event.preventDefault();
 
-        // Get the page number from the link's href attribute
-        var page = $(this).attr('href').split('=')[1];
+    // Get the page number from the link's href attribute
+    var page = $(this).attr('href').split('=')[1];
 
-        // Update the currentPage variable
-        currentPage = parseInt(page);
+    // Update the currentPage variable
+    currentPage = parseInt(page);
 
-        // Trigger the AJAX request
-        $('.category-checkbox, .brand-checkbox, select').trigger('change');
-    });
-
+    // Trigger the AJAX request
+    $('.category-checkbox, .brand-checkbox, select').trigger('change');
+  });
     $('.category-checkbox, .brand-checkbox, select').change(function() {
         if ($(this).hasClass('category-checkbox')) {
             var category = $(this).siblings('a').text();
@@ -284,73 +284,51 @@
         } else if ($(this).is('select')) {
             sortOption = $(this).val();
         }
+       
 
         $.ajax({
             url: '/filterAndSortProducts',
             type: 'GET',
             data: { categories: selectedCategories, brands: selectedBrands, sort: sortOption, page: currentPage, limit: limit },
             success: function(data) {
-                // Clear the current products
-                $('.latest_product_inner').empty();
+  // Clear the current products
+  $('.latest_product_inner').empty();
 
-                // Loop through the products and add them to the page
-                data.product.forEach(function(product) {
-                    $('.latest_product_inner').append(`
-                        <div class="col-lg-4 col-sm-6">
-                            <div class="single_product_item">
-                                <div style="margin-left: 20%;"> 
-                                    <a href="/viewproduct/${product._id}">
-                                        <img src="${product.images[0]}" alt="watch" style="object-fit:scale-down"; height="300px">
-                                    </a>
-                                </div>
-                                <div class="single_product_text">
-                                    <h4>${product.productname}</h4>
-                                    <h3>$ ${product.saleprice}</h3>
-                                    <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                });
+  // Loop through the products and add them to the page
+  data.product.forEach(function(product) {
+    $('.latest_product_inner').append(`
+      <div class="col-lg-4 col-sm-6">
+        <div class="single_product_item">
+          <div style="margin-left: 20%;"> 
+            <a href="/viewproduct/${product._id}">
+              <img src="${product.images[0]}" alt="watch" style="object-fit:scale-down"; height="300px">
+            </a>
+          </div>
+          <div class="single_product_text">
+            <h4>${product.productname}</h4>
+            <h3>$ ${product.saleprice}</h3>
+            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+          </div>
+        </div>
+      </div>
+    `);
+  });
 
-                // Update the current page and total pages
-                currentPage = data.currentPage;
-                var totalPages = data.pages;
+  
+  // Update the pagination links
+  var pagination = $('.pagination');
+  pagination.empty();
+  if (data.currentPage > 1) {
+    pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage - 1) + '"><i class="ti-angle-double-left"></i></a></li>');
+  }
+  for (var i = 1; i <= data.pages; i++) {
+    pagination.append('<li class="page-item' + (i == data.currentPage ? ' active' : '') + '"><a class="page-link" href="?page=' + i + '">' + i + '</a></li>');
+  }
+  if (data.currentPage < data.pages) {
+    pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage + 1) + '"><i class="ti-angle-double-right"></i></a></li>');
+  }
+}
 
-                // Clear the current page navigation
-                $('.pagination').empty();
-
-                // Add the previous page button if necessary
-                if (currentPage > 1) {
-                    $('.pagination').append(`
-                        <li class="page-item">
-                            <a class="page-link" href="?page=${currentPage - 1}" aria-label="Previous">
-                                <i class="ti-angle-double-left"></i>
-                            </a>
-                        </li>
-                    `);
-                }
-
-                // Add the page number buttons
-                for (let i = 1; i <= totalPages; i++) {
-                    $('.pagination').append(`
-                        <li class="page-item ${i == currentPage ? 'active' : ''}">
-                            <a class="page-link" href="?page=${i}">${i}</a>
-                        </li>
-                    `);
-                }
-
-                // Add the next page button if necessary
-                if (currentPage < totalPages) {
-                    $('.pagination').append(`
-                        <li class="page-item">
-                            <a class="page-link" href="?page=${currentPage + 1}" aria-label="Next">
-                                <i class="ti-angle-double-right"></i>
-                            </a>
-                        </li>
-                    `);
-                }
-            }
         });
     });
 });

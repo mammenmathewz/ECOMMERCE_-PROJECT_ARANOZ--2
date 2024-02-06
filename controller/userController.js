@@ -22,7 +22,7 @@ const getHome =async(req,res)=>{
 }
 const getProducts = async(req, res) => {
   try {
-      const { page = 1, limit = 3 } = req.query;
+      const { page = 1, limit = 2 } = req.query;
       const skip = (page - 1) * limit;
 
       // Count the total number of products
@@ -427,7 +427,7 @@ const resetPasswordWithoutOTP = async(req, res) => {
 
 const filterAndSortProducts = async(req, res) => {
   try {
-      const { page = 1, limit = 6, sort = '1', categories, brands } = req.query;
+      const { page = 1, limit = 2, sort = '1', categories, brands } = req.query;
       const skip = (page - 1) * limit;
 
       let query = { deleted: false, number: { $gte: 1 } };

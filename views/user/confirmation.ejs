@@ -89,3 +89,11 @@
     </div>
   </section>
   <%- include('../partials/footer') %>
+  <script>
+    window.history.forward();  
+
+window.onbeforeunload = function() {  // This will prevent the user from refreshing the page
+  return "Do you want to leave?";
+};
+
+  </script>

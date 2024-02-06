@@ -21,10 +21,9 @@ const getHome =async(req,res)=>{
       }
 }
 
-
 const getProducts = async(req, res) => {
   try {
-      const { page = 1, limit = 2 } = req.query;
+      const { page = 1, limit = 3 } = req.query;
       const skip = (page - 1) * limit;
 
       // Count the total number of products
@@ -35,19 +34,13 @@ const getProducts = async(req, res) => {
 
       let product = await Product.find({deleted: false, number: { $gte: 1 }}).limit(limit).skip(skip);
 
-      // Fetch all brands
-      let brands = await Brand.find({});
-
-      // Pass the current page, total pages, and brands to the EJS template
-      res.render('user/products', {product: product, currentPage: page, pages: pages, brands: brands});
+      // Pass the current page and total pages to the EJS template
+      res.render('user/products', {product: product, currentPage: page, pages: pages});
   } catch (error) {
       console.log(error);
       res.send('Error occurred while fetching data');
   }
 }
-
-
-
 
 
 
@@ -416,6 +409,53 @@ const resetPasswordWithoutOTP = async(req, res) => {
       console.log(error);
   }
 }
+const filterAndSortProducts = async(req, res) => {
+  try {
+      const { page = 1, limit = 6, sort = '1', categories, brands } = req.query;
+      const skip = (page - 1) * limit;
+
+      let query = { deleted: false, number: { $gte: 1 } };
+
+      // Handle category filtering
+      if (categories) {
+          if (categories.includes('Mens') || categories.includes('Womens')) {
+              categories.push('Unisex');
+          }
+          query.category = { $in: categories };
+      }
+
+      // Handle brand filtering
+      if (brands) {
+          const brandDocs = await Brand.find({ name: { $in: brands } });
+          const brandIds = brandDocs.map(doc => doc._id);
+          query.brand = { $in: brandIds };
+      }
+
+      // Handle sorting
+      let sortOrder = sort === '1' ? 1 : -1;
+      let sortQuery = { saleprice: sortOrder };
+
+      // Count the total number of products
+      const totalProducts = await Product.countDocuments(query);
+
+      // Calculate the total number of pages
+      const pages = Math.ceil(totalProducts / limit);
+
+      let product = await Product.find(query).sort(sortQuery).limit(limit).skip(skip);
+
+      // Send a JSON response
+      res.json({ product: product, currentPage: page, pages: pages });
+  } catch (error) {
+      console.log(error);
+      res.status(500).send('Error occurred while fetching data');
+  }
+}
+
+
+
+
+
+
 
 module.exports = {
     getHome,
@@ -435,6 +475,6 @@ module.exports = {
     deleteAddress,
     viewOrder,
     changePassword_Profile,
-    resetPasswordWithoutOTP
-   
+    resetPasswordWithoutOTP,
+    filterAndSortProducts
 }

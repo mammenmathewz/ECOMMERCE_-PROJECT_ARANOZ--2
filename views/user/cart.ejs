@@ -19,64 +19,70 @@
                     <div class="p-5">
                       <div class="d-flex justify-content-between align-items-center mb-5">
                         <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
+
+
                         <h6 class="mb-0 text-muted">
                           <%= cart.items.length %> items
                         </h6>
                       </div>
-
-
-                      <% cart.items.forEach(function(item) { %>
-                        <div class="row mb-4 d-flex justify-content-between align-items-center">
-                          <div class="col-md-2 col-lg-2 col-xl-2">
-                            <img src="<%= item.productId.images[0] %>" class="img-fluid rounded-3" alt="Cotton T-shirt">
-                          </div>
-                          <div class="col-md-3 col-lg-3 col-xl-3">
-                            <h6 class="text-muted">
-                              <%= item.productId.brand.name %>
-                            </h6>
-                            <h6 class="text-black mb-0">
-                              <%= item.productId.productname %>
-                            </h6>
-                          </div>
-                          <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                            <button class="btn btn-link px-2 decrement-button">
-                              <i class="fas fa-minus"></i>
-                            </button>
-                          
-                            <h6 id="form1" name="quantity" class="form-control form-control-sm">
-                              <%= item.quantity %>
-                            </h6>
-                          
-                            <button class="btn btn-link px-2 increment-button">
-                              <i class="fas fa-plus"></i>
-                            </button>
-                          </div>
-                          
-                          
-
-                          <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                            <h6 class="mb-0">€ <%= item.productId.saleprice %>
-                            </h6>
-                          </div>
-                          <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                            <a href="#" class="remove-from-cart text-muted" data-id="<%= item.productId._id %>"><i
-                                class="fas fa-times"></i></a>
-
-                          </div>
-
+                      <% if (messages.error) { %>
+                        <div class="alert alert-danger" id="errorMessage">
+                          <%= messages.error %>
                         </div>
+                        <% } %>
+                          <% cart.items.forEach(function(item) { %>
+                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                              <div class="col-md-2 col-lg-2 col-xl-2">
+                                <img src="<%= item.productId.images[0] %>" class="img-fluid rounded-3"
+                                  alt="Cotton T-shirt">
+                              </div>
+                              <div class="col-md-3 col-lg-3 col-xl-3">
+                                <h6 class="text-muted">
+                                  <%= item.productId.brand.name %>
+                                </h6>
+                                <h6 class="text-black mb-0">
+                                  <%= item.productId.productname %>
+                                </h6>
+                              </div>
+                              <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                <button class="btn btn-link px-2 decrement-button">
+                                  <i class="fas fa-minus"></i>
+                                </button>
 
-                        <% }); %>
+                                <h6 id="form1" name="quantity" class="form-control form-control-sm">
+                                  <%= item.quantity %>
+                                </h6>
+
+                                <button class="btn btn-link px-2 increment-button">
+                                  <i class="fas fa-plus"></i>
+                                </button>
+                              </div>
+
+
+
+                              <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                <h6 class="mb-0">€ <%= item.productId.saleprice %>
+                                </h6>
+                              </div>
+                              <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                <a href="#" class="remove-from-cart text-muted" data-id="<%= item.productId._id %>"><i
+                                    class="fas fa-times"></i></a>
+
+                              </div>
+
+                            </div>
+
+                            <% }); %>
 
 
 
 
 
 
-                          <div class="pt-5">
-                            <h6 class="mb-0"><a href="#!" class="text-body"><i
-                                  class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
-                          </div>
+                              <div class="pt-5">
+                                <h6 class="mb-0"><a href="/products" class="text-body"><i
+                                      class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
+                              </div>
                     </div>
                   </div>
                   <div class="col-lg-4 bg-grey">
@@ -97,11 +103,11 @@
 
                       <div class="mb-5">
                         <div class="form-outline">
-                          <input type="text" id="form3Examplea2"  class="form-control form-control-lg" />
-                         <div>
-                          <label style="padding: 1%;" class="form-label" for="form3Examplea2">Enter your code</label>
-                          <a style="margin-top: 2% ;" class="btn_1" href="#">Apply</a>
-                         </div>
+                          <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
+                          <div>
+                            <label style="padding: 1%;" class="form-label" for="form3Examplea2">Enter your code</label>
+                            <a style="margin-top: 2% ;" class="btn_1" href="#">Apply</a>
+                          </div>
                         </div>
                       </div>
 
@@ -164,5 +170,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/user/js/cartscript.js"></script>
     </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.10.4/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      setTimeout(function () {
+        var element = document.getElementById('errorMessage');
+        if (element) {
+          element.style.display = 'none';
+        }
+      }, 4000);
+    </script>
 
     </html>

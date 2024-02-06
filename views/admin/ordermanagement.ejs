@@ -74,18 +74,18 @@
                                                 </td>
                                                 <td><%= order.total %></td>
                                                 <td>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="orderStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-order-id="<%= order._id %>">
-                                                            Select Status
-                                                        </button>
-                                                        <ul class="dropdown-menu" aria-labelledby="orderStatusDropdown">
-                                                            <li><a class="dropdown-item" href="#">Pending</a></li>
-                                                            <li><a class="dropdown-item" href="#">Delivered</a></li>
-                    
-                                                            <li><a class="dropdown-item" href="#">Admin Cancelled</a></li>
-                                                            <li><a class="dropdown-item" href="#">Returned</a></li>
-                                                        </ul>
-                                                    </div>
+                                                    <% if(!order.admin_cancelled && !order.is_returned && !order.user_cancelled) { %>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-secondary dropdown-toggle" type="button" id="orderStatusDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-order-id="<%= order._id %>">
+                                                                Select Status
+                                                            </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="orderStatusDropdown">
+                                                                <li><a class="dropdown-item" href="#">Delivered</a></li>
+                                                                <li><a class="dropdown-item" href="#">Admin Cancelled</a></li>
+                                                            </ul>
+                                                        </div>
+                                                    <% } %>
+                                                    
                                                 </td>
                                                 <td>
                                                   

@@ -3,7 +3,6 @@ const Brand = require("../models/brand");
 const Cart = require("../models/cart");
 const { User } = require("../models/users");
 const Order = require("../models/checkout");
-
 const getOrder = async (req, res) => {
   try {
     const userId = req.session.user._id;
@@ -18,11 +17,20 @@ const getOrder = async (req, res) => {
     console.log(user);
     console.log(cart);
 
+    for(let item of cart.items) {
+      const product = await Product.findById(item.productId);
+      if(product.number < item.quantity) {
+        req.flash('error', 'Some items in your cart are no longer available in the required quantity.');
+        return res.redirect('/cart');
+      }
+    }
+
     res.render("user/checkout", { user: user, cart: cart }); // Pass the cart to the view
   } catch (err) {
     console.log(err);
   }
 };
+
 
 const addAddress = async (req, res) => {
   try {
@@ -43,7 +51,7 @@ const addAddress = async (req, res) => {
 
     await user.save();
 
-    // Redirect to the specified page or default to '/checkout'
+   
     const redirectPage = req.body.redirect || '/checkout';
     res.status(200).redirect(redirectPage);
   } catch (err) {

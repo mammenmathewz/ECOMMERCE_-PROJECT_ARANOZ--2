@@ -38,9 +38,11 @@ const addCart = async(req, res) => {
 
     // Check if the product is already in the cart
     const productInCart = cart.items.find(item => item.productId.toString() === productId);
-    if (productInCart) {
-      return res.send('Product is already in the cart');
-    }
+if (productInCart) {
+  req.flash('error', 'Product is already in the cart');
+  return res.redirect(`/viewproduct/${productId}`);
+}
+
 
     // Fetch the product to get its price
     const product = await Product.findById(productId).populate('brand');

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Product = require('../models/products')
-const brand = require('../models/brand')
+const Brand = require('../models/brand')
 const { User, Address } = require('../models/users')
 const bcrypt = require('bcrypt');
 const session = require('express-session');
@@ -23,7 +23,7 @@ const getHome =async(req,res)=>{
 
 const getProducts = async(req, res) => {
   try {
-      const { page = 1, limit = 2 } = req.query;
+      const { page = 1, limit = 3 } = req.query;
       const skip = (page - 1) * limit;
 
       // Count the total number of products
@@ -125,22 +125,22 @@ const getAccount = async(req,res)=>{
 
 const editUser = async(req, res) => {
   try {
-    const userId = req.params.userId; // get the user's ID from the request parameters
-    const addressId = req.params.addressId; // get the address ID from the request parameters
+    const userId = req.params.userId; 
+    const addressId = req.params.addressId; 
 
-    const user = await User.findById(userId); // find the user by their ID
+    const user = await User.findById(userId); 
 
     if (!user) {
         return res.status(404).send('User not found');
     }
 
-    const address = user.address.id(addressId); // find the address by its ID
+    const address = user.address.id(addressId);
 
     if (!address) {
         return res.status(404).send('Address not found');
     }
 
-    // render the 'edituser' view, passing the user and address data to it
+   
 
     res.render('user/edituser', { user: user, address: address, userId: userId, addressId: addressId });
 
@@ -209,12 +209,16 @@ const deleteAddress = async (req, res) => {
 const myOrder = async(req, res) => {
   try {
     const user_id= req.session.user._id;
-    const orders = await Order.find({ user: user_id }).populate("items.productId").populate("user");
+    const orders = await Order.find({ user: user_id })
+                              .populate("items.productId")
+                              .populate("user")
+                              .sort({ date: -1 }); // Sort by date in descending order
     res.render('user/myorder', { orders });
   } catch(error) {
     console.log(error);
   }
 }
+
 
 const changePassword_Profile = async(req,res)=>{
   try{
@@ -405,6 +409,53 @@ const resetPasswordWithoutOTP = async(req, res) => {
       console.log(error);
   }
 }
+const filterAndSortProducts = async(req, res) => {
+  try {
+      const { page = 1, limit = 6, sort = '1', categories, brands } = req.query;
+      const skip = (page - 1) * limit;
+
+      let query = { deleted: false, number: { $gte: 1 } };
+
+      // Handle category filtering
+      if (categories) {
+          if (categories.includes('Mens') || categories.includes('Womens')) {
+              categories.push('Unisex');
+          }
+          query.category = { $in: categories };
+      }
+
+      // Handle brand filtering
+      if (brands) {
+          const brandDocs = await Brand.find({ name: { $in: brands } });
+          const brandIds = brandDocs.map(doc => doc._id);
+          query.brand = { $in: brandIds };
+      }
+
+      // Handle sorting
+      let sortOrder = sort === '1' ? 1 : -1;
+      let sortQuery = { saleprice: sortOrder };
+
+      // Count the total number of products
+      const totalProducts = await Product.countDocuments(query);
+
+      // Calculate the total number of pages
+      const pages = Math.ceil(totalProducts / limit);
+
+      let product = await Product.find(query).sort(sortQuery).limit(limit).skip(skip);
+
+      // Send a JSON response
+      res.json({ product: product, currentPage: page, pages: pages });
+  } catch (error) {
+      console.log(error);
+      res.status(500).send('Error occurred while fetching data');
+  }
+}
+
+
+
+
+
+
 
 module.exports = {
     getHome,
@@ -424,6 +475,6 @@ module.exports = {
     deleteAddress,
     viewOrder,
     changePassword_Profile,
-    resetPasswordWithoutOTP
-   
+    resetPasswordWithoutOTP,
+    filterAndSortProducts
 }

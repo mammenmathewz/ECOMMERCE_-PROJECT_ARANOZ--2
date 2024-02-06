@@ -37,13 +37,19 @@
                             <td>
                                 <select class="form-control" id="status<%= order._id %>">
                                     <option value="">Status</option>
-                                    <option value="User Cancelled">Cancel</option>
-                                    <option value="Returned">Return</option>
+                                    <% if(!order.is_delivered && !order.user_cancelled && !order.admin_cancelled) { %>
+                                        <!-- Show the cancel option if the order is not delivered and not cancelled by the user -->
+                                        <option value="User Cancelled">Cancel</option>
+                                    <% } %>
+                                    <% if(order.is_delivered && !order.is_returned) { %>
+                                        <!-- Show the return option if the order is delivered and not returned -->
+                                        <option value="Returned">Return</option>
+                                    <% } %>
                                 </select>
                             </td>
                         </tr>
+                        <% }); %>
                         
-                    <% }); %>
                     </tbody>
             </table>
         </div> 
@@ -55,7 +61,7 @@
     
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

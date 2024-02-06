@@ -20,7 +20,6 @@ const getHome =async(req,res)=>{
         res.send('Error occurred while fetching data')
       }
 }
-
 const getProducts = async(req, res) => {
   try {
       const { page = 1, limit = 3 } = req.query;
@@ -34,13 +33,17 @@ const getProducts = async(req, res) => {
 
       let product = await Product.find({deleted: false, number: { $gte: 1 }}).limit(limit).skip(skip);
 
-      // Pass the current page and total pages to the EJS template
-      res.render('user/products', {product: product, currentPage: page, pages: pages});
+      // Fetch the brands
+      let brands = await Brand.find();
+
+      // Pass the current page, total pages, and brands to the EJS template
+      res.render('user/products', {product: product, currentPage: page, pages: pages, brands: brands});
   } catch (error) {
       console.log(error);
       res.send('Error occurred while fetching data');
   }
 }
+
 
 
 

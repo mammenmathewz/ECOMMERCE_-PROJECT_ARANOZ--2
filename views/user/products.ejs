@@ -23,32 +23,12 @@
                             <div class="widgets_inner">
                                 <ul class="list">
                                     <li>
-                                        <a href="#">Frozen Fish</a>
-                                        <span>(250)</span>
+                                        <a href="#" class="category">Mens</a>
+                                        <input type="checkbox" name="" id="" class="category-checkbox">
                                     </li>
                                     <li>
-                                        <a href="#">Dried Fish</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Fish</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Meat Alternatives</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Fresh Fish</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Meat Alternatives</a>
-                                        <span>(250)</span>
-                                    </li>
-                                    <li>
-                                        <a href="#">Meat</a>
-                                        <span>(250)</span>
+                                        <a href="#" class="category">Womens</a>
+                                        <input type="checkbox" name="" id="" class="category-checkbox">
                                     </li>
                                 </ul>
                             </div>
@@ -58,92 +38,24 @@
 
                         <aside class="left_widgets p_filter_widgets">
                             <div class="l_w_title">
-                                <h3>Product filters</h3>
+                                <h3>Filter Brands</h3>
                             </div>
                             <div class="widgets_inner">
                                 <ul class="list">
-                                    <li>
-                                        <a href="#">Apple</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Asus</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">Gionee</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Micromax</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Samsung</a>
-                                    </li>
-                                </ul>
-                                <ul class="list">
-                                    <li>
-                                        <a href="#">Apple</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Asus</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">Gionee</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Micromax</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Samsung</a>
-                                    </li>
+                                    <% brands.forEach(function(brand) { %>
+                                        <li>
+                                            <a href="#"><%= brand.name %></a>
+                                            <input type="checkbox" name="" id="" class="brand-checkbox">
+                                        </li>
+                                    <% }); %>
                                 </ul>
                             </div>
                         </aside>
+                        
 
-                        <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Color Filter</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <li>
-                                        <a href="#">Black</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Black Leather</a>
-                                    </li>
-                                    <li class="active">
-                                        <a href="#">Black with red</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Gold</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Spacegrey</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </aside>
-
-                        <aside class="left_widgets p_filter_widgets price_rangs_aside">
-                            <div class="l_w_title">
-                                <h3>Price Filter</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <div class="range_item">
-                                    <!-- <div id="slider-range"></div> -->
-                                    <input type="text" class="js-range-slider" value="" />
-                                    <div class="d-flex">
-                                        <div class="price_text">
-                                            <p>Price :</p>
-                                        </div>
-                                        <div class="price_value d-flex justify-content-center">
-                                            <input type="text" class="js-input-from" id="amount" readonly />
-                                            <span>to</span>
-                                            <input type="text" class="js-input-to" id="amount" readonly />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </aside>
+                        
+                        <!-- price range -->
+                        
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -153,24 +65,16 @@
                                 <div class="single_product_menu">
                                     <p><span>10000 </span> Prodict Found</p>
                                 </div>
-                                <div class="single_product_menu d-flex">
-                                    <h5>short by : </h5>
-                                    <select>
-                                        <option data-display="Select">name</option>
-                                        <option value="1">price</option>
-                                        <option value="2">product</option>
+                                <div class="d-flex align-items-center" style=" padding: 10px; border-radius: 5px;">
+                                    <h5 style="margin-right: 10px;">Sort by:</h5>
+                                    <select style="padding: 5px; border-radius: 5px; border: none;">
+                                        <option data-display="Select">Price</option>
+                                        <option value="1">Low to high</option>
+                                        <option value="2">High to low</option>
                                     </select>
                                 </div>
-                                <div class="single_product_menu d-flex">
-                                    <h5>show :</h5>
-                                    <div class="top_pageniation">
-                                        <ul>
-                                            <li>1</li>
-                                            <li>2</li>
-                                            <li>3</li>
-                                        </ul>
-                                    </div>
-                                </div>
+                                
+                                
                                 <div class="single_product_menu d-flex">
                                     <div class="input-group">
                                         <input type="text" class="form-control" placeholder="search"
@@ -330,6 +234,236 @@
     <script src="/user/js/price_rangs.js"></script>
     <!-- custom js -->
     <script src="/user/js/custom.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+    var selectedCategories = [];
+    var selectedBrands = [];
+    var sortOption = '';
+    var currentPage = 1;
+    var limit = 8;
+
+    // Set up an event handler for the pagination links
+    $(document).on('click', '.pagination a', function(event) {
+        // Prevent the default action
+        event.preventDefault();
+
+        // Get the page number from the link's href attribute
+        var page = $(this).attr('href').split('=')[1];
+
+        // Update the currentPage variable
+        currentPage = parseInt(page);
+
+        // Trigger the AJAX request
+        $('.category-checkbox, .brand-checkbox, select').trigger('change');
+    });
+
+    $('.category-checkbox, .brand-checkbox, select').change(function() {
+        if ($(this).hasClass('category-checkbox')) {
+            var category = $(this).siblings('a').text();
+            if ($(this).is(':checked')) {
+                selectedCategories.push(category);
+            } else {
+                var index = selectedCategories.indexOf(category);
+                if (index > -1) {
+                    selectedCategories.splice(index, 1);
+                }
+            }
+        } else if ($(this).hasClass('brand-checkbox')) {
+            var brandName = $(this).siblings('a').text();
+            if ($(this).is(':checked')) {
+                selectedBrands.push(brandName);
+            } else {
+                var index = selectedBrands.indexOf(brandName);
+                if (index > -1) {
+                    selectedBrands.splice(index, 1);
+                }
+            }
+        } else if ($(this).is('select')) {
+            sortOption = $(this).val();
+        }
+
+        $.ajax({
+            url: '/filterAndSortProducts',
+            type: 'GET',
+            data: { categories: selectedCategories, brands: selectedBrands, sort: sortOption, page: currentPage, limit: limit },
+            success: function(data) {
+                // Clear the current products
+                $('.latest_product_inner').empty();
+
+                // Loop through the products and add them to the page
+                data.product.forEach(function(product) {
+                    $('.latest_product_inner').append(`
+                        <div class="col-lg-4 col-sm-6">
+                            <div class="single_product_item">
+                                <div style="margin-left: 20%;"> 
+                                    <a href="/viewproduct/${product._id}">
+                                        <img src="${product.images[0]}" alt="watch" style="object-fit:scale-down"; height="300px">
+                                    </a>
+                                </div>
+                                <div class="single_product_text">
+                                    <h4>${product.productname}</h4>
+                                    <h3>$ ${product.saleprice}</h3>
+                                    <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                });
+
+                // Update the current page and total pages
+                currentPage = data.currentPage;
+                var totalPages = data.pages;
+
+                // Clear the current page navigation
+                $('.pagination').empty();
+
+                // Add the previous page button if necessary
+                if (currentPage > 1) {
+                    $('.pagination').append(`
+                        <li class="page-item">
+                            <a class="page-link" href="?page=${currentPage - 1}" aria-label="Previous">
+                                <i class="ti-angle-double-left"></i>
+                            </a>
+                        </li>
+                    `);
+                }
+
+                // Add the page number buttons
+                for (let i = 1; i <= totalPages; i++) {
+                    $('.pagination').append(`
+                        <li class="page-item ${i == currentPage ? 'active' : ''}">
+                            <a class="page-link" href="?page=${i}">${i}</a>
+                        </li>
+                    `);
+                }
+
+                // Add the next page button if necessary
+                if (currentPage < totalPages) {
+                    $('.pagination').append(`
+                        <li class="page-item">
+                            <a class="page-link" href="?page=${currentPage + 1}" aria-label="Next">
+                                <i class="ti-angle-double-right"></i>
+                            </a>
+                        </li>
+                    `);
+                }
+            }
+        });
+    });
+});
+
+
+
+    
+//     $(document).ready(function() {
+//         var selectedCategories = [];
+//         var selectedBrands = [];
+//         var sortOption = '';
+//         var currentPage = 1;
+//         var limit = 8;
+    
+//         $('.category-checkbox, .brand-checkbox, select').change(function() {
+//             if ($(this).hasClass('category-checkbox')) {
+//                 var category = $(this).siblings('a').text();
+//                 if ($(this).is(':checked')) {
+//                     selectedCategories.push(category);
+//                 } else {
+//                     var index = selectedCategories.indexOf(category);
+//                     if (index > -1) {
+//                         selectedCategories.splice(index, 1);
+//                     }
+//                 }
+//             } else if ($(this).hasClass('brand-checkbox')) {
+//                 var brandName = $(this).siblings('a').text();
+//                 if ($(this).is(':checked')) {
+//                     selectedBrands.push(brandName);
+//                 } else {
+//                     var index = selectedBrands.indexOf(brandName);
+//                     if (index > -1) {
+//                         selectedBrands.splice(index, 1);
+//                     }
+//                 }
+//             } else if ($(this).is('select')) {
+//                 sortOption = $(this).val();
+//             }
+    
+//             $.ajax({
+//                 url: '/filterAndSortProducts',
+//                 type: 'GET',
+//                 data: { categories: selectedCategories, brands: selectedBrands, sort: sortOption, page: currentPage, limit: limit },
+//                success: function(data) {
+//     // Clear the current products
+//     $('.latest_product_inner').empty();
+
+//     // Loop through the products and add them to the page
+//     data.product.forEach(function(product) {
+//         $('.latest_product_inner').append(`
+//             <div class="col-lg-4 col-sm-6">
+//                 <div class="single_product_item">
+//                     <div style="margin-left: 20%;"> 
+//                         <a href="/viewproduct/${product._id}">
+//                             <img src="${product.images[0]}" alt="watch" style="object-fit:scale-down"; height="300px">
+//                         </a>
+//                     </div>
+//                     <div class="single_product_text">
+//                         <h4>${product.productname}</h4>
+//                         <h3>$ ${product.saleprice}</h3>
+//                         <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+//                     </div>
+//                 </div>
+//             </div>
+//         `);
+//     });
+
+//     // Update the current page and total pages
+//     currentPage = data.currentPage;
+//     var totalPages = data.pages;
+
+//     // Clear the current page navigation
+//     $('.pagination').empty();
+
+//     // Add the previous page button if necessary
+//     if (currentPage > 1) {
+//         $('.pagination').append(`
+//             <li class="page-item">
+//                 <a class="page-link" href="?page=${currentPage - 1}" aria-label="Previous">
+//                     <i class="ti-angle-double-left"></i>
+//                 </a>
+//             </li>
+//         `);
+//     }
+
+//     // Add the page number buttons
+//     for (let i = 1; i <= totalPages; i++) {
+//         $('.pagination').append(`
+//             <li class="page-item ${i == currentPage ? 'active' : ''}">
+//                 <a class="page-link" href="?page=${i}">${i}</a>
+//             </li>
+//         `);
+//     }
+
+//     // Add the next page button if necessary
+//     if (currentPage < totalPages) {
+//         $('.pagination').append(`
+//             <li class="page-item">
+//                 <a class="page-link" href="?page=${currentPage + 1}" aria-label="Next">
+//                     <i class="ti-angle-double-right"></i>
+//                 </a>
+//             </li>
+//         `);
+//     }
+// }
+
+
+//             });
+//         });
+//     });
+    
+
+    </script>
 </body>
 
 </html>

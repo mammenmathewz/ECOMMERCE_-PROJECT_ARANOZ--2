@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Product = require('../models/products')
-const brand = require('../models/brand')
+const Brand = require('../models/brand')
 const { User, Address } = require('../models/users')
 const bcrypt = require('bcrypt');
 const session = require('express-session');
@@ -21,6 +21,7 @@ const getHome =async(req,res)=>{
       }
 }
 
+
 const getProducts = async(req, res) => {
   try {
       const { page = 1, limit = 2 } = req.query;
@@ -34,13 +35,19 @@ const getProducts = async(req, res) => {
 
       let product = await Product.find({deleted: false, number: { $gte: 1 }}).limit(limit).skip(skip);
 
-      // Pass the current page and total pages to the EJS template
-      res.render('user/products', {product: product, currentPage: page, pages: pages});
+      // Fetch all brands
+      let brands = await Brand.find({});
+
+      // Pass the current page, total pages, and brands to the EJS template
+      res.render('user/products', {product: product, currentPage: page, pages: pages, brands: brands});
   } catch (error) {
       console.log(error);
       res.send('Error occurred while fetching data');
   }
 }
+
+
+
 
 
 

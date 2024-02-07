@@ -128,68 +128,89 @@ const cashOnDelivery = async (req, res) => {
   }
 };
 
-// Handle online payment orders
-const onlinePayment = async(req,res)=>{
-  try{
-    const userId = req.session.user;
-    const orderId = req.body.orderId; 
 
-    const cart = await Cart.findOne({ user: userId })
-      .populate("user")
-      .populate("items.productId");
+const generateOrderid = async(req,res)=>{
+  try {
+    var options = {
+      amount: req.body.amount * 100,  // amount in the smallest currency unit
+      currency: "INR",
+      receipt: "order_rcptid_" + Math.random().toString(36).substring(7)
+    };
+    
+    instance.orders.create(options, function(err, order) {
+      if (err) {
+        return res.status(500).send({ message: err.message });
+      }
 
-    if (!cart) {
-      return res.status(400).send("No cart found for this user");
-    }
-
-    const { selector, addressRadio } = req.body;
-
-    const user = await User.findById(userId).populate("address");
-
-    const selectedAddressIndex = user.address.findIndex(
-      (address) => address._id.toString() === req.body.selectedAddress
-    ); // Use addressRadio to get the selected address
-
-    const newOrder = new Order({
-      paymentMethod: selector,
-      selectedAddress: selectedAddressIndex, 
-      user: userId,
-      items: cart.items,
-      total: cart.total,
-      discount: cart.discount,
-      grandTotal: cart.grandTotal,
+      res.json({ orderId: order.id });
     });
 
-    // Create a new order in Razorpay
-    let options = {
-      amount: cart.total,
-      currency: "INR",
-      receipt: `order_rcptid_${orderId}` // Use orderId here
-    };
-    let razorpayOrder = await instance.orders.create(options);
-    newOrder.razorpayOrderId = razorpayOrder.id;
-    newOrder.status = 'Awaiting Online Payment';
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-    await newOrder.save();
-    const order = await Order.findById(newOrder._id).populate(
-      "items.productId"
-    );
+const verify = async(req,res)=>{
+  try {
+        const secret = 'YOUR_SECRET'; // Replace with your Razorpay secret key
+        const userId = req.session.user;
 
-    for (let item of cart.items) {
-      const product = await Product.findById(item.productId);
-      product.number -= item.quantity;
-      await product.save();
+    // Extract the order details from the request body
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+    // Generate the hmac
+    const generated_signature = crypto.createHmac('sha256', secret).update(razorpay_order_id + '|' + razorpay_payment_id).digest('hex');
+
+    if (generated_signature === razorpay_signature) {
+        // Payment is successful
+
+        // Find the cart for the user
+        const cart = await Cart.findOne({ user: userId }).populate("user").populate("items.productId");
+        if (!cart) {
+            return res.status(400).send("No cart found for this user");
+        }
+
+        const { selector, addressRadio } = req.body;
+        const user = await User.findById(userId).populate("address");
+        const selectedAddressIndex = user.address.findIndex((address) => address._id.toString() === req.body.selectedAddress);
+
+        // Create a new order document
+        const newOrder = new Order({
+            paymentMethod: selector,
+            selectedAddress: selectedAddressIndex, 
+            user: userId,
+            items: cart.items,
+            total: cart.total,
+            discount: cart.discount,
+            grandTotal: cart.grandTotal,
+        });
+
+        // Save the order document in the database
+        try {
+            await newOrder.save();
+            const order = await Order.findById(newOrder._id).populate("items.productId");
+
+            for (let item of cart.items) {
+                const product = await Product.findById(item.productId);
+                product.number -= item.quantity;
+                await product.save();
+            }
+
+            cart.items = [];
+            cart.total = 0;
+            cart.discount = 0;
+            cart.grandTotal = 0;
+            await cart.save();
+
+            res.json({ redirectUrl: `/confirmation/${newOrder._id}` });
+        } catch (error) {
+            res.status(500).send({ message: error.message });
+        }
+    } else {
+        // Payment verification failed
+        res.status(400).send('Payment verification failed');
     }
-
-    cart.items = [];
-    cart.total = 0;
-    cart.discount = 0;
-    cart.grandTotal = 0;
-    await cart.save();
-
-    // Send success response with the Razorpay order ID
-    res.json({ orderId: orderId, razorpayOrderId: razorpayOrder.id }); // Use orderId here
-  } catch(error){
+  } catch (error) {
     console.log(error);
   }
 }
@@ -226,6 +247,7 @@ module.exports = {
   getOrder,
   addAddress,
   cashOnDelivery, 
-  onlinePayment,
+  generateOrderid,
+  verify,
   getConfirmation,
 };

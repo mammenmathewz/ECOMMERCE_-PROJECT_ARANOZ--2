@@ -252,63 +252,101 @@
                                 window.location.href = response.redirectUrl;
                             }
                         });
-                    } else if (paymentMethod === "Online payment") {
+                    } else{
+                        $(document).ready(function () {
+                        var settings = {
+                            "url": "/create/orderId",
+                            "method": "POST",
+                            "timeout": 0,
+                            "headers": {
+                                "Content-Type": "application/json"
+                            },
+                            "data": JSON.stringify({
+                                "amount": "<%= cart.total %>"
+                            }),
+                            
+                        };
 
                         // Creates a new orderId every time
                         $.ajax(settings).done(function (response) {
                             var orderId = response.orderId;
                             console.log(orderId);
 
-                            // Send a POST request to the server to initiate online payment
-                            $.ajax({
-                                url: '/onlinePayment',
-                                method: 'POST',
-                                contentType: 'application/json',
-                                data: JSON.stringify({ orderId: orderId }), // Use the orderId from the previous request
-                                success: function (response) {
-                                    // The server should respond with the Razorpay order ID
-                                    var razorpayOrderId = response.razorpayOrderId;
+                            var options = {
+                                "key": "rzp_test_O7L5XOIOghh2QG", // Enter the Key ID generated from the Dashboard
+                                "amount": " <%= cart.total.toString() %>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                "currency": "INR",
+                                "name": "Aranoz",
+                                "description": "Test Transaction",
+                                "image": "/user/img/logo.png",
+                                "order_id": orderId, // Use the orderId from the previous request
+                                "handler": function (response) {
+    alert(response.razorpay_payment_id);
+    alert(response.razorpay_order_id);
+    alert(response.razorpay_signature);
 
-                                    // Now you can use the Razorpay order ID to complete the payment process
-                                    var options = {
-                                        "key": "rzp_test_P6RwF3E9kIynaJ", // Enter the Key ID generated from the Dashboard
-                                        "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                                        "currency": "INR",
-                                        "name": "Acme Corp",
-                                        "description": "Test Transaction",
-                                        "image": "https://example.com/your_logo",
-                                        "order_id": "order_IluGWxBm9U8zJ8", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                                        "handler": function (response) {
-                                            alert(response.razorpay_payment_id);
-                                            alert(response.razorpay_order_id);
-                                            alert(response.razorpay_signature)
-                                        },
-                                        "prefill": {
-                                            "name": "Gaurav Kumar",
-                                            "email": "gaurav.kumar@example.com",
-                                            "contact": "9000090000"
-                                        },
-                                        "notes": {
-                                            "address": "Razorpay Corporate Office"
-                                        },
-                                        "theme": {
-                                            "color": "#3399cc"
-                                        }
-                                    };
-                                    var rzp1 = new Razorpay(options);
-                                    rzp1.on('payment.failed', function (response) {
-                                        alert(response.error.code);
-                                        alert(response.error.description);
-                                        alert(response.error.source);
-                                        alert(response.error.step);
-                                        alert(response.error.reason);
-                                        alert(response.error.metadata.order_id);
-                                        alert(response.error.metadata.payment_id);
-                                    });
+    // Prepare the data to send to the server
+    var data = {
+        razorpay_order_id: response.razorpay_order_id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        razorpay_signature: response.razorpay_signature,
+        cart: cart // Include the cart data
+        // Add any other data you need to send
+    };
+
+    // Send a POST request to the server to verify the payment and save the order details
+    $.ajax({
+        url: '/paymentverify',
+        method: 'POST',
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function(data) {
+            // Handle the response from your server
+            console.log('Payment verification and order saving successful');
+        },
+        error: function(err) {
+            // Handle any errors
+            console.log('Payment verification and order saving failed', err);
+        }
+    });
+},
+
+                                "prefill": {
+                                    "name": '<%= user.first_name %><%=" "+ user.last_name  %>',
+                                    "email": "<%= user.email %>",
+                                    "contact": "<%= user.phone %>"
+                                },
+                                
+                                "notes": {
+                                    "address": "Razorpay Corporate Office"
+                                },
+                                "theme": {
+                                    "color": "#FF3368"
                                 }
+                                
+                            };
+                            var rzp1 = new Razorpay(options);
+                            rzp1.on('payment.failed', function (response) {
+                                alert(response.error.code);
+                                alert(response.error.description);
+                                alert(response.error.source);
+                                alert(response.error.step);
+                                alert(response.error.reason);
+                                alert(response.error.metadata.order_id);
+                                alert(response.error.metadata.payment_id);
                             });
+                            document.getElementById('rzp-button1').onclick = function (e) {
+                                rzp1.open();
+                                e.preventDefault();
+                            }
                         });
+                    });
+
                     }
+                    
+
+                  
+
                 });
             });
 

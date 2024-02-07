@@ -33,7 +33,8 @@ userRouter.put('/decrementQuantity/:productId',auth.isUserLogin,cartController.d
 userRouter.get('/checkout',auth.isUserLogin,orderController.getOrder)
 userRouter.post('/addAddress',auth.isUserLogin,orderController.addAddress)
 userRouter.post('/confirmOrder',auth.isUserLogin,orderController.cashOnDelivery)
-userRouter.post('/onlinePayment', auth.isUserLogin, orderController.onlinePayment);
+userRouter.post('/create/orderId',auth.isUserLogin,orderController.generateOrderid)
+userRouter.post('/paymentverify',auth.isUserLogin,orderController.verify)
 
 userRouter.get('/confirmation/:orderId',auth.isUserLogin,orderController.getConfirmation)
 userRouter.get('/myorder',auth.isUserLogin,userController.myOrder)

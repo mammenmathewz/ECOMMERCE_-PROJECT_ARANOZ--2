@@ -275,11 +275,9 @@
   var paypal = document.getElementById("f-option6");
   var submitButton = document.getElementById("rzp-button1");
 
-  // Add event listeners to the radio buttons
   cashOnDelivery.addEventListener("change", updateButton);
   paypal.addEventListener("change", updateButton);
 
-  // Function to update the button text
   function updateButton() {
     if (cashOnDelivery.checked) {
       submitButton.textContent = "Confirm Order";
@@ -292,125 +290,124 @@
   }
 </script>
 
-
-
 <script>
-  $(document).ready(function () {
-    $("#rzp-button1").click(function (e) {
-      e.preventDefault();
-console.log("cliked");
-      var paymentMethod = $("input[name='selector']:checked").val();
-      var selectedAddress = $("#hiddenAddress").val();
-      console.log(paymentMethod+" and "+ selectedAddress);
+  $("#rzp-button1").click(function (e) {
+    e.preventDefault();
+    var selectedAddress = $("#hiddenAddress").val();
+    updateAddress(selectedAddress);
+    
+    var paymentMethod = $("input[name='selector']:checked").val();
+    var selectedAddress = $("#hiddenAddress").val();
+    console.log("address:"+selectedAddress+"payment"+paymentMethod);
 
-      if (paymentMethod === "Cash on delivery") {
-        // Send a POST request to the server to confirm the orde
+    if (paymentMethod === "Cash on delivery") {
+      handleCashOnDelivery(selectedAddress);
+    } else if (paymentMethod === "Online payment") { 
+      handleOnlinePayment(selectedAddress);
+    }
+  });
 
-        $.ajax({
-          url: "/confirmOrder",
-          method: "POST",
-          contentType: "application/json",
-          data: JSON.stringify({
-            paymentMethod: paymentMethod,
-            selectedAddress: selectedAddress,
-          }),
-          success: function (response) {
-            // Redirect the user to the confirmation page
-            window.location.href = response.redirectUrl;
-          },
-        });
-      } else {
-        $(document).ready(function () {
-          var settings = {
-            url: "/create/orderId",
-            method: "POST",
-            timeout: 0,
-            headers: {
-              "Content-Type": "application/json",
-            },
-            data: JSON.stringify({
-              amount: "<%= cart.total %>",
-            }),
+  function handleCashOnDelivery(selectedAddress) {
+    // Send a POST request to the server to confirm the order
+    $.ajax({
+      url: "/confirmOrder",
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        paymentMethod: "Cash on Delivery",
+        selectedAddress: selectedAddress,
+      }),
+      success: function (response) {
+        // Redirect the user to the confirmation page
+        window.location.href = response.redirectUrl;
+      },
+    });
+  }
+
+  function handleOnlinePayment(selectedAddress) {
+    var settings = {
+      url: "/create/orderId",
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
+        amount: "<%= cart.total %>",
+        selectedAddress: selectedAddress,
+        paymentMethod: "Online payment"
+      }),
+    };
+
+    // Creates a new orderId every time
+    $.ajax(settings).done(function (createOrderResponse) {
+  console.log(createOrderResponse); // Add this line
+  var orderId = createOrderResponse.orderId;
+  console.log(orderId);
+
+      var options = {
+        key: "rzp_test_O7L5XOIOghh2QG", // Enter the Key ID generated from the Dashboard
+        amount: " <%= cart.total.toString() %>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        currency: "INR",
+        name: "Aranoz",
+        description: "Test Transaction",
+        image: "/user/img/logo.png",
+        order_id: orderId, // Use the orderId from the previous request
+        handler: function (response) {
+        
+          var data = {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
           };
 
-          // Creates a new orderId every time
-          $.ajax(settings).done(function (response) {
-            var orderId = response.orderId;
-            console.log(orderId);
+          // Send a POST request to the server to verify the payment and save the order details
+        
+    $.ajax({
+      url: "/paymentverify",
+      method: "POST",
+      data: JSON.stringify(data),
+      contentType: "application/json",
+      success: function (verifyPaymentResponse) {
+  console.log(verifyPaymentResponse); // Log the response
+  window.location.href = verifyPaymentResponse.redirectUrl; // Redirect the user
+},
 
-            var options = {
-              key: "rzp_test_O7L5XOIOghh2QG", // Enter the Key ID generated from the Dashboard
-              amount: " <%= cart.total.toString() %>", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-              currency: "INR",
-              name: "Aranoz",
-              description: "Test Transaction",
-              image: "/user/img/logo.png",
-              order_id: orderId, // Use the orderId from the previous request
-              handler: function (response) {
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature);
-
-                // Prepare the data to send to the server
-                var data = {
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
-                 
-                };
-
-                // Send a POST request to the server to verify the payment and save the order details
-                $.ajax({
-                  url: "/paymentverify",
-                  method: "POST",
-                  data: JSON.stringify(data),
-                  contentType: "application/json",
-                  success: function (data) {
-                    // Handle the response from your server
-                    console.log(
-                      "Payment verification and order saving successful"
-                    );
-                  },
-                  error: function (err) {
-                    // Handle any errors
-                    console.log(
-                      "Payment verification and order saving failed",
-                      err
-                    );
-                  },
-                });
-              },
-
-              prefill: {
-                name: '<%= user.first_name %><%=" "+ user.last_name  %>',
-                email: "<%= user.email %>",
-                contact: "<%= user.phone %>",
-              },
-
-              notes: {
-                address: "Razorpay Corporate Office",
-              },
-              theme: {
-                color: "#FF3368",
-              },
-            };
-            var rzp1 = new Razorpay(options);
-            rzp1.on("payment.failed", function (response) {
-              alert(response.error.code);
-              alert(response.error.description);
-              alert(response.error.source);
-              alert(response.error.step);
-              alert(response.error.reason);
-              alert(response.error.metadata.order_id);
-              alert(response.error.metadata.payment_id);
-            });
-            document.getElementById("rzp-button1").onclick = function (e) {
-              rzp1.open();
-              e.preventDefault();
-            };
+            error: function (err) {
+              // Handle any errors
+              console.log("Payment verification and order saving failed", err);
+            },
           });
-        });
-      }
+        },
+
+        prefill: {
+          name: '<%= user.first_name %><%=" "+ user.last_name  %>',
+          email: "<%= user.email %>",
+          contact: "<%= user.phone %>",
+        },
+
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#FF3368",
+        },
+      };
+
+      var rzp1 = new Razorpay(options);
+      rzp1.on("payment.failed", function (response) {
+        alert(response.error.code);
+        alert(response.error.description);
+        alert(response.error.source);
+        alert(response.error.step);
+        alert(response.error.reason);
+        alert(response.error.metadata.order_id);
+        alert(response.error.metadata.payment_id);
+      });
+      // document.getElementById("rzp-button1").onclick = function (e) {
+        rzp1.open();
+      //   e.preventDefault();
+      // };
     });
-  });
+  }
 </script>

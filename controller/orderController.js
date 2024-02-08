@@ -77,6 +77,7 @@ const addAddress = async (req, res) => {
 const cashOnDelivery = async (req, res) => {
   try {
     const userId = req.session.user;
+    console.log("userid:"+userId);
   
 
     const cart = await Cart.findOne({ user: userId })
@@ -103,6 +104,7 @@ const cashOnDelivery = async (req, res) => {
       total: cart.total,
       discount: cart.discount,
       grandTotal: cart.grandTotal,
+      paymentStatus : 'COD'
     });
 
     await newOrder.save();
@@ -223,6 +225,8 @@ const cashOnDelivery = async (req, res) => {
 const generateOrderid = async(req,res)=>{
   try {
     const userId = req.session.user;
+    console.log("user..."+req.session.user);
+    console.log("userid::"+userId);
 
     var options = {
       amount: req.body.amount * 100,  
@@ -240,7 +244,8 @@ const generateOrderid = async(req,res)=>{
           return res.status(400).send("No cart found for this user");
       }
 
-      const { selector, addressRadio } = req.body;
+      const { selector, addressRadio, selectedAddress, paymentMethod } = req.body;
+      console.log(req.body);
       const user = await User.findById(userId).populate("address");
       const selectedAddressIndex = user.address.findIndex(
         (address) => address._id.toString() === req.body.selectedAddress
@@ -251,6 +256,7 @@ const generateOrderid = async(req,res)=>{
       const newOrder = new Order({
         orderId: order.id,
         selectedAddress: selectedAddressIndex, 
+        paymentMethod: paymentMethod,
         user: userId,
         items: cart.items,
         total: cart.total,
@@ -289,20 +295,37 @@ const verify = async(req,res)=>{
     console.log('Order ID retrieved from session:', orderId);
 
     const generated_signature = crypto.createHmac('sha256', secret).update(razorpay_order_id + '|' + razorpay_payment_id).digest('hex');
+    
+    console.log('razorpay_signature:', razorpay_signature);
+
+
     if (generated_signature === razorpay_signature) {
       // Payment is successful, update the order status
       const order = await Order.findById(orderId);
       if (order) {
-        order.status = 'Paid';
+        order.paymentStatus = 'Paid';
         await order.save();
       }
-      res.json({ redirectUrl: `/confirmation/${orderId}` });
+      
     } else {
-      // Payment failed, delete the order
-      await Order.deleteOne({ _id: orderId });
-      res.status(400).send('Payment verification failed');
+      // Signature verification failed, check the payment status
+      const order = await Order.findById(orderId);
+      if (order && order.paymentStatus !== 'Paid') {
+        try {
+          console.log(orderId);
+          await Order.deleteOne({ _id: orderId });
+        } catch (error) {
+          console.log('Error deleting order:', error);
+        }
+      }
+     
     }
-    
+   
+    let redirectUrl = `/confirmation/${orderId}`;
+res.json({ redirectUrl: redirectUrl });
+console.log("url:" + redirectUrl);
+
+
   } catch (error) {
     console.log(error);
   }

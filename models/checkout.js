@@ -15,6 +15,10 @@ const orderSchema = new mongoose.Schema({
       },
         
     }],
+    orderId: {
+      type: String,
+   
+  },
     date: {
       type: Date,
       default: Date.now, 
@@ -63,8 +67,9 @@ const orderSchema = new mongoose.Schema({
     type: String,
     
 },
-orderStatus: {
-  type:String
+paymentStatus: {
+  type:String,
+  default: 'Failed'
 },
   });
 

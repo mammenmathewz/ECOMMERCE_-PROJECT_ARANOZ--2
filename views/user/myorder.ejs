@@ -1,4 +1,12 @@
+<style>
+    .failed-order {
+   
 
+    color: #e67a85;
+
+  }
+</style>
+  
 <div class="col-lg-8 col-md-10 col-sm-12">
    
         <h2>My Orders</h2>
@@ -6,23 +14,26 @@
             <table class="table">
                 <tbody>
                     <% orders.forEach(function(order) { %>
-                        <tr>
+                        <tr class="<%= order.paymentStatus === 'Failed' ? 'failed-order' : '' %>">
                             <td><%= order._id.toString().slice(-4) %></td>
                             <td>
                                 <% if (order.is_delivered) { %>
-                                  <p class="btn btn-success m-2"> Delivered </p>
+                                    <p class="btn btn-success m-2"> Delivered </p>
+                                  <% } else if (order.paymentStatus === 'Failed') { %>
+                                    <p class="btn btn-danger m-2">Payment failed</p>   
                                   <% } else if (order.user_cancelled) { %>
-                                  <p class="btn btn-danger m-2"> User Cancelled</p>
-                                  
+                                    <p class="btn btn-danger m-2"> User Cancelled</p>
                                   <% } else if (order.admin_cancelled) { %>
-                                     <p class="btn btn-danger m-2">   Admin Cancelled</p>
+                                    <p class="btn btn-danger m-2"> Admin Cancelled</p>
                                   <% } else if (order.is_returned) { %>
-                                     <p class="btn btn-warning m-2">   Returned</p>
-                                     
+                                    <p class="btn btn-warning m-2"> Returned</p>
                                   <% } else { %>
-                                      <p class=" btn btn-info m-2">Pending</p>   
+                                    <p class="btn btn-info m-2">Pending</p>   
                                   <% } %>
+                                  
+                                  
                               </td>
+                              <td><%="Status: "+order.paymentStatus  %></td>
                               <td><%="€"+ order.total %></td>
                             <td><a class="seeMore" style="cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
                   <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3m5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3"/>
@@ -37,11 +48,11 @@
                             <td>
                                 <select class="form-control" id="status<%= order._id %>">
                                     <option value="">Status</option>
-                                    <% if(!order.is_delivered && !order.user_cancelled && !order.admin_cancelled) { %>
+                                    <% if(!order.is_delivered && !order.user_cancelled && !order.admin_cancelled && !order.paymentStatus === 'Failed') { %>
                                         <!-- Show the cancel option if the order is not delivered and not cancelled by the user -->
                                         <option value="User Cancelled">Cancel</option>
                                     <% } %>
-                                    <% if(order.is_delivered && !order.is_returned) { %>
+                                    <% if(order.is_delivered && !order.is_returned ) { %>
                                         <!-- Show the return option if the order is delivered and not returned -->
                                         <option value="Returned">Return</option>
                                     <% } %>

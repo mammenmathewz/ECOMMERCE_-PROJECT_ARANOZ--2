@@ -305,8 +305,24 @@ const verify = async(req,res)=>{
       if (order) {
         order.paymentStatus = 'Paid';
         await order.save();
+    
+        // Reduce product quantities and clear the cart
+        const cart = await Cart.findOne({ user: userId }).populate("items.productId");
+        for (let item of cart.items) {
+          const product = await Product.findById(item.productId);
+          product.number -= item.quantity;
+          await product.save();
+        }
+        cart.items = [];
+        cart.total = 0;
+        cart.discount = 0;
+        cart.grandTotal = 0;
+        await cart.save();
       }
-      
+      let redirectUrl = `/confirmation/${orderId}`;
+      res.json({ redirectUrl: redirectUrl });
+      console.log("url:" + redirectUrl);
+
     } else {
       // Signature verification failed, check the payment status
       const order = await Order.findById(orderId);
@@ -321,9 +337,7 @@ const verify = async(req,res)=>{
      
     }
    
-    let redirectUrl = `/confirmation/${orderId}`;
-res.json({ redirectUrl: redirectUrl });
-console.log("url:" + redirectUrl);
+ 
 
 
   } catch (error) {

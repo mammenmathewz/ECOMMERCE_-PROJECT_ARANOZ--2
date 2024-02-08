@@ -6,6 +6,7 @@ const { User } = require("../models/users");
 const Order = require("../models/checkout");
 const moment = require("moment");
 const Razorpay = require('razorpay')
+const crypto = require('crypto')
 
 
 var instance = new Razorpay({
@@ -129,17 +130,141 @@ const cashOnDelivery = async (req, res) => {
 };
 
 
+// const generateOrderid = async(req,res)=>{
+//   try {
+//     var options = {
+//       amount: req.body.amount * 100,  // amount in the smallest currency unit
+//       currency: "INR",
+//       receipt: "order_rcptid_" + Math.random().toString(36).substring(7)
+//     };
+    
+//     instance.orders.create(options, function(err, order) {
+//       if (err) {
+//         return res.status(500).send({ message: err.message });
+//       }
+
+//       res.json({ orderId: order.id });
+//     });
+
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+// const verify = async(req,res)=>{
+//   try {
+//         const secret = 'YOUR_SECRET'; // Replace with your Razorpay secret key
+//         const userId = req.session.user;
+
+//     // Extract the order details from the request body
+//     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+//     // Generate the hmac
+//     const generated_signature = crypto.createHmac('sha256', secret).update(razorpay_order_id + '|' + razorpay_payment_id).digest('hex');
+
+//     if (generated_signature === razorpay_signature) {
+//         // Payment is successful
+
+//         // Find the cart for the user
+//         const cart = await Cart.findOne({ user: userId }).populate("user").populate("items.productId");
+//         if (!cart) {
+//             return res.status(400).send("No cart found for this user");
+//         }
+
+//         const { selector, addressRadio } = req.body;
+//         const user = await User.findById(userId).populate("address");
+//         const selectedAddressIndex = user.address.findIndex((address) => address._id.toString() === req.body.selectedAddress);
+
+//         // Create a new order document
+//         const newOrder = new Order({
+//             paymentMethod: selector,
+//             selectedAddress: selectedAddressIndex, 
+//             user: userId,
+//             items: cart.items,
+//             total: cart.total,
+//             discount: cart.discount,
+//             grandTotal: cart.grandTotal,
+//         });
+
+//         // Save the order document in the database
+//         try {
+//             await newOrder.save();
+//             const order = await Order.findById(newOrder._id).populate("items.productId");
+
+//             for (let item of cart.items) {
+//                 const product = await Product.findById(item.productId);
+//                 product.number -= item.quantity;
+//                 await product.save();
+//             }
+
+//             cart.items = [];
+//             cart.total = 0;
+//             cart.discount = 0;
+//             cart.grandTotal = 0;
+//             await cart.save();
+
+//             res.json({ redirectUrl: `/confirmation/${newOrder._id}` });
+//         } catch (error) {
+//             res.status(500).send({ message: error.message });
+//         }
+//     } else {
+//         // Payment verification failed
+//         res.status(400).send('Payment verification failed');
+//     }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+
 const generateOrderid = async(req,res)=>{
   try {
+    const userId = req.session.user;
+
     var options = {
-      amount: req.body.amount * 100,  // amount in the smallest currency unit
+      amount: req.body.amount * 100,  
       currency: "INR",
       receipt: "order_rcptid_" + Math.random().toString(36).substring(7)
     };
     
-    instance.orders.create(options, function(err, order) {
+    instance.orders.create(options, async function(err, order) {
       if (err) {
         return res.status(500).send({ message: err.message });
+      }
+
+      const cart = await Cart.findOne({ user: userId }).populate("user").populate("items.productId");
+      if (!cart) {
+          return res.status(400).send("No cart found for this user");
+      }
+
+      const { selector, addressRadio } = req.body;
+      const user = await User.findById(userId).populate("address");
+      const selectedAddressIndex = user.address.findIndex(
+        (address) => address._id.toString() === req.body.selectedAddress
+      );
+      
+
+      // Save the order in the database
+      const newOrder = new Order({
+        orderId: order.id,
+        selectedAddress: selectedAddressIndex, 
+        user: userId,
+        items: cart.items,
+        total: cart.total,
+        discount: cart.discount,
+        grandTotal: cart.grandTotal,
+      });
+
+      try {
+        await newOrder.save();
+        console.log('Order created with ID:', newOrder._id);
+        req.session.orderId = newOrder._id;
+        console.log('Order ID saved to session:', req.session.orderId);
+      } catch (error) {
+        console.log(error);
       }
 
       res.json({ orderId: order.id });
@@ -152,68 +277,54 @@ const generateOrderid = async(req,res)=>{
 
 const verify = async(req,res)=>{
   try {
-        const secret = 'YOUR_SECRET'; // Replace with your Razorpay secret key
-        const userId = req.session.user;
+    const secret = instance.key_secret; // Replace with your Razorpay secret key
+    const userId = req.session.user;
 
-    // Extract the order details from the request body
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const orderId = req.session.orderId;
 
-    // Generate the hmac
+    console.log('secret:', secret);
+    console.log('razorpay_order_id:', razorpay_order_id);
+    console.log('razorpay_payment_id:', razorpay_payment_id);
+    console.log('Order ID retrieved from session:', orderId);
+
     const generated_signature = crypto.createHmac('sha256', secret).update(razorpay_order_id + '|' + razorpay_payment_id).digest('hex');
-
     if (generated_signature === razorpay_signature) {
-        // Payment is successful
-
-        // Find the cart for the user
-        const cart = await Cart.findOne({ user: userId }).populate("user").populate("items.productId");
-        if (!cart) {
-            return res.status(400).send("No cart found for this user");
-        }
-
-        const { selector, addressRadio } = req.body;
-        const user = await User.findById(userId).populate("address");
-        const selectedAddressIndex = user.address.findIndex((address) => address._id.toString() === req.body.selectedAddress);
-
-        // Create a new order document
-        const newOrder = new Order({
-            paymentMethod: selector,
-            selectedAddress: selectedAddressIndex, 
-            user: userId,
-            items: cart.items,
-            total: cart.total,
-            discount: cart.discount,
-            grandTotal: cart.grandTotal,
-        });
-
-        // Save the order document in the database
-        try {
-            await newOrder.save();
-            const order = await Order.findById(newOrder._id).populate("items.productId");
-
-            for (let item of cart.items) {
-                const product = await Product.findById(item.productId);
-                product.number -= item.quantity;
-                await product.save();
-            }
-
-            cart.items = [];
-            cart.total = 0;
-            cart.discount = 0;
-            cart.grandTotal = 0;
-            await cart.save();
-
-            res.json({ redirectUrl: `/confirmation/${newOrder._id}` });
-        } catch (error) {
-            res.status(500).send({ message: error.message });
-        }
+      // Payment is successful, update the order status
+      const order = await Order.findById(orderId);
+      if (order) {
+        order.status = 'Paid';
+        await order.save();
+      }
+      res.json({ redirectUrl: `/confirmation/${orderId}` });
     } else {
-        // Payment verification failed
-        res.status(400).send('Payment verification failed');
+      // Payment failed, delete the order
+      await Order.deleteOne({ _id: orderId });
+      res.status(400).send('Payment verification failed');
     }
+    
   } catch (error) {
     console.log(error);
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const getConfirmation = async (req, res) => {
   try {

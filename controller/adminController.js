@@ -84,15 +84,135 @@ const postAdminSignup = async (req, res) => {
   }
 };
 
+// const adminDash = async (req, res) => {
+//   try {
+//     res.render("admin/index", { active: "dash" });
+//   } catch (error) {
+//     console.log(error);
+//     res.send("Error occurred while fetching data");
+//   }
+// };
+
+////////////////////////////////////////
+
+function aggregateDailySales(req, res) {
+  return Order.aggregate([
+    {
+      $match: {
+        paymentStatus: { $ne: 'Failed' },
+        date: {
+          $gte: new Date(new Date().setHours(0, 0, 0)),
+          $lt: new Date(new Date().setHours(23, 59, 59)),
+        },
+      },
+    },
+
+    {
+      $group: {
+        _id: { $hour: "$date" },
+        totalSales: { $sum: "$total" },
+      },
+    },
+    { $sort: { _id: 1 } },
+  ]).exec();
+}
+
+// Function to aggregate weekly sales data
+function aggregateWeeklySales(req, res) {
+  return Order.aggregate([
+    {
+      $match: {
+        paymentStatus: { $ne: 'Failed' },
+        date: {
+          $gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+          $lt: new Date(),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $dayOfWeek: "$date" },
+        totalSales: { $sum: "$total" },
+      },
+    },
+    { $sort: { _id: 1 } },
+  ]).exec();
+}
+
+// Function to aggregate yearly sales data
+function aggregateYearlySales(req, res) {
+  return Order.aggregate([
+    {
+      $match: {
+        paymentStatus: { $ne: 'Failed' },
+        date: {
+          $gte: new Date(new Date().getFullYear(), 0, 1),
+          $lt: new Date(new Date().getFullYear() + 1, 0, 1),
+        },
+      },
+    },
+    {
+      $group: {
+        _id: { $month: "$date" },
+        totalSales: { $sum: "$total" },
+      },
+    },
+    { $sort: { _id: 1 } },
+  ]).exec();
+}
+
 const adminDash = async (req, res) => {
   try {
-    res.render("admin/index", { active: "dash" });
+    const [dailySales, weeklySales, yearlySales] = await Promise.all([
+      aggregateDailySales(),
+      aggregateWeeklySales(),
+      aggregateYearlySales(),
+    ]);
+
+    // Create an array for each day of the week with default sales of 0
+    const weeklySalesData = Array(7)
+      .fill(0)
+      .map((_, i) => ({ _id: i + 1, totalSales: 0 }));
+
+    // Update the sales for the days that are in the result of the aggregation
+    for (const sale of weeklySales) {
+      weeklySalesData[sale._id - 1].totalSales = sale.totalSales;
+    }
+    const yearlySalesData = Array(12)
+      .fill(0)
+      .map((_, i) => ({ _id: i + 1, totalSales: 0 }));
+
+    for (const sale of yearlySales) {
+      yearlySalesData[sale._id - 1].totalSales = sale.totalSales;
+    }
+    const dailySalesData = Array(24)
+      .fill(0)
+      .map((_, i) => ({ _id: i, totalSales: 0 }));
+
+    for (const sale of dailySales) {
+      dailySalesData[sale._id].totalSales = sale.totalSales;
+    }
+
+    const weeklyTotal = weeklySales.reduce((sum, sale) => sum + sale.totalSales, 0);
+    const dailyTotal = dailySales.reduce((sum,sale)=> sum+sale.totalSales,0);
+    const yearlyTotal = yearlySales.reduce((sum,sale)=> sum+sale.totalSales,0);
+
+    
+    console.log("weekly :" + JSON.stringify(dailySales+"  total="+dailyTotal));
+
+    res.render("admin/index", {
+      active: "dash",
+      dailyTotal,dailySalesData,
+      weeklyTotal, weeklySalesData,
+      yearlyTotal,yearlySalesData
+    });
   } catch (error) {
     console.log(error);
     res.send("Error occurred while fetching data");
   }
 };
 
+//////////////////////////////////////////////////
 const adminLogout = async (req, res) => {
   try {
     if (req.session.admin) {

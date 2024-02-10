@@ -60,58 +60,63 @@
 
 
     // Worldwide Sales Chart
-    var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
-    var myChart1 = new Chart(ctx1, {
-        type: "bar",
-        data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                    label: "USA",
-                    data: [15, 30, 55, 65, 60, 80, 95],
-                    backgroundColor: "rgba(0, 156, 255, .7)"
-                },
-                {
-                    label: "UK",
-                    data: [8, 35, 40, 60, 70, 55, 75],
-                    backgroundColor: "rgba(0, 156, 255, .5)"
-                },
-                {
-                    label: "AU",
-                    data: [12, 25, 45, 55, 65, 70, 60],
-                    backgroundColor: "rgba(0, 156, 255, .3)"
-                }
-            ]
-            },
-        options: {
-            responsive: true
-        }
-    });
+   
 
 
     // Salse & Revenue Chart
-    var ctx2 = $("#salse-revenue").get(0).getContext("2d");
-    var myChart2 = new Chart(ctx2, {
-        type: "line",
-        data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                    label: "Salse",
-                    data: [15, 30, 55, 45, 70, 65, 85],
-                    backgroundColor: "rgba(0, 156, 255, .5)",
-                    fill: true
-                },
-                {
-                    label: "Revenue",
-                    data: [99, 135, 170, 130, 190, 180, 270],
-                    backgroundColor: "rgba(0, 156, 255, .3)",
-                    fill: true
-                }
-            ]
-            },
-        options: {
-            responsive: true
-        }
-    });
+//     var ctx2 = $("#salse-revenue").get(0).getContext("2d");
+//     var myChart2 = new Chart(ctx2, {
+//         type: "bar",
+//         data: {
+//             labels:  ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+//             datasets: [{
+//                 label: "Sales",
+//                 data: [0, 0, 0, 0, 0, 0, 0], // Initialize with zero sales
+//                 backgroundColor: "#5bc2f5",
+//                 fill: true
+//             }]
+//         },
+//         options: {
+//             responsive: true
+//         }
+//     });
+
+
+
+    
+//     // Assuming you have buttons with ids "dailyButton", "weeklyButton", and "yearlyButton"
+//     var dailyButton = document.getElementById("dailyButton");
+//     var weeklyButton = document.getElementById("weeklyButton");
+//     var yearlyButton = document.getElementById("yearlyButton");
+
+ 
+
+
+    
+//     console.log('dailySalesData:');
+// console.log('weeklySalesData:', weeklySalesData);
+// console.log('yearlySalesData:', yearlySalesData);
+    
+//     dailyButton.addEventListener("mouseover", function() {
+//         myChart2.data.labels = dailySalesData.map(item => `${item._id}:00`);
+//         myChart2.data.datasets[0].data = dailySalesData.map(item => item.totalSales);
+//         myChart2.data.datasets[0].backgroundColor = '#b0ddf4';
+//         myChart2.update();
+//     });
+    
+//     weeklyButton.addEventListener("mouseover", function() {
+//         myChart2.data.labels = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+//         myChart2.data.datasets[0].data = weeklySalesData.map(item => item.totalSales);
+//         myChart2.data.datasets[0].backgroundColor = '#5bc2f5';
+//         myChart2.update();
+//     });
+    
+//     yearlyButton.addEventListener("mouseover", function() {
+//         myChart2.data.labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+//         myChart2.data.datasets[0].data = yearlySalesData.map(item => item.totalSales);
+//         myChart2.data.datasets[0].backgroundColor = '#86d2d8';
+//         myChart2.update();
+//     });
     
 
 

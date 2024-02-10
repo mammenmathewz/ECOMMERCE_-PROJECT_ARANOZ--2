@@ -1,5 +1,8 @@
 <%- include('../partials/adminHead') %>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.css" integrity="sha512-bs9fAcCAeaDfA4A+NiShWR886eClUcBtqhipoY5DM60Y1V3BbVQlabthUBal5bq8Z8nnxxiyb1wfGX2n76N1Mw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.js" integrity="sha512-Zt7blzhYHCLHjU0c+e4ldn5kGAbwLKTSOTERgqSNyTB50wWSI21z0q6bn/dEIuqf6HiFzKJ6cfj2osRhklb4Og==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <body>
     <div class="container-xxl position-relative bg-white d-flex p-0">
@@ -71,7 +74,9 @@
                                 <div class="mb-3">
                                     <label for="formImage" class="form-label">Images</label>
                                     <input class="form-control" type="file" id="formImage" name="images" multiple required>
+                                    
                                 </div>
+                                                         
                                 <button type="submit" class="btn btn-primary">Submit</button>
                             </form>
                             
@@ -79,7 +84,17 @@
                     </div>
                    
                     
-                  
+                    <div class="col-sm-12 col-xl-6">
+                        <div class="bg-light rounded h-100 p-4">
+                            <h6 class="mb-4">Add Product</h6>
+                            <div>
+                                <img src="" id="croppedImage" alt="">
+                            </div>
+                            <div>
+                                <button id="cropBtn">crop image</button>
+                            </div>
+                        </div>
+                    </div>
                     
                     
                    
@@ -88,7 +103,11 @@
             </div>
             <!-- Form End -->
 
-
+            
+           
+ 
+           
+            
             <!-- Footer Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="bg-light rounded-top p-4">
@@ -122,6 +141,11 @@
     <script src="lib/tempusdominus/js/moment.min.js"></script>
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
@@ -144,6 +168,46 @@
               document.getElementById('message').style.display = 'none';
             }, 2000);
           </script>
+
+<script>
+
+document.addEventListener('DOMContentLoaded',()=>{
+    let cropper;
+
+const ourImage = document.getElementById('formImage');
+const cropimage = document.getElementById('croppedImage');
+const cropBtn = document.getElementById('cropBtn');
+
+ourImage.addEventListener("change",(e)=>{
+    const file = event.target.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload=(e)=>{
+            cropimage.src = e.target.result;
+            cropper = new Cropper(cropimage,{
+                aspectRatio:1,
+                viewMode:1
+            });
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+cropBtn.addEventListener('click',()=>{
+    if (cropper) {
+        const croppedDataUrl = cropper.getCroppedCanvas().toDataURL();
+        cropimage.src = croppedDataUrl;
+    } else {
+        console.error('Cropper is not defined. Make sure an image is loaded before clicking the crop button.');
+    }
+});
+})
+
+
+</script>
+
 </body>
+
 
 </html>

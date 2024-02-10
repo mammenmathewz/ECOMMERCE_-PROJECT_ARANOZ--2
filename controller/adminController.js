@@ -84,17 +84,6 @@ const postAdminSignup = async (req, res) => {
   }
 };
 
-// const adminDash = async (req, res) => {
-//   try {
-//     res.render("admin/index", { active: "dash" });
-//   } catch (error) {
-//     console.log(error);
-//     res.send("Error occurred while fetching data");
-//   }
-// };
-
-////////////////////////////////////////
-
 function aggregateDailySales(req, res) {
   return Order.aggregate([
     {
@@ -211,6 +200,46 @@ const adminDash = async (req, res) => {
     res.send("Error occurred while fetching data");
   }
 };
+
+// const dataPerDate = async(req,res)=>{
+//   try {
+//     const { startDate, endDate } = req.body;
+
+//     const data = await Order.aggregate([
+//       {
+//         $match: {
+//           paymentStatus: { $ne: 'Failed' },
+//           date: {
+//             $gte: new Date(startDate),
+//             $lt: new Date(endDate),
+//           },
+//         },
+//       },
+//       {
+//         $group: {
+//           _id: { $dayOfMonth: "$date" },
+//           totalSales: { $sum: "$total" },
+//         },
+//       },
+//       { $sort: { _id: 1 } },
+//     ]).exec();
+
+//     // Initialize an array with zeros for each day of the month
+//     const salesPerDay = Array(31).fill(0);
+
+//     // Update the array with the data from the aggregation
+//     for (const item of data) {
+//       salesPerDay[item._id - 1] = item.totalSales;
+//     }
+// console.log(JSON.stringify(salesPerDay));
+//     res.json(salesPerDay);
+
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Error occurred while fetching data");
+//   }
+// }
+
 
 //////////////////////////////////////////////////
 const adminLogout = async (req, res) => {
@@ -644,4 +673,5 @@ module.exports = {
   getOrderManagement,
   switchStatus,
   vieworder,
+  // dataPerDate
 };

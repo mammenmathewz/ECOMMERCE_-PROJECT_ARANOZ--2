@@ -157,13 +157,48 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script>
-        $(function() {
-          $('input[name="daterange"]').daterangepicker({
-            opens: 'left'
-          }, function(start, end, label) {
-            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-          });
-        });
+
+       $(function() {
+  $('input[name="daterange"]').daterangepicker({
+    opens: 'left'
+  }, function(start, end, label) {
+    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    
+    // Send a request to the server with the selected date range
+    $.ajax({
+      url: '/admin/dateData', // replace with your API endpoint
+      method: 'POST',
+      data: {
+        startDate: start.format('YYYY-MM-DD'),
+        endDate: end.format('YYYY-MM-DD')
+      },
+      success: function(response) {
+    // Extract labels from response
+    var labels = response.map(function(item) {
+      return item._id; // replace '_id' with the property that holds the label in your data
+    });
+
+    var ctx2 = $("#salse-revenue").get(0).getContext("2d");
+    var myChart2 = new Chart(ctx2, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [{
+          label: "Sales",
+          data: [0, 0, 0, 0, 0, 0, 0], // replace with your data
+          backgroundColor: "#5bc2f5",
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+  }
+});
+  });
+});
+
         </script>
       <script>
         var dailySalesData = <%- JSON.stringify(  dailySalesData) %>;

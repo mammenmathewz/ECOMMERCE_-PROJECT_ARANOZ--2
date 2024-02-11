@@ -34,46 +34,103 @@
 
 
     // Progress Bar
-    $('.pg-bar').waypoint(function () {
-        $('.progress .progress-bar').each(function () {
-            $(this).css("width", $(this).attr("aria-valuenow") + '%');
-        });
-    }, {offset: '80%'});
+    // $('.pg-bar').waypoint(function () {
+    //     $('.progress .progress-bar').each(function () {
+    //         $(this).css("width", $(this).attr("aria-valuenow") + '%');
+    //     });
+    // }, {offset: '80%'});
 
 
-    // Calender
-    $('#calender').datetimepicker({
-        inline: true,
-        format: 'L'
-    });
+//     // Calender
+//     $('#calender').datetimepicker({
+//         inline: true,
+//         format: 'L'
+//     });
 
 
-    // Testimonials carousel
-    $(".testimonial-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1000,
-        items: 1,
-        dots: true,
-        loop: true,
-        nav : false
-    });
+//     // Testimonials carousel
+//     $(".testimonial-carousel").owlCarousel({
+//         autoplay: true,
+//         smartSpeed: 1000,
+//         items: 1,
+//         dots: true,
+//         loop: true,
+//         nav : false
+//     });
 
 
-    // Worldwide Sales Chart
+//     // Worldwide Sales Chart
    
 
 
-    // Salse & Revenue Chart
-//     var ctx2 = $("#salse-revenue").get(0).getContext("2d");
-//     var myChart2 = new Chart(ctx2, {
-//         type: "bar",
+//     // Salse & Revenue Chart
+// //     var ctx2 = $("#salse-revenue").get(0).getContext("2d");
+// //     var myChart2 = new Chart(ctx2, {
+// //         type: "bar",
+// //         data: {
+// //             labels:  ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+// //             datasets: [{
+// //                 label: "Sales",
+// //                 data: [0, 0, 0, 0, 0, 0, 0], // Initialize with zero sales
+// //                 backgroundColor: "#5bc2f5",
+// //                 fill: true
+// //             }]
+// //         },
+// //         options: {
+// //             responsive: true
+// //         }
+// //     });
+
+
+
+    
+// //     // Assuming you have buttons with ids "dailyButton", "weeklyButton", and "yearlyButton"
+// //     var dailyButton = document.getElementById("dailyButton");
+// //     var weeklyButton = document.getElementById("weeklyButton");
+// //     var yearlyButton = document.getElementById("yearlyButton");
+
+ 
+
+
+    
+// //     console.log('dailySalesData:');
+// // console.log('weeklySalesData:', weeklySalesData);
+// // console.log('yearlySalesData:', yearlySalesData);
+    
+// //     dailyButton.addEventListener("mouseover", function() {
+// //         myChart2.data.labels = dailySalesData.map(item => `${item._id}:00`);
+// //         myChart2.data.datasets[0].data = dailySalesData.map(item => item.totalSales);
+// //         myChart2.data.datasets[0].backgroundColor = '#b0ddf4';
+// //         myChart2.update();
+// //     });
+    
+// //     weeklyButton.addEventListener("mouseover", function() {
+// //         myChart2.data.labels = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+// //         myChart2.data.datasets[0].data = weeklySalesData.map(item => item.totalSales);
+// //         myChart2.data.datasets[0].backgroundColor = '#5bc2f5';
+// //         myChart2.update();
+// //     });
+    
+// //     yearlyButton.addEventListener("mouseover", function() {
+// //         myChart2.data.labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+// //         myChart2.data.datasets[0].data = yearlySalesData.map(item => item.totalSales);
+// //         myChart2.data.datasets[0].backgroundColor = '#86d2d8';
+// //         myChart2.update();
+// //     });
+    
+
+
+//     // Single Line Chart
+//     var ctx3 = $("#line-chart").get(0).getContext("2d");
+//     var myChart3 = new Chart(ctx3, {
+//         type: "line",
 //         data: {
-//             labels:  ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+//             labels: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
 //             datasets: [{
-//                 label: "Sales",
-//                 data: [0, 0, 0, 0, 0, 0, 0], // Initialize with zero sales
-//                 backgroundColor: "#5bc2f5",
-//                 fill: true
+//                 label: "Salse",
+//                 fill: false,
+//                 backgroundColor: "rgba(0, 156, 255, .3)",
+//                 data: [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15]
 //             }]
 //         },
 //         options: {
@@ -82,130 +139,73 @@
 //     });
 
 
-
-    
-//     // Assuming you have buttons with ids "dailyButton", "weeklyButton", and "yearlyButton"
-//     var dailyButton = document.getElementById("dailyButton");
-//     var weeklyButton = document.getElementById("weeklyButton");
-//     var yearlyButton = document.getElementById("yearlyButton");
-
- 
-
-
-    
-//     console.log('dailySalesData:');
-// console.log('weeklySalesData:', weeklySalesData);
-// console.log('yearlySalesData:', yearlySalesData);
-    
-//     dailyButton.addEventListener("mouseover", function() {
-//         myChart2.data.labels = dailySalesData.map(item => `${item._id}:00`);
-//         myChart2.data.datasets[0].data = dailySalesData.map(item => item.totalSales);
-//         myChart2.data.datasets[0].backgroundColor = '#b0ddf4';
-//         myChart2.update();
+//     // Single Bar Chart
+//     var ctx4 = $("#bar-chart").get(0).getContext("2d");
+//     var myChart4 = new Chart(ctx4, {
+//         type: "bar",
+//         data: {
+//             labels: ["Italy", "France", "Spain", "USA", "Argentina"],
+//             datasets: [{
+//                 backgroundColor: [
+//                     "rgba(0, 156, 255, .7)",
+//                     "rgba(0, 156, 255, .6)",
+//                     "rgba(0, 156, 255, .5)",
+//                     "rgba(0, 156, 255, .4)",
+//                     "rgba(0, 156, 255, .3)"
+//                 ],
+//                 data: [55, 49, 44, 24, 15]
+//             }]
+//         },
+//         options: {
+//             responsive: true
+//         }
 //     });
-    
-//     weeklyButton.addEventListener("mouseover", function() {
-//         myChart2.data.labels = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-//         myChart2.data.datasets[0].data = weeklySalesData.map(item => item.totalSales);
-//         myChart2.data.datasets[0].backgroundColor = '#5bc2f5';
-//         myChart2.update();
+
+
+//     // Pie Chart
+//     var ctx5 = $("#pie-chart").get(0).getContext("2d");
+//     var myChart5 = new Chart(ctx5, {
+//         type: "pie",
+//         data: {
+//             labels: ["Italy", "France", "Spain", "USA", "Argentina"],
+//             datasets: [{
+//                 backgroundColor: [
+//                     "rgba(0, 156, 255, .7)",
+//                     "rgba(0, 156, 255, .6)",
+//                     "rgba(0, 156, 255, .5)",
+//                     "rgba(0, 156, 255, .4)",
+//                     "rgba(0, 156, 255, .3)"
+//                 ],
+//                 data: [55, 49, 44, 24, 15]
+//             }]
+//         },
+//         options: {
+//             responsive: true
+//         }
 //     });
-    
-//     yearlyButton.addEventListener("mouseover", function() {
-//         myChart2.data.labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-//         myChart2.data.datasets[0].data = yearlySalesData.map(item => item.totalSales);
-//         myChart2.data.datasets[0].backgroundColor = '#86d2d8';
-//         myChart2.update();
+
+
+//     // Doughnut Chart
+//     var ctx6 = $("#doughnut-chart").get(0).getContext("2d");
+//     var myChart6 = new Chart(ctx6, {
+//         type: "doughnut",
+//         data: {
+//             labels: ["Italy", "France", "Spain", "USA", "Argentina"],
+//             datasets: [{
+//                 backgroundColor: [
+//                     "rgba(0, 156, 255, .7)",
+//                     "rgba(0, 156, 255, .6)",
+//                     "rgba(0, 156, 255, .5)",
+//                     "rgba(0, 156, 255, .4)",
+//                     "rgba(0, 156, 255, .3)"
+//                 ],
+//                 data: [55, 49, 44, 24, 15]
+//             }]
+//         },
+//         options: {
+//             responsive: true
+//         }
 //     });
-    
-
-
-    // Single Line Chart
-    var ctx3 = $("#line-chart").get(0).getContext("2d");
-    var myChart3 = new Chart(ctx3, {
-        type: "line",
-        data: {
-            labels: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
-            datasets: [{
-                label: "Salse",
-                fill: false,
-                backgroundColor: "rgba(0, 156, 255, .3)",
-                data: [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-
-    // Single Bar Chart
-    var ctx4 = $("#bar-chart").get(0).getContext("2d");
-    var myChart4 = new Chart(ctx4, {
-        type: "bar",
-        data: {
-            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-            datasets: [{
-                backgroundColor: [
-                    "rgba(0, 156, 255, .7)",
-                    "rgba(0, 156, 255, .6)",
-                    "rgba(0, 156, 255, .5)",
-                    "rgba(0, 156, 255, .4)",
-                    "rgba(0, 156, 255, .3)"
-                ],
-                data: [55, 49, 44, 24, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-
-    // Pie Chart
-    var ctx5 = $("#pie-chart").get(0).getContext("2d");
-    var myChart5 = new Chart(ctx5, {
-        type: "pie",
-        data: {
-            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-            datasets: [{
-                backgroundColor: [
-                    "rgba(0, 156, 255, .7)",
-                    "rgba(0, 156, 255, .6)",
-                    "rgba(0, 156, 255, .5)",
-                    "rgba(0, 156, 255, .4)",
-                    "rgba(0, 156, 255, .3)"
-                ],
-                data: [55, 49, 44, 24, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-
-    // Doughnut Chart
-    var ctx6 = $("#doughnut-chart").get(0).getContext("2d");
-    var myChart6 = new Chart(ctx6, {
-        type: "doughnut",
-        data: {
-            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-            datasets: [{
-                backgroundColor: [
-                    "rgba(0, 156, 255, .7)",
-                    "rgba(0, 156, 255, .6)",
-                    "rgba(0, 156, 255, .5)",
-                    "rgba(0, 156, 255, .4)",
-                    "rgba(0, 156, 255, .3)"
-                ],
-                data: [55, 49, 44, 24, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
 
     
 })(jQuery);

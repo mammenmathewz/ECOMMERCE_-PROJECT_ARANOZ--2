@@ -5,6 +5,10 @@ const Brand = require("../models/brand");
 const Order = require("../models/checkout");
 const flash = require("express-flash");
 const moment = require("moment");
+const fs = require('fs');
+const path = require('path');
+
+
 
 const getAdminLogin = async (req, res) => {
   try {
@@ -403,7 +407,6 @@ const addProduct = async (req, res) => {
     res.status(500).send("An error occurred while fetching the brands.");
   }
 };
-
 const uploadProduct = async (req, res) => {
   try {
     // Validate the brand ID
@@ -423,19 +426,51 @@ const uploadProduct = async (req, res) => {
       createdon: Date.now(),
     });
 
-    req.files.forEach((file) => {
-      // Save the path of the image file to the database
-      product.images.push("/user/img/product/" + file.originalname);
+    // If there are new images, add them to the product
+  // If there are new images, add them to the product
+if (req.body.croppedImage) {
+  var images = Array.isArray(req.body.croppedImage) ? req.body.croppedImage : [req.body.croppedImage];
+  
+  images.forEach((base64data, index) => {
+    base64data = base64data.replace(/^data:image\/png;base64,/, "");
+    
+    // Generate a unique file name
+    var filename = Date.now() + "_" + index + ".png";
+    
+    // Specify a different directory
+    var directory = path.resolve('public', 'user', 'img', 'product');
+
+    var filePath = directory + filename;
+console.log("dir: "+directory);
+console.log("fpath: "+filePath);
+
+
+    // Create the directory if it doesn't exist
+    fs.mkdirSync(directory, { recursive: true });
+
+    fs.writeFile(filePath, base64data, 'base64', function(err) {
+      if (err) {
+        console.log(err);
+      } else {
+        // Save the path of the image file to the database
+        product.images.push(filePath);
+       
+      }
     });
+    
+  });
+}
+
 
     await product.save();
-
     res.redirect("/admin/addproduct");
   } catch (err) {
     console.log(err);
     res.status(500).send("An error occurred while saving the product.");
   }
 };
+
+
 
 const deleteImage = async (req, res) => {
   try {

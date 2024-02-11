@@ -218,7 +218,7 @@ $("body").on("change", ".image", function(e) {
         reader.readAsDataURL(file);
     }
 });
-
+  
 bs_modal.on('shown.bs.modal', function() {
     cropper = new Cropper(image, {
         aspectRatio: 1,
@@ -256,10 +256,11 @@ $("#crop").click(function() {
         reader.readAsDataURL(blob);
     });
 });
-
+console.log(document.getElementById('croppedImage').value);
     // Release the $ symbol for use by other libraries
     
-    console.log(croppedImage);
+ 
+
         
         </script>
 

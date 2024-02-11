@@ -407,71 +407,80 @@ const addProduct = async (req, res) => {
     res.status(500).send("An error occurred while fetching the brands.");
   }
 };
-const uploadProduct = async (req, res) => {
-  try {
-    // Validate the brand ID
-    const brand = await Brand.findById(req.body.brand);
-    if (!brand) {
-      return res.status(400).send("Invalid brand ID.");
-    }
 
-    const product = new Product({
-      brand: req.body.brand,
-      productname: req.body.productname,
-      description: req.body.description,
-      category: req.body.category,
-      regularprice: req.body.regularprice,
-      saleprice: req.body.saleprice,
-      number: req.body.number,
-      createdon: Date.now(),
-    });
 
-    // If there are new images, add them to the product
-  // If there are new images, add them to the product
-if (req.body.croppedImage) {
-  var images = Array.isArray(req.body.croppedImage) ? req.body.croppedImage : [req.body.croppedImage];
+
+// const uploadProduct = async (req, res) => {
+//   try {
+//     // Validate the brand ID
+//     const brand = await Brand.findById(req.body.brand);
+//     if (!brand) {
+//       return res.status(400).send("Invalid brand ID.");
+//     }
+
+//     const product = new Product({
+//       brand: req.body.brand,
+//       productname: req.body.productname,
+//       description: req.body.description,
+//       category: req.body.category,
+//       regularprice: req.body.regularprice,
+//       saleprice: req.body.saleprice,
+//       number: req.body.number,
+//       createdon: Date.now(),
+//     });
+
+// console.log("req.body.crop..."+req.body.croppedImage);
+//   if (req.body.croppedImage) {
+//     var images = Array.isArray(req.body.croppedImage) ? req.body.croppedImage : [req.body.croppedImage];
+//     console.log(images);
+//     await Promise.all(images.map(async (base64data, index) => {
+//       base64data = base64data.replace(/^data:image\/png;base64,/, "");
+      
+//       // Generate a unique file name
+//       var filename = Date.now() + "_" + index + ".png";
+      
+//       // Specify a different directory
+//       var directory = path.resolve('public', 'user', 'img', 'product');
+//       var filePath = path.join(directory, filename);
   
-  images.forEach((base64data, index) => {
-    base64data = base64data.replace(/^data:image\/png;base64,/, "");
-    
-    // Generate a unique file name
-    var filename = Date.now() + "_" + index + ".png";
-    
-    // Specify a different directory
-    var directory = path.resolve('public', 'user', 'img', 'product');
+//       // Create the directory if it doesn't exist 
+//       fs.mkdirSync(directory, { recursive: true });
+  
+//       // Write the file and return a promise
+//    // Write the file and return a promise
+// return new Promise((resolve, reject) => {
+//   fs.writeFile(filePath, base64data, 'base64', async function(err) {
+//     if (err) {
+//       console.log(err);
+//       reject(err);
+//     } else {
+//       // Save the path of the image file to the database
+//       product.images.push(filePath);
+      
+//       // Save the product after the image path has been added
+//       await product.save();
+      
+//       resolve();
+//     }
+//   });
+// });
 
-    var filePath = directory + filename;
-console.log("dir: "+directory);
-console.log("fpath: "+filePath);
-
-
-    // Create the directory if it doesn't exist
-    fs.mkdirSync(directory, { recursive: true });
-
-    fs.writeFile(filePath, base64data, 'base64', function(err) {
-      if (err) {
-        console.log(err);
-      } else {
-        // Save the path of the image file to the database
-        product.images.push(filePath);
-       
-      }
-    });
-    
-  });
-}
-
-
-    await product.save();
-    res.redirect("/admin/addproduct");
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("An error occurred while saving the product.");
-  }
-};
+//     }));
+//   }
+  
+//   await product.save();
+  
+  
+  
+//     res.redirect("/admin/addproduct");
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).send("An error occurred while saving the product.");
+//   }
+// };
 
 
-
+ 
 const deleteImage = async (req, res) => {
   try {
     const productId = req.params.productId;
@@ -699,7 +708,7 @@ module.exports = {
   editProduct,
   updateProduct,
   addProduct,
-  uploadProduct,
+  // uploadProduct,
   deleteImage,
   deleteProduct,
   getBrands,

@@ -35,7 +35,7 @@ adminRouter.get('/productmanagement',auth.isAdminLogin,adminController.getProduc
 adminRouter.get('/edit/:id',auth.isAdminLogin,adminController.editProduct)
 adminRouter.post('/updateproduct/:productId', upload.array("images"), auth.isAdminLogin, adminController.updateProduct);
 adminRouter.get('/addproduct',auth.isAdminLogin,adminController.addProduct)
-adminRouter.post('/uploadeproduct', upload.single("image"), auth.isAdminLogin, adminController.uploadProduct);
+// adminRouter.post('/uploadeproduct', upload.single("image"), auth.isAdminLogin, adminController.uploadProduct);
 
 adminRouter.delete('/deleteimage/:productId/:imageIndex',auth.isAdminLogin,adminController.deleteImage)
 adminRouter.post('/delete-product/:id',auth.isAdminLogin,adminController.deleteProduct)

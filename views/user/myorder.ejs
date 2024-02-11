@@ -48,8 +48,8 @@
                             <td>
                                 <select class="form-control" id="status<%= order._id %>">
                                     <option value="">Status</option>
-                                    <% if(!order.is_delivered && !order.user_cancelled && !order.admin_cancelled && !order.paymentStatus === 'Failed') { %>
-                                        <!-- Show the cancel option if the order is not delivered and not cancelled by the user -->
+                                    <% if(!order.is_delivered && !order.user_cancelled && !order.admin_cancelled && order.paymentStatus !== 'Failed') { %>
+                                        <!-- Show the cancel option if the order is not delivered, not cancelled by the user, and payment status is not failed -->
                                         <option value="User Cancelled">Cancel</option>
                                     <% } %>
                                     <% if(order.is_delivered && !order.is_returned ) { %>
@@ -57,6 +57,8 @@
                                         <option value="Returned">Return</option>
                                     <% } %>
                                 </select>
+                                
+                                
                                 <div style="background-color: azure;">
                                     <p style="padding: 1%;">
                                         <%= order.user.address[order.selectedAddress].first_name %>

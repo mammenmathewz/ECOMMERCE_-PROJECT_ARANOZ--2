@@ -88,21 +88,26 @@ const postAdminSignup = async (req, res) => {
   }
 };
 
-function aggregateDailySales(req, res) {
+function aggregateDailySales() {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
+
   return Order.aggregate([
     {
       $match: {
         paymentStatus: { $ne: 'Failed' },
         date: {
-          $gte: new Date(new Date().setHours(0, 0, 0)),
-          $lt: new Date(new Date().setHours(23, 59, 59)),
+          $gte: startOfDay,
+          $lt: endOfDay,
         },
       },
     },
-
     {
       $group: {
-        _id: { $hour: "$date" },
+        _id: { $hour: { date: "$date", timezone: "Asia/Kolkata" } }, // replace with your local time zone
         totalSales: { $sum: "$total" },
       },
     },
@@ -110,15 +115,25 @@ function aggregateDailySales(req, res) {
   ]).exec();
 }
 
+
 // Function to aggregate weekly sales data
-function aggregateWeeklySales(req, res) {
+function aggregateWeeklySales() {
+  const now = new Date();
+  const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
+  startOfWeek.setHours(0, 0, 0, 0); 
+
+  const endOfWeek = new Date(startOfWeek);
+endOfWeek.setDate(startOfWeek.getDate() + 6);
+endOfWeek.setHours(23, 59, 59, 999); 
+
+console.log("start:"+startOfWeek+"      "+endOfWeek);
   return Order.aggregate([
     {
       $match: {
         paymentStatus: { $ne: 'Failed' },
         date: {
-          $gte: new Date(new Date().setDate(new Date().getDate() - 7)),
-          $lt: new Date(),
+          $gte: startOfWeek,
+          $lt: endOfWeek,
         },
       },
     },
@@ -132,8 +147,11 @@ function aggregateWeeklySales(req, res) {
   ]).exec();
 }
 
+
+
+
 // Function to aggregate yearly sales data
-function aggregateYearlySales(req, res) {
+function aggregateYearlySales() {
   return Order.aggregate([
     {
       $match: {
@@ -171,6 +189,8 @@ const adminDash = async (req, res) => {
     for (const sale of weeklySales) {
       weeklySalesData[sale._id - 1].totalSales = sale.totalSales;
     }
+
+    console.log(weeklySalesData);
     const yearlySalesData = Array(12)
       .fill(0)
       .map((_, i) => ({ _id: i + 1, totalSales: 0 }));
@@ -373,6 +393,7 @@ const updateProduct = async (req, res) => {
       return res.status(404).send("Product not found.");
     }
 
+
     // Update the product details
     product.brand = req.body.brand;
     product.productname = req.body.productname;
@@ -479,6 +500,62 @@ const addProduct = async (req, res) => {
 //   }
 // };
 
+function saveImageToFile(base64String) {
+  // Remove header from base64 string
+  const base64Image = base64String.split(';base64,').pop();
+
+  // Generate a unique filename
+  const filename = Date.now() + '.png';
+
+  // Create the path to the output file
+  const filepath = path.join(__dirname, '../public/user/img/product/', filename);
+
+  // Write the image file
+  fs.writeFileSync(filepath, base64Image, {encoding: 'base64'});
+
+  return filename;
+}
+const uploadProduct = async (req, res) => {
+try {
+  // Validate the brand ID
+  const brand = await Brand.findById(req.body.brand);
+  if (!brand) {
+    return res.status(400).send("Invalid brand ID.");
+  }
+
+  const product = new Product({
+    brand: req.body.brand,
+    productname: req.body.productname,
+    description: req.body.description,
+    category: req.body.category,
+    regularprice: req.body.regularprice,
+    saleprice: req.body.saleprice,
+    number: req.body.number,
+    createdon: Date.now(),
+  });
+
+  // Handle the cropped images
+ // Handle the cropped images
+if (req.body.croppedImage) {
+  req.body.croppedImage.forEach((imageData) => {
+    // Check if imageData is not empty
+    if (imageData.trim() !== '') {
+      // Save the image data to a file and get the file path
+      const filePath = saveImageToFile(imageData);
+
+      // Add the file path to the product images
+      product.images.push("/user/img/product/" + filePath);
+    }
+  });
+}
+
+  await product.save();
+  res.redirect("/admin/addproduct");
+} catch (err) {
+  console.log(err);
+  res.status(500).send("An error occurred while saving the product.");
+}
+};
 
  
 const deleteImage = async (req, res) => {
@@ -708,7 +785,7 @@ module.exports = {
   editProduct,
   updateProduct,
   addProduct,
-  // uploadProduct,
+  uploadProduct,
   deleteImage,
   deleteProduct,
   getBrands,

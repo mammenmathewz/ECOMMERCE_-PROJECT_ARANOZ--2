@@ -63,10 +63,7 @@ const orderSchema = new mongoose.Schema({
   paymentMethod: {
     type: String,
   },
-  paymentMethod: {
-    type: String,
-    
-},
+
 paymentStatus: {
   type:String,
   default: 'Failed'

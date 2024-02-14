@@ -19,7 +19,7 @@
               </li>
              
               <li>
-                <p>Payment Method: </p><span> <%= order.paymentMethod %></span>
+                <p>Payment Method: </p><span><%= order.paymentMethod ? order.paymentMethod : 'COD' %></span>
               </li>
               <li>
                 <p>Date & time: </p><span> <%= date %></span>

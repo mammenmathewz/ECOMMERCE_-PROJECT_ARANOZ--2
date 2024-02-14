@@ -38,12 +38,12 @@
             <!-- Form Start -->
             <div class="container-fluid pt-4 px-4">
                 <div class="row g-4">
-                    <div class="col-sm-12 col-xl-6">
+                    <div class="col-sm-12 col-xl-8">
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Add Product</h6>
                             
                               
-                            <form action="/admin/uploadeproduct" method="post" onsubmit="console.log(document.getElementById('croppedImage').value)" enctype="multipart/form-data">
+                            <form action="/admin/uploadeproduct" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label for="brand" class="form-label">Brand</label>
                                     <select id="brand" name="brand" class="form-select mb-3" required>
@@ -81,11 +81,11 @@
                                 </div>
                                 
                                 <div class="mb-3">
-                                   
+                                    <label for="offerPrice" class="form-label">Add images:</label>
                                     <!-- <input class="form-control" type="file" id="formImage" name="images" multiple required> -->
-                                 
+                                    <input type="file" id="image" class="image" multiple>
 
-                                    <input type="hidden" id="croppedImage" name="croppedImage">
+                                    <input type="hidden" id="croppedImage" name="croppedImage" multiple >
                                   
 
                                 </div>
@@ -96,11 +96,11 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-12 col-xl-6">
+                    <div class="col-sm-12 col-xl-4">
                         <div class="bg-light rounded h-100 p-4">
-                            <h6 class="mb-4">images</h6>
+                            <h4 class="mb-4">ADD IMAGES</h4>
                             
-                            <input type="file" name="image" class="image">
+                            
 
                             
                         </div>
@@ -122,9 +122,8 @@
                         <div class="modal-body">
                             <div class="img-container">
                                 <div class="row">
-                                    <div class="col-md-8">  
-                                      
-                                        <img id="image">
+                                    <div class="col-md-8">
+                                        <img id="imagePreview">
                                     </div>
                                     <div class="col-md-4">
                                         <div class="preview"></div>
@@ -139,7 +138,6 @@
                     </div>
                 </div>
             </div>
-    
         </div>
     </div>
   
@@ -173,6 +171,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 
@@ -200,27 +199,26 @@
 
 
 <script>
-    var bs_modal = $('#modal');
-var image = document.getElementById('image');
-var cropper, reader, file;
+   var bs_modal = $('#modal');
+var imageElement = document.getElementById('image');
+var imagePreview = document.getElementById('imagePreview');
+var cropper, reader, files;
 
-$("body").on("change", ".image", function(e) {
-    var files = e.target.files;
+$("body").on("change", "#image", function(e) {
+    files = e.target.files;
 
     if (files && files.length > 0) {
-        file = files[0];
-
         reader = new FileReader();
         reader.onload = function(e) {
-            image.src = e.target.result;
+            imagePreview.src = e.target.result;
             bs_modal.modal('show');
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(files[0]);
     }
 });
-  
+
 bs_modal.on('shown.bs.modal', function() {
-    cropper = new Cropper(image, {
+    cropper = new Cropper(imagePreview, {
         aspectRatio: 1,
         viewMode: 3,
         preview: '.preview'
@@ -232,10 +230,9 @@ bs_modal.on('shown.bs.modal', function() {
 
 $("#crop").click(function() {
     var canvas = cropper.getCroppedCanvas({
-        width: 160,
-        height: 160,
+        width: 530, // Set the width
+        height: 518, // Set the height
     });
-
     canvas.toBlob(function(blob) {
         var reader = new FileReader();
         reader.onloadend = function() {
@@ -250,18 +247,44 @@ $("#crop").click(function() {
             // Append the hidden input field to the form
             document.querySelector('form').appendChild(input);
 
-            // Close the modal
-            bs_modal.modal('hide');
+            // Remove the processed file from the file list
+            files = Array.from(files);
+            files.shift();
+            if (files.length > 0) {
+                // Load the next image
+                reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    cropper.replace(e.target.result);
+                };
+                reader.readAsDataURL(files[0]);
+            } else {
+                // Close the modal if there are no more images
+                bs_modal.modal('hide');
+            }
         };
         reader.readAsDataURL(blob);
     });
 });
-console.log(document.getElementById('croppedImage').value);
-    // Release the $ symbol for use by other libraries
-    
+
  
 
-        
+function validateForm() {
+    // Get the value of the croppedImage input field
+    var croppedImage = document.getElementById('croppedImage').value;
+
+    // If no images have been cropped, prevent form submission
+    if (!croppedImage) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please crop images before submitting.',
+        })
+        return false;
+    }
+
+    return true;
+}
         </script>
 
 

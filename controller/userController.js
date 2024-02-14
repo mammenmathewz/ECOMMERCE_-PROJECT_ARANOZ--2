@@ -470,6 +470,9 @@ const filterAndSortProducts = async (req, res) => {
   }
 };
 
+
+
+
 module.exports = {
   getHome,
   getProducts,
@@ -490,4 +493,5 @@ module.exports = {
   changePassword_Profile,
   resetPasswordWithoutOTP,
   filterAndSortProducts,
+
 };

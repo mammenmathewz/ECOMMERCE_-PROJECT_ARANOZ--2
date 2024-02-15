@@ -5,7 +5,7 @@ $(document).on('click', '.remove-from-cart', function(e) {
   e.preventDefault();
 
   const productId = $(this).data('id');
-  const itemElement = $(this).closest('.row'); // Get the closest parent element with the class 'row'
+  const itemElement = $(this).closest('.row'); 
 
   Swal.fire({
     title: 'Are you sure?',
@@ -64,8 +64,19 @@ console.log(productId);  // Add this line
       $('.priceChange').text('€ ' + result.total.toFixed(2));
     },
     error: function(err) {
-      console.error(err);
+      if (err.responseJSON && err.responseJSON.message) {
+        // Display your flash message here
+        Swal.fire({
+          icon: 'warning',
+          title: 'Oops...',
+          text:   'Only ' + err.responseJSON.availableQuantity +" pices of "+err.responseJSON.message
+        });
+      } else {
+        console.error(err);
+      }
     }
+    
+    
   });
 });
 

@@ -119,8 +119,6 @@ const increment = async(req,res)=>{
     if (!cart) {
       return res.status(404).send('Cart not found');
     }
-  
-    console.log('Cart items:', cart.items.map(item => item.productId._id.toString()));
 
     // Find the item to be incremented
     const item = cart.items.find(item => item.productId._id.toString() === productId);
@@ -129,14 +127,21 @@ const increment = async(req,res)=>{
       return res.status(404).send('Item not found in cart');
     }
   
+    // Check if the product is out of stock
+    if (item.quantity >= item.productId.number) {
+      return res.status(400).json({
+        message: `${item.productId.productname}  left ! `,
+        availableQuantity: item.productId.number
+      });
+    }
+    
+
     // Increment the quantity of the item
     item.quantity++;
-  
 
     // Update the total price
     cart.total += item.productId.saleprice;  
 
-  
     await cart.save();
     res.json({ total: cart.total });
   
@@ -144,6 +149,7 @@ const increment = async(req,res)=>{
     console.log(error);
   }
 }
+
 
 const decrement = async(req,res)=>{
   try{

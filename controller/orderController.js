@@ -104,6 +104,7 @@ const cashOnDelivery = async (req, res) => {
       total: cart.total,
       discount: cart.discount,
       grandTotal: cart.grandTotal,
+      paymentMethod:'COD',
       paymentStatus : 'COD'
     });
 
@@ -325,7 +326,7 @@ const verify = async(req,res)=>{
 
     } else {
       // Signature verification failed, check the payment status
-      console.log("payment failllllllledddd");
+  
       const order = await Order.findById(orderId);
       if (order && order.paymentStatus !== 'Paid') {
         try {

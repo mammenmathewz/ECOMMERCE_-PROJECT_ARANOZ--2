@@ -121,11 +121,11 @@ function aggregateWeeklySales() {
   const now = new Date();
   const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
   startOfWeek.setHours(0, 0, 0, 0); 
-
+  
   const endOfWeek = new Date(startOfWeek);
-endOfWeek.setDate(startOfWeek.getDate() + 6);
-endOfWeek.setHours(23, 59, 59, 999); 
-
+  endOfWeek.setDate(startOfWeek.getDate() + 6);
+  endOfWeek.setHours(23, 59, 59, 999); 
+  
 console.log("start:"+startOfWeek+"      "+endOfWeek);
   return Order.aggregate([
     {
@@ -139,10 +139,11 @@ console.log("start:"+startOfWeek+"      "+endOfWeek);
     },
     {
       $group: {
-        _id: { $dayOfWeek: "$date" },
+        _id: { $dayOfWeek: { date: "$date", timezone: "Asia/Kolkata" } }, 
         totalSales: { $sum: "$total" },
       },
     },
+    
     { $sort: { _id: 1 } },
   ]).exec();
 }
@@ -171,6 +172,7 @@ function aggregateYearlySales() {
     { $sort: { _id: 1 } },
   ]).exec();
 }
+
 
 const adminDash = async (req, res) => {
   try {
@@ -536,17 +538,31 @@ try {
 
   // Handle the cropped images
  // Handle the cropped images
+// Handle the cropped images
 if (req.body.croppedImage) {
-  req.body.croppedImage.forEach((imageData) => {
-    // Check if imageData is not empty
-    if (imageData.trim() !== '') {
+  // Check if req.body.croppedImage is an array
+  if (Array.isArray(req.body.croppedImage)) {
+    // If it's an array, iterate over it with forEach
+    req.body.croppedImage.forEach((imageData) => {
+      // Check if imageData is not empty
+      if (imageData.trim() !== '') {
+        // Save the image data to a file and get the file path
+        const filePath = saveImageToFile(imageData);
+
+        // Add the file path to the product images
+        product.images.push("/user/img/product/" + filePath);
+      }
+    });
+  } else {
+    // If it's not an array, directly process the single image
+    if (req.body.croppedImage.trim() !== '') {
       // Save the image data to a file and get the file path
-      const filePath = saveImageToFile(imageData);
+      const filePath = saveImageToFile(req.body.croppedImage);
 
       // Add the file path to the product images
       product.images.push("/user/img/product/" + filePath);
     }
-  });
+  }
 }
 
   await product.save();

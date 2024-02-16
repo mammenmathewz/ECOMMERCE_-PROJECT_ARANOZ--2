@@ -25,7 +25,7 @@ $(document).on('click', '.remove-from-cart', function(e) {
           itemElement.remove();
 
           // Update the total price in the DOM
-          $('.priceChange').text('€ ' + result.total.toFixed(2));
+          $('.priceChange').text('₹  ' + result.total.toFixed(2));
 
           // Update the number of items in the cart
           const itemCount = result.items.length;
@@ -61,7 +61,7 @@ console.log(productId);  // Add this line
       quantityElement.text(quantity);
 
       // Update the total price in the DOM
-      $('.priceChange').text('€ ' + result.total.toFixed(2));
+      $('.priceChange').text('₹  ' + result.total.toFixed(2));
     },
     error: function(err) {
       if (err.responseJSON && err.responseJSON.message) {
@@ -104,7 +104,7 @@ $(document).on('click', '.decrement-button', function(e) {
       quantityElement.text(quantity);
 
       // Update the total price in the DOM
-      $('.priceChange').text('€ ' + result.total.toFixed(2));
+      $('.priceChange').text('₹  ' + result.total.toFixed(2));
     },
     error: function(err) {
       console.error(err);

@@ -82,10 +82,9 @@
                                 
                                 <div class="mb-3">
                                     <label for="offerPrice" class="form-label">Add images:</label>
-                                    <!-- <input class="form-control" type="file" id="formImage" name="images" multiple required> -->
+                                   
                                     <input type="file" id="image" class="image" multiple>
 
-                                    <input type="hidden" id="croppedImage" name="croppedImage" multiple >
                                   
 
                                 </div>
@@ -272,8 +271,8 @@ $("#crop").click(function() {
 function validateForm() {
     // Get the value of the croppedImage input field
     var croppedImage = document.getElementById('croppedImage').value;
-
     // If no images have been cropped, prevent form submission
+    console.log("croped img::::"+croppedImage);
     if (!croppedImage) {
         Swal.fire({
             icon: 'error',

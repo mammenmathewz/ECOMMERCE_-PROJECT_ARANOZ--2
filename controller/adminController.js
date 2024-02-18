@@ -227,44 +227,45 @@ const adminDash = async (req, res) => {
   }
 };
 
-// const dataPerDate = async(req,res)=>{
-//   try {
-//     const { startDate, endDate } = req.body;
+const dataPerDate = async(req,res)=>{
+  try {
+    const { startDate, endDate } = req.body;
+    console.log(startDate+"  "+ endDate);
+    const data = await Order.aggregate([
+      {
+        $match: {
+          paymentStatus: { $ne: 'Failed' },
+          date: {
+            $gte: new Date(startDate),
+            $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)), 
+          },
+        },
+      },
+      {
+        $group: {
+          _id: { $dayOfMonth: "$date" },
+          totalSales: { $sum: "$total" },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]).exec();
 
-//     const data = await Order.aggregate([
-//       {
-//         $match: {
-//           paymentStatus: { $ne: 'Failed' },
-//           date: {
-//             $gte: new Date(startDate),
-//             $lt: new Date(endDate),
-//           },
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: { $dayOfMonth: "$date" },
-//           totalSales: { $sum: "$total" },
-//         },
-//       },
-//       { $sort: { _id: 1 } },
-//     ]).exec();
+    // Initialize an array with zeros for each day of the selected date range
+    const salesPerDay = Array(moment(endDate).diff(moment(startDate), 'days') + 1).fill(0);
 
-//     // Initialize an array with zeros for each day of the month
-//     const salesPerDay = Array(31).fill(0);
+    // Update the array with the data from the aggregation
+    for (const item of data) {
+      salesPerDay[item._id - moment(startDate).date()] = item.totalSales;
+    }
+    console.log(JSON.stringify(salesPerDay));
+    res.json(salesPerDay);
 
-//     // Update the array with the data from the aggregation
-//     for (const item of data) {
-//       salesPerDay[item._id - 1] = item.totalSales;
-//     }
-// console.log(JSON.stringify(salesPerDay));
-//     res.json(salesPerDay);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error occurred while fetching data");
+  }
+}
 
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).send("Error occurred while fetching data");
-//   }
-// }
 
 
 //////////////////////////////////////////////////
@@ -810,5 +811,5 @@ module.exports = {
   getOrderManagement,
   switchStatus,
   vieworder,
-  // dataPerDate
+  dataPerDate
 };

@@ -158,48 +158,57 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script>
 
-       $(function() {
+$(function() {
   $('input[name="daterange"]').daterangepicker({
-    opens: 'left'
+    minSpan: {
+      days: 7
+    },
+    maxSpan: {
+      days: 31
+    }
   }, function(start, end, label) {
     console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-    
-    // Send a request to the server with the selected date range
+
     $.ajax({
-      url: '/admin/dateData', // replace with your API endpoint
+      url: '/admin/dateData', 
       method: 'POST',
       data: {
         startDate: start.format('YYYY-MM-DD'),
         endDate: end.format('YYYY-MM-DD')
       },
       success: function(response) {
-    // Extract labels from response
-    var labels = response.map(function(item) {
-      return item._id; // replace '_id' with the property that holds the label in your data
-    });
+        var ctx2 = $("#salse-revenue").get(0).getContext("2d");
+        if (window.myChart2 != undefined)
+          window.myChart2.destroy();
 
-    var ctx2 = $("#salse-revenue").get(0).getContext("2d");
-    var myChart2 = new Chart(ctx2, {
-      type: "bar",
-      data: {
-        labels: labels,
-        datasets: [{
-          label: "Sales",
-          data: [0, 0, 0, 0, 0, 0, 0], // replace with your data
-          backgroundColor: "#5bc2f5",
-          fill: true
-        }]
-      },
-      options: {
-        responsive: true
+    
+        var labels = [];
+        for (var m = moment(start); m.isBefore(end); m.add(1, 'days')) {
+        labels.push(m.format('DD-MM-YYYY')); 
+        }
+
+
+        window.myChart2 = new Chart(ctx2, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [{
+              label: "Sales",
+              data: response, // use the response directly as the data
+              backgroundColor: "#5bc2f5",
+              fill: true
+            }]
+          },
+          options: {
+            responsive: true
+          }
+        });
       }
     });
-  }
-});
   });
 });
 
-        </script>
+</script>
       <script>
         var dailySalesData = <%- JSON.stringify(  dailySalesData) %>;
         var weeklySalesData = <%- JSON.stringify(weeklySalesData) %>;

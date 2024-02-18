@@ -176,10 +176,13 @@ function aggregateYearlySales() {
 
 const adminDash = async (req, res) => {
   try {
-    const [dailySales, weeklySales, yearlySales] = await Promise.all([
+    const [dailySales, weeklySales, yearlySales, totalOrders, codOrders, onlineOrders] = await Promise.all([
       aggregateDailySales(),
       aggregateWeeklySales(),
       aggregateYearlySales(),
+      Order.countDocuments(), // total number of orders
+      Order.countDocuments({ paymentMethod: 'COD' }), // number of orders with paymentMethod == 'COD'
+      Order.countDocuments({ paymentMethod: "Online payment" }) // number of orders with paymentMethod == 'Online Payment'
     ]);
 
     // Create an array for each day of the week with default sales of 0
@@ -219,7 +222,10 @@ const adminDash = async (req, res) => {
       active: "dash",
       dailyTotal,dailySalesData,
       weeklyTotal, weeklySalesData,
-      yearlyTotal,yearlySalesData
+      yearlyTotal,yearlySalesData,
+      totalOrders, // pass totalOrders to the view
+      codOrders, // pass codOrders to the view
+      onlineOrders // pass onlineOrders to the view
     });
   } catch (error) {
     console.log(error);

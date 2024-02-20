@@ -46,4 +46,5 @@ adminRouter.get('/orders',auth.isAdminLogin,adminController.getOrderManagement)
 adminRouter.post('/change-order-status/:id',auth.isAdminLogin,adminController.switchStatus)
 adminRouter.get('/vieworder/:orderId',auth.isAdminLogin,adminController.vieworder)
 adminRouter.post('/dateData',auth.isAdminLogin,adminController.dataPerDate)
+adminRouter.get('/coupons',auth.isAdminLogin,adminController.getCoupon)
 module.exports = adminRouter;

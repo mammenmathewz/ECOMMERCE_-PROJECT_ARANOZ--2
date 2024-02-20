@@ -3,7 +3,7 @@ const { User, Address } = require("../models/users");
 const Product = require("../models/products");
 const Brand = require("../models/brand");
 const Order = require("../models/checkout");
-const flash = require("express-flash");
+const Coupon = require('../models/coupons')
 const moment = require("moment");
 const fs = require('fs');
 const path = require('path');
@@ -795,6 +795,17 @@ const vieworder = async (req, res) => {
   }
 };
 
+const getCoupon = async(req,res)=>{
+  try {
+    
+    res.render('admin/coupons',{active:"coupons"})
+
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   getAdminLogin,
   postAdminLogin,
@@ -817,5 +828,6 @@ module.exports = {
   getOrderManagement,
   switchStatus,
   vieworder,
-  dataPerDate
+  dataPerDate,
+  getCoupon
 };

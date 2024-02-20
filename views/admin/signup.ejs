@@ -55,24 +55,27 @@
                             <h3>Sign Up</h3>
                         </div>
                         <div>
-                           
-                        </div>
-                        <form class="row contact_form" onsubmit="checkForm(event)" action="/admin/signup" method="post" novalidate="novalidate">
 
-                           
-                     
-                        <div class="form-floating mb-3">
-                            <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
-                            <label for="floatingInput">Email address</label>
                         </div>
-                        <div class="form-floating mb-4">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                        <form class="row contact_form" onsubmit="checkForm(event)" action="/admin/signup" method="post"
+                            novalidate="novalidate">
 
-                            <label for="floatingPassword">Password</label>
-                        </div>
 
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
-                        <p class="text-center mb-0">Already have an Account? <a href="/admin">Sign In</a></p>
+
+                            <div class="form-floating mb-3">
+                                <input name="email" type="email" class="form-control" id="floatingInput"
+                                    placeholder="name@example.com">
+                                <label for="floatingInput">Email address</label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <input type="password" class="form-control" id="password" name="password"
+                                    placeholder="Password">
+
+                                <label for="floatingPassword">Password</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Sign Up</button>
+                            <p class="text-center mb-0">Already have an Account? <a href="/admin">Sign In</a></p>
                         </form>
                     </div>
                 </div>
@@ -96,25 +99,25 @@
     <script src="js/main.js"></script>
     <script>
         function checkForm(e) {
-          let inputs = document.getElementsByTagName('input');
-          console.log(inputs)
-          for(let i=0; i<inputs.length; i++) {
-            if (!inputs[i].value.trim()) {
-              e.preventDefault();
-              alert('Please fill out the form completely');
-              return;
-            }
-          }
-        }
-        </script>
-            <script>
-                window.onload = function() {
-                  setTimeout(function() {
-                    var alert = document.getElementById('alert');
-                    if(alert) alert.remove()
-                  }, 3000);
+            let inputs = document.getElementsByTagName('input');
+            console.log(inputs)
+            for (let i = 0; i < inputs.length; i++) {
+                if (!inputs[i].value.trim()) {
+                    e.preventDefault();
+                    alert('Please fill out the form completely');
+                    return;
                 }
-              </script>
+            }
+        }
+    </script>
+    <script>
+        window.onload = function () {
+            setTimeout(function () {
+                var alert = document.getElementById('alert');
+                if (alert) alert.remove()
+            }, 3000);
+        }
+    </script>
 </body>
 
 </html>

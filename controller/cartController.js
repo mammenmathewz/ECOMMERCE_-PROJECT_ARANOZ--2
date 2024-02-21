@@ -1,6 +1,8 @@
 const Product = require('../models/products')
 const Brand = require('../models/brand') 
 const Cart = require('../models/cart')
+const Coupon = require('../models/coupons')
+
 
 const getCart = async(req, res) => {
   try {
@@ -17,6 +19,18 @@ const getCart = async(req, res) => {
       return res.status(404).send('Cart not found');
     }
 
+    // Add your discount reset logic here
+    if (cart.discount > 0) {
+      const now = new Date();
+      const discountDuration =   6*1000; // 5 minutes in milliseconds
+
+      if (now - cart.discountAppliedAt > discountDuration || cart.items.length == 0) {
+        cart.discount = 0;
+        cart.grandTotal = cart.total;
+        await cart.save();
+      }
+    }
+
     res.render('user/cart', { cart: cart }); // Pass the cart to the view
   } catch (error) {
     console.log(error);
@@ -24,8 +38,8 @@ const getCart = async(req, res) => {
   }
 }
 
-  
 
+  
 const addCart = async(req, res) => {
   try {
     const userId = req.session.user._id;
@@ -38,23 +52,23 @@ const addCart = async(req, res) => {
 
     // Check if the product is already in the cart
     const productInCart = cart.items.find(item => item.productId.toString() === productId);
-if (productInCart) {
-  req.flash('error', 'Product is already in the cart');
-  return res.redirect(`/viewproduct/${productId}`);
-}
-
+    if (productInCart) {
+      req.flash('error', 'Product is already in the cart');
+      return res.redirect(`/viewproduct/${productId}`);
+    }
 
     // Fetch the product to get its price
     const product = await Product.findById(productId).populate('brand');
     const price = product.saleprice;
-
-  
 
     // Add new product to the cart
     cart.items.push({ productId: productId, quantity: 1 });
 
     // Update the total price
     cart.total += price;
+
+    // Update the grand total
+    cart.grandTotal = cart.total - cart.discount;
 
     // Populate the productId in the cart
     await cart.populate('items.productId');
@@ -91,24 +105,29 @@ const deleteItem = async(req,res)=>{
     // Subtract the total price of the item from the cart's total
     cart.total -= item.quantity * price;
 
+    // Update the grand total
+    cart.grandTotal = cart.total - cart.discount;
+
     // Remove the item from the cart
     cart.items = cart.items.filter(item => item.productId.toString() !== productId);
 
     // If all items are removed, set the total price to 0
     if (cart.items.length === 0) {
       cart.total = 0;
+      cart.grandTotal = 0; // Also set the grand total to 0
     }
 
     // Populate the productId in the cart
     await cart.populate('items.productId');
 
     await cart.save();
-    res.json({ total: cart.total, items: cart.items }); // Send back the updated total and items
+    res.json({ total: cart.total, grandTotal: cart.grandTotal, items: cart.items }); // Send back the updated total, grand total and items
   } catch (error) {
     console.log(error);
     res.status(500).send('Error occurred while removing from cart');
   }
 }
+
 
 const increment = async(req,res)=>{
   try{
@@ -142,14 +161,16 @@ const increment = async(req,res)=>{
     // Update the total price
     cart.total += item.productId.saleprice;  
 
+    // Update the grand total
+    cart.grandTotal = cart.total - cart.discount;
+
     await cart.save();
-    res.json({ total: cart.total });
+    res.json({ total: cart.total, grandTotal: cart.grandTotal });
   
   } catch(error){
     console.log(error);
   }
 }
-
 
 const decrement = async(req,res)=>{
   try{
@@ -161,8 +182,6 @@ const decrement = async(req,res)=>{
       return res.status(404).send('Cart not found');
     }
   
-    console.log('Cart items:', cart.items.map(item => item.productId._id.toString()));
-
     // Find the item to be decremented
     const item = cart.items.find(item => item.productId._id.toString() === productId);
 
@@ -177,14 +196,49 @@ const decrement = async(req,res)=>{
       cart.total -= item.productId.saleprice;  
     }
 
+    // Update the grand total
+    cart.grandTotal = cart.total - cart.discount;
+
     await cart.save();
-    res.json({ total: cart.total });
+    res.json({ total: cart.total, grandTotal: cart.grandTotal });
   
   } catch(error){
     console.log(error);
   }
 }
 
+// Server-side code
+const applyCoupon = async(req,res)=>{
+  const { code } = req.body; // assuming you're sending the coupon code in the request body
+
+    try {
+        const coupon = await Coupon.findOne({ code: code });
+
+        if (!coupon) {
+            return res.status(404).json({ message: 'Coupon not found' });
+        }
+
+        const cart = await Cart.findOne({ user: req.session.user._id });
+
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
+
+        // Apply the coupon discount to the cart
+        cart.discount = coupon.discount;
+        cart.grandTotal = cart.total - cart.discount;
+
+        // Update the discountAppliedAt field with the current date and time
+        cart.discountAppliedAt = new Date();
+
+        await cart.save();
+
+        res.json({ message: 'Coupon applied successfully', grandTotal: cart.grandTotal, couponAmount:cart.discount, originalTotal: cart.total });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
 
 
 
@@ -193,5 +247,6 @@ module.exports={
     addCart,
     deleteItem,
     increment,
-    decrement
+    decrement,
+    applyCoupon
 }

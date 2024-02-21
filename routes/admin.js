@@ -47,4 +47,8 @@ adminRouter.post('/change-order-status/:id',auth.isAdminLogin,adminController.sw
 adminRouter.get('/vieworder/:orderId',auth.isAdminLogin,adminController.vieworder)
 adminRouter.post('/dateData',auth.isAdminLogin,adminController.dataPerDate)
 adminRouter.get('/coupons',auth.isAdminLogin,adminController.getCoupon)
+adminRouter.post('/addCoupons',auth.isAdminLogin,adminController.postCoupon)
+adminRouter.get('/editCoupon/:id',auth.isAdminLogin,adminController.getCouponEdit)
+adminRouter.post('/updateCoupon',auth.isAdminLogin,adminController.updateCoupon)
+adminRouter.delete('/couponDelete', auth.isAdminLogin,adminController.deleteCoupon)
 module.exports = adminRouter;

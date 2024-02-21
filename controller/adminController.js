@@ -543,9 +543,7 @@ try {
     createdon: Date.now(),
   });
 
-  // Handle the cropped images
- // Handle the cropped images
-// Handle the cropped images
+
 if (req.body.croppedImage) {
   // Check if req.body.croppedImage is an array
   if (Array.isArray(req.body.croppedImage)) {
@@ -795,14 +793,97 @@ const vieworder = async (req, res) => {
   }
 };
 
-const getCoupon = async(req,res)=>{
+const getCoupon = async(req, res) => {
   try {
-    
-    res.render('admin/coupons',{active:"coupons"})
-
-
+    const coupons = await Coupon.find();
+    res.render('admin/coupons', { active: "coupons", coupons: coupons, moment: moment });
   } catch (error) {
     console.log(error);
+  }
+}
+
+
+const postCoupon = async(req, res) => {
+  try {
+    const { code, discount, min_amount, max_discount, startDate, expiry_date } = req.body;
+
+    const existingCoupon = await Coupon.findOne({ code });
+    if (existingCoupon) {
+      return res.status(400).json({ message: 'A coupon with this code already exists' });
+    }
+
+    const coupon = new Coupon({ code, discount, min_amount, max_discount, startDate, expiry_date });
+    console.log(coupon);
+    await coupon.save();
+
+    res.redirect('/admin/coupons');
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'An error occurred while creating the coupon' });
+  }
+}
+
+const getCouponEdit = async(req,res)=>{
+  console.log(req.params.id); // log the ID
+
+    try {
+        const coupon = await Coupon.findById(req.params.id);
+        console.log(coupon); // log the coupon
+
+        if (!coupon) {
+            return res.status(404).send('Coupon not found');
+        }
+
+       res.render('admin/editeCoupon',{active: "coupons",coupon:coupon})
+    } catch (err) {
+        console.log(err); // log any errors
+        res.status(500).send('Server error');
+    }
+}
+
+
+const updateCoupon = async(req,res)=>{
+  const { code, discount, min_amount, max_discount, startDate, expiry_date } = req.body;
+
+    try {
+        const coupon = await Coupon.findOne({ code: code });
+
+        if (!coupon) {
+            return res.status(404).json({ message: 'Coupon not found' });
+        }
+
+        coupon.discount = discount;
+        coupon.min_amount = min_amount;
+        coupon.max_discount = max_discount;
+        coupon.startDate = new Date(startDate);
+        coupon.expiry_date = new Date(expiry_date);
+
+        await coupon.save();
+
+        res.redirect('/admin/coupons')
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error' });
+    }
+}
+
+const deleteCoupon = async (req,res)=>{
+  const { id } = req.body; // assuming you're sending the ID in the request body
+
+  try {
+      const coupon = await Coupon.deleteOne({ _id: id });
+
+
+      if (!coupon) {
+          return res.status(404).json({ message: 'Coupon not found' });
+      }
+
+      await coupon.remove();
+
+      res.json({ message: 'Coupon deleted successfully' });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: 'Server error' });
   }
 }
 
@@ -829,5 +910,9 @@ module.exports = {
   switchStatus,
   vieworder,
   dataPerDate,
-  getCoupon
+  getCoupon,
+  postCoupon,
+  getCouponEdit,
+  updateCoupon,
+  deleteCoupon
 };

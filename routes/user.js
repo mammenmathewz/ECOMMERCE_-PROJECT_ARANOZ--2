@@ -46,6 +46,7 @@ userRouter.get('/vieworder',auth.isUserLogin,userController.viewOrder)
 userRouter.get('/changepass',auth.isUserLogin,userController.changePassword_Profile)
 userRouter.post('/newpassword',auth.isUserLogin,userController.resetPasswordWithoutOTP)
 userRouter.get('/filterAndSortProducts',userController.filterAndSortProducts)
+userRouter.put('/applyCoupon',auth.isUserLogin,cartController.applyCoupon)
 
 
 

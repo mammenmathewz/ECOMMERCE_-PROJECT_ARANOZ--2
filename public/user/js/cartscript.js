@@ -1,6 +1,5 @@
 
 
-
 $(document).on('click', '.remove-from-cart', function(e) {
   e.preventDefault();
 
@@ -27,6 +26,9 @@ $(document).on('click', '.remove-from-cart', function(e) {
           // Update the total price in the DOM
           $('.priceChange').text('₹  ' + result.total.toFixed(2));
 
+          // Update the grand total in the DOM
+          $('.gtotal').text('₹  ' + result.grandTotal.toFixed(2));
+
           // Update the number of items in the cart
           const itemCount = result.items.length;
           $('.d-flex.justify-content-between.align-items-center.mb-5 h6').text(itemCount + ' items');
@@ -41,13 +43,11 @@ $(document).on('click', '.remove-from-cart', function(e) {
 });
 
 
-
 $(document).on('click', '.increment-button', function(e) {
   e.preventDefault();
 
-
   const productId = $(this).closest('.row').find('.remove-from-cart').data('id');
-console.log(productId);  // Add this line
+  console.log(productId);  // Add this line
 
   const quantityElement = $(this).siblings('h6[name="quantity"]');
   let quantity = parseInt(quantityElement.text());
@@ -62,6 +62,9 @@ console.log(productId);  // Add this line
 
       // Update the total price in the DOM
       $('.priceChange').text('₹  ' + result.total.toFixed(2));
+
+      // Update the grand total in the DOM
+      $('.gtotal').text('₹  ' + result.grandTotal.toFixed(2));
     },
     error: function(err) {
       if (err.responseJSON && err.responseJSON.message) {
@@ -75,10 +78,9 @@ console.log(productId);  // Add this line
         console.error(err);
       }
     }
-    
-    
   });
 });
+
 
 
 $(document).on('click', '.decrement-button', function(e) {
@@ -105,9 +107,52 @@ $(document).on('click', '.decrement-button', function(e) {
 
       // Update the total price in the DOM
       $('.priceChange').text('₹  ' + result.total.toFixed(2));
+
+      // Update the grand total in the DOM
+      $('.gtotal').text('₹  ' + result.grandTotal.toFixed(2));
     },
     error: function(err) {
       console.error(err);
     }
   });
 });
+
+
+// Client-side code
+function applyCoupon(event) {
+  event.preventDefault();
+
+  const couponCode = document.getElementById('couponCode').value;
+
+  fetch('/applyCoupon', {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ code: couponCode }),
+  })
+  .then(response => response.json())
+  .then(data => {
+      // Update the values on the page
+      document.querySelector('.priceChange').textContent = '₹ ' + data.originalTotal.toFixed(2);
+      document.querySelector('.couponDiscount').textContent = '- ₹ ' + data.couponAmount.toFixed(2);
+      document.querySelector('.gtotal').textContent = '₹ ' + data.grandTotal.toFixed(2);
+
+      // Show a success message
+      Swal.fire({
+        icon: 'success',
+        title: 'Coupon applied successfully',
+        text: `Your new total is ₹ ${data.grandTotal.toFixed(2)}. You saved ₹ ${data.couponAmount.toFixed(2)}!`
+      });
+  })
+  .catch((error) => {
+      console.error('Error:', error);
+
+      // Show an error message
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong! Please try again.'
+      });
+  });
+}

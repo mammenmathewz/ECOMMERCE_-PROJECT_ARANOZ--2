@@ -103,22 +103,39 @@
 
                       <div class="mb-5">
                         <div class="form-outline">
-                          <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
-                          <div>
-                            <label style="padding: 1%;" class="form-label" for="form3Examplea2">Enter your code</label>
-                            <a style="margin-top: 2% ;" class="btn_1" href="#">Apply</a>
-                          </div>
+                            <input type="text" id="couponCode" class="form-control form-control-lg" />
+                            <div>
+                                <label style="padding: 1%;" class="form-label" for="couponCode">Enter your code</label>
+                                <a style="margin-top: 2%;" class="btn_1" href="#" onclick="applyCoupon(event)">Apply</a>
+                            </div>
                         </div>
-                      </div>
+                    </div>
+                    
 
                       <hr class="my-4">
 
                       <div class="d-flex justify-content-between mb-5">
-                        <h5 class="text-uppercase">Total price</h5>
+                        <h6 class="text-uppercase">Total price</h6>
                         <h5 class="priceChange"> ₹ <%= cart.total %>
                         </h5>
                       </div>
-
+                     
+                      <div class="d-flex justify-content-between mb-5">
+                        <h6 class="text-uppercase">Coupon discount</h6>
+                        <h5 style="color: red;" class="couponDiscount">
+                          <% if (cart.discount > 0) { %>
+                            - ₹ <%= cart.discount.toFixed(2) %>
+                          <% } %>
+                        </h5>
+                         
+                        </h5>
+                      </div>
+                      <hr class="my-4">
+                      <div class="d-flex justify-content-between mb-5">
+                        <h6 class="text-uppercase">Grand Total</h6>
+                        <h5 class="gtotal"> <%= cart.grandTotal %>
+                        </h5>
+                      </div>
 
                       <a class="btn_1 checkout_btn_1" href="/checkout">Proceed to checkout</a>
 

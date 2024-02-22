@@ -26,10 +26,12 @@
                                     Account
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown_2">
-                                    <a class="dropdown-item" href="/login">Login</a>
+                                    <% if (!user) { %>
+                                        <a class="dropdown-item" href="/login">Login</a>
+                                      <% } %>
 
                                     <a class="dropdown-item" href="/account">My Profile</a>
-                                    <a class="dropdown-item" href="">Wallet</a>
+                                    <a class="dropdown-item" href="/wallet">Wallet</a>
 
                                 </div>
                             </li>

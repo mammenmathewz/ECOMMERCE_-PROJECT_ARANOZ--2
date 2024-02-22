@@ -33,6 +33,7 @@ userRouter.put('/decrementQuantity/:productId',auth.isUserLogin,cartController.d
 userRouter.get('/checkout',auth.isUserLogin,orderController.getOrder)
 userRouter.post('/addAddress',auth.isUserLogin,orderController.addAddress)
 userRouter.post('/confirmOrder',auth.isUserLogin,orderController.cashOnDelivery)
+userRouter.post('/confirmWalletPayment',auth.isUserLogin,orderController.walletPayment)
 userRouter.post('/create/orderId',auth.isUserLogin,orderController.generateOrderid)
 userRouter.post('/paymentverify',auth.isUserLogin,orderController.verify)
 
@@ -47,6 +48,8 @@ userRouter.get('/changepass',auth.isUserLogin,userController.changePassword_Prof
 userRouter.post('/newpassword',auth.isUserLogin,userController.resetPasswordWithoutOTP)
 userRouter.get('/filterAndSortProducts',userController.filterAndSortProducts)
 userRouter.put('/applyCoupon',auth.isUserLogin,cartController.applyCoupon)
+userRouter.get('/wallet',auth.isUserLogin,userController.getWallet)
+userRouter.get('/addFromWallet',auth.isUserLogin,orderController.addFromWallet)
 
 
 

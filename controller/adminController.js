@@ -706,17 +706,20 @@ const getOrderManagement = async (req, res) => {
     console.log(error);
   }
 };
-
 const switchStatus = async (req, res) => {
   const orderId = req.params.id; // Get the order ID from the URL
   const status = req.body.status; // Get the new status from the request body
   console.log(status);
 
   try {
-    const order = await Order.findById(orderId).populate("items.productId");
+    const order = await Order.findById(orderId).populate("items.productId").populate("user");
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
+
+    // find the user
+    const user = await User.findById(order.user._id);
+    console.log("dhdsuwka"+user);
 
     order.is_delivered = false;
     order.user_cancelled = false;
@@ -731,14 +734,19 @@ const switchStatus = async (req, res) => {
       case "User Cancelled":
         order.user_cancelled = true;
         incrementProductQuantity(order.items);
+        user.wallet += order.grandTotal; 
         break;
       case "Admin Cancelled":
         order.admin_cancelled = true;
         incrementProductQuantity(order.items);
+        user.wallet += order.total; // Add total to user's wallet
+        console.log("wallet"+user.wallet +"    "+ order.total);
+        console.log(typeof user.wallet, typeof order.total);
         break;
       case "Returned":
         order.is_returned = true;
         incrementProductQuantity(order.items);
+        user.wallet += order.grandTotal; // Add grandTotal to user's wallet
         break;
       case "Pending":
         order.is_delivered = false;
@@ -750,6 +758,7 @@ const switchStatus = async (req, res) => {
         return res.status(400).json({ message: "Invalid status" });
     }
 
+    await user.save(); // Save the updated user
     await order.save();
     res.status(200).json(order);
   } catch (err) {
@@ -764,6 +773,8 @@ async function incrementProductQuantity(items) {
     await product.save();
   }
 }
+
+
 
 const vieworder = async (req, res) => {
   try {

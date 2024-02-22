@@ -32,6 +32,11 @@ const addressSchema = new mongoose.Schema({
     pin: {
         type: Number,
         required: true
+    },
+    wallet:{
+        type:Number,
+        default:0
+    
     }
 });
 

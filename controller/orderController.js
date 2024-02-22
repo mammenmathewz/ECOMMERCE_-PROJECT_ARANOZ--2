@@ -14,10 +14,10 @@ var instance = new Razorpay({
   key_secret: process.env.API_KEY,
 });
 
-
 const getOrder = async (req, res) => {
   try {
     const userId = req.session.user._id;
+    const justuser = req.session.user;
     const user = await User.findById(userId);
     const cart = await Cart.findOne({ user: userId }).populate({
       path: "items.productId",
@@ -39,12 +39,13 @@ const getOrder = async (req, res) => {
         return res.redirect("/cart");
       }
     }
-
-    res.render("user/checkout", { user: user, cart: cart }); // Pass the cart to the view
+    console.log(justuser);
+    res.render("user/checkout", {justuser:justuser, cart: cart ,addMoneySuccess: req.flash('addMoneySuccess')}); // Pass the cart to the view
   } catch (err) {
     console.log(err);
   }
 };
+
 
 const addAddress = async (req, res) => {
   try {
@@ -133,95 +134,63 @@ const cashOnDelivery = async (req, res) => {
 };
 
 
-// const generateOrderid = async(req,res)=>{
-//   try {
-//     var options = {
-//       amount: req.body.amount * 100,  // amount in the smallest currency unit
-//       currency: "INR",
-//       receipt: "order_rcptid_" + Math.random().toString(36).substring(7)
-//     };
-    
-//     instance.orders.create(options, function(err, order) {
-//       if (err) {
-//         return res.status(500).send({ message: err.message });
-//       }
+const walletPayment = async (req, res) => {
+  try {
+    const userId = req.session.user;
+    console.log("userid:"+userId);
+  
 
-//       res.json({ orderId: order.id });
-//     });
+    const cart = await Cart.findOne({ user: userId })
+      .populate("user")
+      .populate("items.productId");
 
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+    if (!cart) {
+      return res.status(400).send("No cart found for this user");
+    }
 
-// const verify = async(req,res)=>{
-//   try {
-//         const secret = 'YOUR_SECRET'; // Replace with your Razorpay secret key
-//         const userId = req.session.user;
+    const { selector, addressRadio } = req.body;
 
-//     // Extract the order details from the request body
-//     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+    const user = await User.findById(userId).populate("address");
 
-//     // Generate the hmac
-//     const generated_signature = crypto.createHmac('sha256', secret).update(razorpay_order_id + '|' + razorpay_payment_id).digest('hex');
+    const selectedAddressIndex = user.address.findIndex(
+      (address) => address._id.toString() === req.body.selectedAddress
+    ); // Use addressRadio to get the selected address
 
-//     if (generated_signature === razorpay_signature) {
-//         // Payment is successful
+    const newOrder = new Order({
+      paymentMethod: selector,
+      selectedAddress: selectedAddressIndex, 
+      user: userId,
+      items: cart.items,
+      total: cart.total,
+      discount: cart.discount,
+      grandTotal: cart.grandTotal,
+      paymentMethod:'Wallet',
+      paymentStatus : 'Paid'
+    });
 
-//         // Find the cart for the user
-//         const cart = await Cart.findOne({ user: userId }).populate("user").populate("items.productId");
-//         if (!cart) {
-//             return res.status(400).send("No cart found for this user");
-//         }
+    await newOrder.save();
+    const order = await Order.findById(newOrder._id).populate(
+      "items.productId"
+    );
 
-//         const { selector, addressRadio } = req.body;
-//         const user = await User.findById(userId).populate("address");
-//         const selectedAddressIndex = user.address.findIndex((address) => address._id.toString() === req.body.selectedAddress);
+    for (let item of cart.items) {
+      const product = await Product.findById(item.productId);
+      product.number -= item.quantity;
+      await product.save();
+    }
 
-//         // Create a new order document
-//         const newOrder = new Order({
-//             paymentMethod: selector,
-//             selectedAddress: selectedAddressIndex, 
-//             user: userId,
-//             items: cart.items,
-//             total: cart.total,
-//             discount: cart.discount,
-//             grandTotal: cart.grandTotal,
-//         });
+    cart.items = [];
+    cart.total = 0;
+    cart.discount = 0;
+    cart.grandTotal = 0;
+    await cart.save();
 
-//         // Save the order document in the database
-//         try {
-//             await newOrder.save();
-//             const order = await Order.findById(newOrder._id).populate("items.productId");
+    res.json({ redirectUrl: `/confirmation/${newOrder._id}` });
 
-//             for (let item of cart.items) {
-//                 const product = await Product.findById(item.productId);
-//                 product.number -= item.quantity;
-//                 await product.save();
-//             }
-
-//             cart.items = [];
-//             cart.total = 0;
-//             cart.discount = 0;
-//             cart.grandTotal = 0;
-//             await cart.save();
-
-//             res.json({ redirectUrl: `/confirmation/${newOrder._id}` });
-//         } catch (error) {
-//             res.status(500).send({ message: error.message });
-//         }
-//     } else {
-//         // Payment verification failed
-//         res.status(400).send('Payment verification failed');
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
-
-/////////////////////////////////////////////////////////////////////////////
-
+  } catch (error) {
+    res.status(500).send({ message: error.message });
+  }
+};
 
 const generateOrderid = async(req,res)=>{
   try {
@@ -339,14 +308,62 @@ const verify = async(req,res)=>{
      
     }
    
- 
-
 
   } catch (error) {
     console.log(error);
   }
 }
 
+const addFromWallet = async(req,res)=>{
+  try {
+        const userId = req.session.user;
+
+        // find the user and the cart for the user
+        const user = await User.findById(userId);
+        const cart = await Cart.findOne({ user: userId });
+        const justuser = req.session.user;
+
+        if (!user || !cart) {
+            return res.status(404).json({ message: 'User or cart not found' });
+        }
+
+        // check if wallet amount is greater than the grandTotal
+        if (justuser.wallet >= cart.grandTotal) {
+          // subtract grandTotal from user's wallet
+          justuser.wallet -= cart.grandTotal;
+          cart.grandTotal = 0;
+
+          await user.save();
+          await cart.save();
+  
+          req.flash('addMoneySuccess', 'true');
+          res.redirect('/checkout');
+
+        } else {
+            // subtract from grandTotal and save on a new field on cart
+            cart.grandTotal -= justuser.wallet;
+            justuser.wallet = 0;
+
+            console.log("gt:  "+ cart.grandTotal);
+
+            await user.save();
+            await cart.save();
+    
+            req.flash('addMoneySuccess', 'true');
+            res.redirect('/checkout');
+            
+
+
+        }
+
+        // save the updated user and cart
+       
+    } catch (error) {
+      console.error('Error in addFromWallet:', error);
+      res.status(500).json({ message: 'Server error', error: error.toString() });
+  }
+  
+}
 
 
 
@@ -399,5 +416,7 @@ module.exports = {
   cashOnDelivery, 
   generateOrderid,
   verify,
+  addFromWallet,
   getConfirmation,
+  walletPayment
 };

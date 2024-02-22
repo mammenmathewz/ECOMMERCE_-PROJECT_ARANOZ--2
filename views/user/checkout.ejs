@@ -2,7 +2,75 @@
   <!-- Header part end-->
   <%- include('../partials/navbar') %>
 
+<style>
+  .walletBalanceCard {
+  width: fit-content;
+  height: 55px;
+  background-color: #ff3368;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 0px 12px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.svgwrapper {
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.svgwrapper svg {
+  width: 100%;
+}
+.balancewrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 120px;
+  gap: 0px;
+}
+.balanceHeading {
+  font-size: 12px;
+  color: rgb(255, 255, 255);
+  font-weight: 100;
+  letter-spacing: 0.6px;
+}
+.balance {
+  font-size: 13.5px;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
 
+.addmoney {
+  padding: 1px 15px;
+  border-radius: 20px;
+  background-color: #8100dc;
+  color: white;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.addmoney:hover {
+  background-color: whitesmoke;
+  color: #9c59cc;
+}
+.plussign {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+</style>
   
 
     <section class="checkout_area padding_top">
@@ -131,35 +199,103 @@
                                 </ul>
                                 <ul class="list list_2">
                                   <li>
-                                    <a>Total
+                                    <a>Grand Total
                                       <span>
-                                        <%= cart.total %>
+                                        <%= cart.grandTotal %>
                                       </span>
                                     </a>
                                   </li>
+                                  <li>
+                                   
+                                  </li>
                                 </ul>
+                                <div style="padding-top: 10%; padding-bottom: 10%;">
+                                  <div class="walletBalanceCard">
+                                    <div class="svgwrapper">
+                                      <svg viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect
+                                          x="0.539915"
+                                          y="6.28937"
+                                          width="21"
+                                          height="4"
+                                          rx="1.5"
+                                          transform="rotate(-4.77865 0.539915 6.28937)"
+                                          fill="#7D6B9D"
+                                          stroke="black"
+                                        ></rect>
+                                        <circle
+                                          cx="11.5"
+                                          cy="5.5"
+                                          r="4.5"
+                                          fill="#E7E037"
+                                          stroke="#F9FD50"
+                                          stroke-width="2"
+                                        ></circle>
+                                        <path
+                                          d="M2.12011 6.64507C7.75028 6.98651 12.7643 6.94947 21.935 6.58499C22.789 6.55105 23.5 7.23329 23.5 8.08585V24C23.5 24.8284 22.8284 25.5 22 25.5H2C1.17157 25.5 0.5 24.8284 0.5 24V8.15475C0.5 7.2846 1.24157 6.59179 2.12011 6.64507Z"
+                                          fill="#BF8AEB"
+                                          stroke="black"
+                                        ></path>
+                                        <path
+                                          d="M16 13.5H23.5V18.5H16C14.6193 18.5 13.5 17.3807 13.5 16C13.5 14.6193 14.6193 13.5 16 13.5Z"
+                                          fill="#BF8AEB"
+                                          stroke="black"
+                                        ></path>
+                                      </svg>
+                                    </div>
+                                  
+                                    <div class="balancewrapper">
+                                      <span class="balanceHeading">Wallet balance</span>
+                                      <p class="balance"><span id="currency">₹</span><%= justuser.wallet %></p>
+                                    </div>
+                                  
+                                   <a href="/addFromWallet"> <button class="addmoney"><span class="plussign">+</span>Add Money</button></a>
+                                  </div>
 
                                 <form id="paymentForm" style="padding-top: 2%">
                                   <div class="row">
                                     <input type="hidden" id="hiddenAddress" name="selectedAddress" />
                                   </div>
-                                  <div class="payment_item">
-                                    <div class="radion_btn">
-                                      <input type="radio" id="f-option5" name="selector" value="Cash on delivery" />
-                                      <label for="f-option5">Cash on delivery</label>
-                                    </div>
+
+                                    
+                                    
                                   </div>
-                                  <div class="payment_item active">
-                                    <div class="radion_btn">
-                                      <input type="radio" id="f-option6" name="selector" value="Online payment" />
-                                      <label for="f-option6">Online Payment</label>
+                                  <% if (cart.grandTotal > justuser.wallet) { %>
+                                    <div class="payment_item">
+                                        <div class="radion_btn">
+                                            <input type="radio" id="f-option5" name="selector" value="Cash on delivery" />
+                                            <label for="f-option5">Cash on delivery</label>
+                                        </div>
                                     </div>
-                                  </div>
-                                  <button type="button" class="btn_3" id="rzp-button1">
-                                    Pay with Razorpay
-                                  </button>
-                                </form>
+                                    <div class="payment_item active">
+                                        <div class="radion_btn">
+                                            <input type="radio" id="f-option7" name="selector" value="Online payment" />
+                                            <label for="f-option7">Online Payment</label>
+                                        </div>
+                                    </div> 
+                                <% } else if (locals.addMoneySuccess) { %>
+                                    <div class="payment_item1">
+                                        <div class="radion_btn">
+                                            <input type="radio" id="f-option6" name="selector" value="Wallet payment" />
+                                            <label for="f-option6">Wallet payment</label>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        document.getElementById("f-option6").addEventListener("change", updateButton);
+                                    </script>
+                                <% } %>
+                                
+                                
+                              
+                              
+                                <button type="button" class="btn_3" id="rzp-button1">
+                                  Confirm Order
+                              </button>
+                                  
+                              </form>
+                                
                               </div>
+                              
                     </div>
               </div>
             </div>
@@ -184,21 +320,35 @@
 
 
     <script>
-      var cashOnDelivery = document.getElementById("f-option5");
-      var paypal = document.getElementById("f-option6");
-      var submitButton = document.getElementById("rzp-button1");
+   window.onload = function() {
+  var cashOnDelivery = document.getElementById("f-option5");
+  var walletPayment = document.getElementById("f-option6");
+  var onlinePayment = document.getElementById("f-option7");
+  var submitButton = document.getElementById("rzp-button1");
 
-      cashOnDelivery.addEventListener("change", updateButton);
-      paypal.addEventListener("change", updateButton);
+  if(cashOnDelivery) {
+    cashOnDelivery.addEventListener("change", updateButton);
+  }
+  if(walletPayment) {
+    walletPayment.addEventListener("change", updateButton);
+  }
+  if(onlinePayment) {
+    onlinePayment.addEventListener("change", updateButton);
+  }
 
-      function updateButton() {
-        if (cashOnDelivery.checked) {
-          submitButton.textContent = "Confirm Order";
-        } else if (paypal.checked) {
-          submitButton.textContent = "Proceed to Razorpay";
-        }
-      }
-      function updateAddress(addressId) {
+  function updateButton() {
+    if (cashOnDelivery && cashOnDelivery.checked) {
+  
+      submitButton.textContent = "Confirm Order";
+    } else if (walletPayment && walletPayment.checked) {
+      submitButton.textContent = "Confirm Wallet Payment";
+    } else if (onlinePayment && onlinePayment.checked) {
+      submitButton.textContent = "Proceed to Razorpay";
+    }
+  }
+}
+
+  function updateAddress(addressId) {
         document.getElementById("hiddenAddress").value = addressId;
       }
     </script>
@@ -233,10 +383,13 @@
     console.log("address:" + selectedAddress + "payment" + paymentMethod);
 
     if (paymentMethod === "Cash on delivery") {
-        handleCashOnDelivery(selectedAddress);
-    } else if (paymentMethod === "Online payment") {
-        handleOnlinePayment(selectedAddress);
-    }
+  handleCashOnDelivery(selectedAddress);
+} else if (paymentMethod === "Online payment") {
+  handleOnlinePayment(selectedAddress);
+} else if (paymentMethod === "Wallet payment") {
+  handleWalletPayment(selectedAddress);
+}
+
 });
 
 
@@ -257,6 +410,23 @@
         });
       }
 
+function handleWalletPayment(selectedAddress) {
+  $.ajax({
+    url: "/confirmWalletPayment",
+    method: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({
+      paymentMethod: "Wallet Payment",
+      selectedAddress: selectedAddress,
+    }),
+    success: function (response) {
+      // Redirect the user to the confirmation page
+      window.location.href = response.redirectUrl;
+    },
+  });
+}
+
+
       function handleOnlinePayment(selectedAddress) {
         var settings = {
           url: "/create/orderId",
@@ -266,7 +436,7 @@
             "Content-Type": "application/json",
           },
           data: JSON.stringify({
-            amount: "<%= cart.total %>",
+            amount: "<%= cart.grandTotal %>",
             selectedAddress: selectedAddress,
             paymentMethod: "Online payment",
           }),

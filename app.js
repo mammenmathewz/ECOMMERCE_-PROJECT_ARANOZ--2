@@ -26,6 +26,12 @@ app.use(session({
         maxAge:1000 * 60 * 24 * 10
     }
 }));
+
+app.use((req, res, next) => {
+  res.locals.user = req.session.user;
+  next();
+});
+
 app.use((req, res, next) => {
   res.set('Cache-Control', 'no-store');
   next();
@@ -39,6 +45,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/',userRouter)
 app.use('/admin',adminRouter)
+
 
 
 // catch 404 and forward to error handler

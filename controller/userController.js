@@ -13,12 +13,13 @@ const saltRounds = 10;
 
 const getHome = async (req, res) => {
   try {
-    res.render("user/home");
+    res.render("user/home", { user: req.session.user });
   } catch (error) {
     console.log(error);
     res.send("Error occurred while fetching data");
   }
 };
+
 const getProducts = async (req, res) => {
   try {
     const { page = 1, limit = 2 } = req.query;
@@ -470,7 +471,15 @@ const filterAndSortProducts = async (req, res) => {
   }
 };
 
-
+const getWallet = async(req,res)=>{
+  try {
+    const user = req.session.user;
+    console.log(user);
+    res.render('user/wallet',{user:user})
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 module.exports = {
@@ -493,5 +502,5 @@ module.exports = {
   changePassword_Profile,
   resetPasswordWithoutOTP,
   filterAndSortProducts,
-
+  getWallet
 };

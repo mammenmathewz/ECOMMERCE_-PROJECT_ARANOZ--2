@@ -70,15 +70,32 @@
                             
                         </tr>
                     <% }); %>
-                   
                     <tr>
                         
                         <th colspan="3">Subtotal</th>
                         <th> <h4>₹<%= order.total %></h4></th>
                     </tr>
                     <tr>
-                        
+                      <th colspan="3">Coupon</th>
+                      <th> <h4 style="color: red;">- ₹<%= order.discount %></h4></th>
                     </tr>
+                    <% if (order.paymentMethod === 'Wallet') { %>
+                      
+                      <tr>
+                        <th colspan="3">Grand Total</th>
+                        <th><h4>₹<%= order.total - order.discount %></h4></th>
+                      </tr>
+                    <% } else { %>
+                      <tr>
+                        <th colspan="3">Wallet</th>
+                        <th><h4  style="color: red;">- ₹<%= order.total - order.discount-order.grandTotal %></h4></th>
+                      </tr>
+                      <tr>
+                        <th colspan="3">Grand Total</th>
+                        <th><h4>₹<%= order.grandTotal %></h4></th>
+                      </tr>
+                    <% } %>
+                  
                 </tbody>
                 
             </table>

@@ -210,35 +210,53 @@ const decrement = async(req,res)=>{
 // Server-side code
 const applyCoupon = async(req,res)=>{
   const { code } = req.body; // assuming you're sending the coupon code in the request body
+  const userId = req.session.user._id;
 
-    try {
-        const coupon = await Coupon.findOne({ code: code });
+  try {
+    const coupon = await Coupon.findOne({ code: code });
 
-        if (!coupon) {
-            return res.status(404).json({ message: 'Coupon not found' });
-        }
-
-        const cart = await Cart.findOne({ user: req.session.user._id });
-
-        if (!cart) {
-            return res.status(404).json({ message: 'Cart not found' });
-        }
-
-        // Apply the coupon discount to the cart
-        cart.discount = coupon.discount;
-        cart.grandTotal = cart.total - cart.discount;
-
-        // Update the discountAppliedAt field with the current date and time
-        cart.discountAppliedAt = new Date();
-
-        await cart.save();
-
-        res.json({ message: 'Coupon applied successfully', grandTotal: cart.grandTotal, couponAmount:cart.discount, originalTotal: cart.total });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
+    // Check if the coupon exists
+    if (!coupon) {
+      return res.status(404).json({ message: 'Coupon not found' });
     }
+
+    // Check if the coupon is valid (not expired and not deleted)
+    if (coupon.expiry_date < new Date() || coupon.is_deleted) {
+      return res.status(400).json({ message: 'Coupon is not valid' });
+    }
+
+    // Check if the user is in the list of users for the coupon
+    // if (!coupon.users.includes(userId)) {
+    //   return res.status(403).json({ message: 'User is not eligible for this coupon' });
+    // }
+
+    const cart = await Cart.findOne({ user: userId });
+
+    // Check if the cart exists
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
+
+    // Generate a random discount amount between coupon.discount and coupon.max_discount
+    const discountAmount = Math.floor(Math.random() * (coupon.max_discount - coupon.discount) + coupon.discount);
+
+
+    // Apply the discount to the cart
+    cart.discount = discountAmount;
+    cart.grandTotal = cart.total - discountAmount;
+
+    // Update the discountAppliedAt field with the current date and time
+    cart.discountAppliedAt = new Date();
+
+    await cart.save();
+
+    res.json({ message: 'Coupon applied successfully', grandTotal: cart.grandTotal, couponAmount:cart.discount, originalTotal: cart.total });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
 }
+
 
 
 

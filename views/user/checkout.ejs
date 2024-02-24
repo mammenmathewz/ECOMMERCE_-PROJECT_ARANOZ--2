@@ -310,8 +310,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 <!-- SweetAlert -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.10.4/sweetalert2.all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <!-- Razorpay -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -408,8 +408,7 @@
           },
         });
       }
-
-function handleWalletPayment(selectedAddress) {
+      function handleWalletPayment(selectedAddress) {
   $.ajax({
     url: "/confirmWalletPayment",
     method: "POST",
@@ -419,11 +418,24 @@ function handleWalletPayment(selectedAddress) {
       selectedAddress: selectedAddress,
     }),
     success: function (response) {
-      // Redirect the user to the confirmation page
+      // Redirect the user to the appropriate page
       window.location.href = response.redirectUrl;
     },
   });
 }
+$(document).ready(function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const flashMessage = urlParams.get('flashMessage');
+  
+  if (flashMessage) {
+    Swal.fire({
+      title: 'Notice!',
+      text: flashMessage,
+      icon: 'info'
+    });
+  }
+});
+
 
 
       function handleOnlinePayment(selectedAddress) {

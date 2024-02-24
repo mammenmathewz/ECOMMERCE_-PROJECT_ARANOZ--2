@@ -147,7 +147,14 @@ const walletPayment = async (req, res) => {
     if (!cart) {
       return res.status(400).send("No cart found for this user");
     }
-
+    if (cart.grandTotal !== 0) {
+      console.log(true);
+      return res.json({ 
+        redirectUrl: "/checkout?flashMessage=please add money from wallet to continue"
+      });
+    }
+    
+    
     const { selector, addressRadio } = req.body;
 
     const user = await User.findById(userId).populate("address");

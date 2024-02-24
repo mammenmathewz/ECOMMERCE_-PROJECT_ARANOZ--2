@@ -508,19 +508,16 @@ $(document).ready(function() {
           };
 
           var rzp1 = new Razorpay(options);
-          rzp1.on("payment.failed", function (response) {
-            alert(response.error.code);
-            alert(response.error.description);
-            alert(response.error.source);
-            alert(response.error.step);
-            alert(response.error.reason);
-            alert(response.error.metadata.order_id);
-            alert(response.error.metadata.payment_id);
-          });
-          // document.getElementById("rzp-button1").onclick = function (e) {
-          rzp1.open();
-          //   e.preventDefault();
-          // };
+rzp1.on("payment.failed", function (response) {
+  // Handle the error here. You might want to log the error or display a message to the user.
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops...',
+    text: 'Payment failed. Please try again. You can complete this order in 24 hours from your orders.'
+  });
+});
+rzp1.open();
+
         });
       }
 

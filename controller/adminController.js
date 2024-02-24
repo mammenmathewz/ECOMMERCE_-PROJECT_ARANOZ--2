@@ -719,7 +719,7 @@ const switchStatus = async (req, res) => {
 
     // find the user
     const user = await User.findById(order.user._id);
-    console.log("dhdsuwka"+user);
+  
 
     order.is_delivered = false;
     order.user_cancelled = false;
@@ -735,18 +735,25 @@ const switchStatus = async (req, res) => {
         order.user_cancelled = true;
         incrementProductQuantity(order.items);
         user.wallet += order.grandTotal; 
+        if (order.grandTotal == 0) {
+          user.wallet += order.total - order.discount - order.grandTotal;
+        }
         break;
       case "Admin Cancelled":
         order.admin_cancelled = true;
         incrementProductQuantity(order.items);
-        user.wallet += order.total; // Add total to user's wallet
-        console.log("wallet"+user.wallet +"    "+ order.total);
-        console.log(typeof user.wallet, typeof order.total);
+        user.wallet += order.grandTotal; 
+        if (order.grandTotal == 0) {
+          user.wallet += order.total - order.discount - order.grandTotal;
+        }
         break;
       case "Returned":
         order.is_returned = true;
         incrementProductQuantity(order.items);
-        user.wallet += order.grandTotal; // Add grandTotal to user's wallet
+        user.wallet += order.grandTotal; 
+        if (order.grandTotal == 0) {
+          user.wallet += order.total - order.discount - order.grandTotal;
+        }
         break;
       case "Pending":
         order.is_delivered = false;

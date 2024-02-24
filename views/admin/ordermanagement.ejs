@@ -72,7 +72,13 @@
                                                         <p class=" btn btn-info m-2">Pending</p>   
                                                     <% } %>
                                                 </td>
-                                                <td><%= order.total %></td>
+                                                <td>
+                                                    <% if(order.grandTotal == 0) { %>
+                                                       ₹<%= order.total - order.discount - order.grandTotal %>
+                                                    <% } else { %>
+                                                       ₹<%= order.grandTotal %>
+                                                    <% } %>
+                                                  </td>
                                                 <td>
                                                     <% if(!order.admin_cancelled && !order.is_returned && !order.user_cancelled) { %>
                                                         <div class="dropdown">

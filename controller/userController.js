@@ -473,13 +473,14 @@ const filterAndSortProducts = async (req, res) => {
 
 const getWallet = async(req,res)=>{
   try {
-    const user = req.session.user;
+    const user = await User.findById(req.session.user._id);
     console.log(user);
     res.render('user/wallet',{user:user})
   } catch (error) {
     console.log(error);
   }
 }
+
 
 
 module.exports = {

@@ -17,8 +17,7 @@ var instance = new Razorpay({
 const getOrder = async (req, res) => {
   try {
     const userId = req.session.user._id;
-    const justuser = req.session.user;
-    const user = await User.findById(userId);
+    const justuser = await User.findById(userId); // Fetch the latest user data from the database
     const cart = await Cart.findOne({ user: userId }).populate({
       path: "items.productId",
       populate: {
@@ -26,8 +25,7 @@ const getOrder = async (req, res) => {
       },
     }); // Populate the products in the cart
 
-    console.log(user);
-    console.log(cart);
+    console.log(justuser); // This will now log the latest user data
 
     for (let item of cart.items) {
       const product = await Product.findById(item.productId);
@@ -39,7 +37,7 @@ const getOrder = async (req, res) => {
         return res.redirect("/cart");
       }
     }
-    console.log(justuser);
+
     res.render("user/checkout", {justuser:justuser, cart: cart ,addMoneySuccess: req.flash('addMoneySuccess')}); // Pass the cart to the view
   } catch (err) {
     console.log(err);
@@ -323,54 +321,41 @@ const verify = async(req,res)=>{
 
 const addFromWallet = async(req,res)=>{
   try {
-        const userId = req.session.user;
+    const userId = req.session.user._id;
 
-        // find the user and the cart for the user
-        const user = await User.findById(userId);
-        const cart = await Cart.findOne({ user: userId });
-        const justuser = req.session.user;
+    // find the user and the cart for the user
+    const user = await User.findById(userId);
+    const cart = await Cart.findOne({ user: userId });
 
-        if (!user || !cart) {
-            return res.status(404).json({ message: 'User or cart not found' });
-        }
+    if (!user || !cart) {
+        return res.status(404).json({ message: 'User or cart not found' });
+    }
 
-        // check if wallet amount is greater than the grandTotal
-        if (justuser.wallet >= cart.grandTotal) {
-          // subtract grandTotal from user's wallet
-          justuser.wallet -= cart.grandTotal;
-          cart.grandTotal = 0;
+    // check if wallet amount is greater than the grandTotal
+    if (user.wallet >= cart.grandTotal) {
+      // subtract grandTotal from user's wallet
+      user.wallet -= cart.grandTotal;
+      cart.grandTotal = 0;
+    } else {
+      // subtract from grandTotal and save on a new field on cart
+      cart.grandTotal -= user.wallet;
+      user.wallet = 0;
+    }
 
-          await user.save();
-          await cart.save();
-  
-          req.flash('addMoneySuccess', 'true');
-          res.redirect('/checkout');
+    await user.save(); // Save the updated user
+    await cart.save(); // Save the updated cart
 
-        } else {
-            // subtract from grandTotal and save on a new field on cart
-            cart.grandTotal -= justuser.wallet;
-            justuser.wallet = 0;
+    // Update the user object in the session
+    req.session.user = user;
 
-            console.log("gt:  "+ cart.grandTotal);
-
-            await user.save();
-            await cart.save();
-    
-            req.flash('addMoneySuccess', 'true');
-            res.redirect('/checkout');
-            
-
-
-        }
-
-        // save the updated user and cart
-       
-    } catch (error) {
-      console.error('Error in addFromWallet:', error);
-      res.status(500).json({ message: 'Server error', error: error.toString() });
+    req.flash('addMoneySuccess', 'true');
+    res.redirect('/checkout');
+  } catch (error) {
+    console.error('Error in addFromWallet:', error);
+    res.status(500).json({ message: 'Server error', error: error.toString() });
   }
-  
 }
+
 
 
 

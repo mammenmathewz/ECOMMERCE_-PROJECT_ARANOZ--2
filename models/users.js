@@ -33,11 +33,7 @@ const addressSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    wallet:{
-        type:Number,
-        default:0
     
-    }
 });
 
 const userSchema = new mongoose.Schema({
@@ -69,6 +65,11 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    wallet:{
+        type:Number,
+        default:0
+    
     },
     address: [addressSchema]
 });

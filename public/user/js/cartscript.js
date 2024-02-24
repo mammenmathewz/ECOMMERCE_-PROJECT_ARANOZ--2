@@ -131,7 +131,13 @@ function applyCoupon(event) {
       },
       body: JSON.stringify({ code: couponCode }),
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      // If the response status is not ok (like 400 or 500), throw an error
+      throw response;
+    }
+    return response.json();
+  })
   .then(data => {
       // Update the values on the page
       document.querySelector('.priceChange').textContent = '₹ ' + data.originalTotal.toFixed(2);
@@ -146,13 +152,13 @@ function applyCoupon(event) {
       });
   })
   .catch((error) => {
-      console.error('Error:', error);
-
-      // Show an error message
+    // If there was an error, get the error message from the JSON response
+    error.json().then(errorData => {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Something went wrong! Please try again.'
+        text: errorData.message
       });
+    });
   });
 }

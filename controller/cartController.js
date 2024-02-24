@@ -225,10 +225,12 @@ const applyCoupon = async(req,res)=>{
       return res.status(400).json({ message: 'Coupon is not valid' });
     }
 
-    // Check if the user is in the list of users for the coupon
-    // if (!coupon.users.includes(userId)) {
-    //   return res.status(403).json({ message: 'User is not eligible for this coupon' });
-    // }
+    if (!coupon.users.includes(userId)) {
+      coupon.users.push(userId);
+      await coupon.save();
+    } else {
+      return res.status(400).json({ message: 'User has already used this coupon' });
+    }
 
     const cart = await Cart.findOne({ user: userId });
 

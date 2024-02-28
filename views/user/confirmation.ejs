@@ -93,7 +93,7 @@
                             <% if(order.grandTotal == 0) { %>
                               - ₹<%= order.total - order.discount - order.grandTotal %>
                             <% } else { %>
-                              - ₹<%= order.grandTotal %>
+                              - ₹<%= order.total-order.discount -order.grandTotal %>
                             <% } %>
                           </h4>
                         </th>

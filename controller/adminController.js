@@ -3,12 +3,10 @@ const { User, Address } = require("../models/users");
 const Product = require("../models/products");
 const Brand = require("../models/brand");
 const Order = require("../models/checkout");
-const Coupon = require('../models/coupons')
+const Coupon = require("../models/coupons");
 const moment = require("moment");
-const fs = require('fs');
-const path = require('path');
-
-
+const fs = require("fs");
+const path = require("path");
 
 const getAdminLogin = async (req, res) => {
   try {
@@ -98,7 +96,7 @@ function aggregateDailySales() {
   return Order.aggregate([
     {
       $match: {
-        paymentStatus: { $ne: 'Failed' },
+        paymentStatus: { $ne: "Failed" },
         date: {
           $gte: startOfDay,
           $lt: endOfDay,
@@ -115,22 +113,25 @@ function aggregateDailySales() {
   ]).exec();
 }
 
-
 // Function to aggregate weekly sales data
 function aggregateWeeklySales() {
   const now = new Date();
-  const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay());
-  startOfWeek.setHours(0, 0, 0, 0); 
-  
+  const startOfWeek = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() - now.getDay()
+  );
+  startOfWeek.setHours(0, 0, 0, 0);
+
   const endOfWeek = new Date(startOfWeek);
   endOfWeek.setDate(startOfWeek.getDate() + 6);
-  endOfWeek.setHours(23, 59, 59, 999); 
-  
-console.log("start:"+startOfWeek+"      "+endOfWeek);
+  endOfWeek.setHours(23, 59, 59, 999);
+
+  console.log("start:" + startOfWeek + "      " + endOfWeek);
   return Order.aggregate([
     {
       $match: {
-        paymentStatus: { $ne: 'Failed' },
+        paymentStatus: { $ne: "Failed" },
         date: {
           $gte: startOfWeek,
           $lt: endOfWeek,
@@ -139,24 +140,21 @@ console.log("start:"+startOfWeek+"      "+endOfWeek);
     },
     {
       $group: {
-        _id: { $dayOfWeek: { date: "$date", timezone: "Asia/Kolkata" } }, 
+        _id: { $dayOfWeek: { date: "$date", timezone: "Asia/Kolkata" } },
         totalSales: { $sum: "$total" },
       },
     },
-    
+
     { $sort: { _id: 1 } },
   ]).exec();
 }
-
-
-
 
 // Function to aggregate yearly sales data
 function aggregateYearlySales() {
   return Order.aggregate([
     {
       $match: {
-        paymentStatus: { $ne: 'Failed' },
+        paymentStatus: { $ne: "Failed" },
         date: {
           $gte: new Date(new Date().getFullYear(), 0, 1),
           $lt: new Date(new Date().getFullYear() + 1, 0, 1),
@@ -173,38 +171,51 @@ function aggregateYearlySales() {
   ]).exec();
 }
 
-// Fetch daily delivered orders
 const getDailyDeliveredOrders = async () => {
   const startOfDay = new Date();
   startOfDay.setHours(0, 0, 0, 0);
-  return await Order.find({ is_delivered: true, date: { $gte: startOfDay } }).populate('user');
+  return await Order.find({
+    is_delivered: true,
+    date: { $gte: startOfDay },
+  }).populate("user");
 };
 
-// Fetch weekly delivered orders
 const getWeeklyDeliveredOrders = async () => {
   const oneWeekAgo = new Date();
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
-  return await Order.find({ is_delivered: true, date: { $gte: oneWeekAgo } }).populate('user');
+  return await Order.find({
+    is_delivered: true,
+    date: { $gte: oneWeekAgo },
+  }).populate("user");
 };
 
-// Fetch yearly delivered orders
 const getYearlyDeliveredOrders = async () => {
   const oneYearAgo = new Date();
   oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-  return await Order.find({ is_delivered: true, date: { $gte: oneYearAgo } }).populate('user');
+  return await Order.find({
+    is_delivered: true,
+    date: { $gte: oneYearAgo },
+  }).populate("user");
 };
 
 ////GET ADMIN DASH/////
 
 const adminDash = async (req, res) => {
   try {
-    const [dailySales, weeklySales, yearlySales, totalOrders, codOrders, onlineOrders] = await Promise.all([
+    const [
+      dailySales,
+      weeklySales,
+      yearlySales,
+      totalOrders,
+      codOrders,
+      onlineOrders,
+    ] = await Promise.all([
       aggregateDailySales(),
       aggregateWeeklySales(),
       aggregateYearlySales(),
       Order.countDocuments(), // total number of orders
-      Order.countDocuments({ paymentMethod: 'COD' }), // number of orders with paymentMethod == 'COD'
-      Order.countDocuments({ paymentMethod: "Online payment" }) // number of orders with paymentMethod == 'Online Payment'
+      Order.countDocuments({ paymentMethod: "COD" }), // number of orders with paymentMethod == 'COD'
+      Order.countDocuments({ paymentMethod: "Online payment" }), // number of orders with paymentMethod == 'Online Payment'
     ]);
 
     // Create an array for each day of the week with default sales of 0
@@ -233,20 +244,34 @@ const adminDash = async (req, res) => {
       dailySalesData[sale._id].totalSales = sale.totalSales;
     }
 
-    const weeklyTotal = weeklySales.reduce((sum, sale) => sum + sale.totalSales, 0);
-    const dailyTotal = dailySales.reduce((sum,sale)=> sum+sale.totalSales,0);
-    const yearlyTotal = yearlySales.reduce((sum,sale)=> sum+sale.totalSales,0);
+    const weeklyTotal = weeklySales.reduce(
+      (sum, sale) => sum + sale.totalSales,
+      0
+    );
+    const dailyTotal = dailySales.reduce(
+      (sum, sale) => sum + sale.totalSales,
+      0
+    );
+    const yearlyTotal = yearlySales.reduce(
+      (sum, sale) => sum + sale.totalSales,
+      0
+    );
 
-    console.log("weekly :" + JSON.stringify(dailySales+"  total="+dailyTotal));
+    console.log(
+      "weekly :" + JSON.stringify(dailySales + "  total=" + dailyTotal)
+    );
 
     res.render("admin/index", {
       active: "dash",
-      dailyTotal,dailySalesData,
-      weeklyTotal, weeklySalesData,
-      yearlyTotal,yearlySalesData,
-      totalOrders, // pass totalOrders to the view
-      codOrders, // pass codOrders to the view
-      onlineOrders // pass onlineOrders to the view
+      dailyTotal,
+      dailySalesData,
+      weeklyTotal,
+      weeklySalesData,
+      yearlyTotal,
+      yearlySalesData,
+      totalOrders,
+      codOrders,
+      onlineOrders,
     });
   } catch (error) {
     console.log(error);
@@ -254,17 +279,17 @@ const adminDash = async (req, res) => {
   }
 };
 
-const salesReport = async(req, res) => {
+const salesReport = async (req, res) => {
   try {
     let salesData;
     switch (req.query.timePeriod) {
-      case 'daily':
+      case "daily":
         salesData = await getDailyDeliveredOrders();
         break;
-      case 'weekly':
+      case "weekly":
         salesData = await getWeeklyDeliveredOrders();
         break;
-      case 'yearly':
+      case "yearly":
         salesData = await getYearlyDeliveredOrders();
         break;
       default:
@@ -275,22 +300,22 @@ const salesReport = async(req, res) => {
     res.json({ salesData });
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error occurred while fetching sales data');
+    res.status(500).send("Error occurred while fetching sales data");
   }
 };
 
-///////////////////////////////////////////////
-const dataPerDate = async(req,res)=>{
+
+const dataPerDate = async (req, res) => {
   try {
     const { startDate, endDate } = req.body;
-    console.log(startDate+"  "+ endDate);
+    console.log(startDate + "  " + endDate);
     const data = await Order.aggregate([
       {
         $match: {
-          paymentStatus: { $ne: 'Failed' },
+          paymentStatus: { $ne: "Failed" },
           date: {
             $gte: new Date(startDate),
-            $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)), 
+            $lte: new Date(new Date(endDate).setHours(23, 59, 59, 999)),
           },
         },
       },
@@ -304,7 +329,9 @@ const dataPerDate = async(req,res)=>{
     ]).exec();
 
     // Initialize an array with zeros for each day of the selected date range
-    const salesPerDay = Array(moment(endDate).diff(moment(startDate), 'days') + 1).fill(0);
+    const salesPerDay = Array(
+      moment(endDate).diff(moment(startDate), "days") + 1
+    ).fill(0);
 
     // Update the array with the data from the aggregation
     for (const item of data) {
@@ -312,16 +339,13 @@ const dataPerDate = async(req,res)=>{
     }
     console.log(JSON.stringify(salesPerDay));
     res.json(salesPerDay);
-
   } catch (error) {
     console.error(error);
     res.status(500).send("Error occurred while fetching data");
   }
-}
+};
 
 
-
-//////////////////////////////////////////////////
 const adminLogout = async (req, res) => {
   try {
     if (req.session.admin) {
@@ -449,7 +473,6 @@ const updateProduct = async (req, res) => {
       return res.status(404).send("Product not found.");
     }
 
-
     // Update the product details
     product.brand = req.body.brand;
     product.productname = req.body.productname;
@@ -485,8 +508,6 @@ const addProduct = async (req, res) => {
   }
 };
 
-
-
 // const uploadProduct = async (req, res) => {
 //   try {
 //     // Validate the brand ID
@@ -512,17 +533,17 @@ const addProduct = async (req, res) => {
 //     console.log(images);
 //     await Promise.all(images.map(async (base64data, index) => {
 //       base64data = base64data.replace(/^data:image\/png;base64,/, "");
-      
+
 //       // Generate a unique file name
 //       var filename = Date.now() + "_" + index + ".png";
-      
+
 //       // Specify a different directory
 //       var directory = path.resolve('public', 'user', 'img', 'product');
 //       var filePath = path.join(directory, filename);
-  
-//       // Create the directory if it doesn't exist 
+
+//       // Create the directory if it doesn't exist
 //       fs.mkdirSync(directory, { recursive: true });
-  
+
 //       // Write the file and return a promise
 //    // Write the file and return a promise
 // return new Promise((resolve, reject) => {
@@ -533,10 +554,10 @@ const addProduct = async (req, res) => {
 //     } else {
 //       // Save the path of the image file to the database
 //       product.images.push(filePath);
-      
+
 //       // Save the product after the image path has been added
 //       await product.save();
-      
+
 //       resolve();
 //     }
 //   });
@@ -544,11 +565,9 @@ const addProduct = async (req, res) => {
 
 //     }));
 //   }
-  
+
 //   await product.save();
-  
-  
-  
+
 //     res.redirect("/admin/addproduct");
 //   } catch (err) {
 //     console.log(err);
@@ -558,74 +577,76 @@ const addProduct = async (req, res) => {
 
 function saveImageToFile(base64String) {
   // Remove header from base64 string
-  const base64Image = base64String.split(';base64,').pop();
+  const base64Image = base64String.split(";base64,").pop();
 
   // Generate a unique filename
-  const filename = Date.now() + '.png';
+  const filename = Date.now() + ".png";
 
   // Create the path to the output file
-  const filepath = path.join(__dirname, '../public/user/img/product/', filename);
+  const filepath = path.join(
+    __dirname,
+    "../public/user/img/product/",
+    filename
+  );
 
   // Write the image file
-  fs.writeFileSync(filepath, base64Image, {encoding: 'base64'});
+  fs.writeFileSync(filepath, base64Image, { encoding: "base64" });
 
   return filename;
 }
 const uploadProduct = async (req, res) => {
-try {
-  // Validate the brand ID
-  const brand = await Brand.findById(req.body.brand);
-  if (!brand) {
-    return res.status(400).send("Invalid brand ID.");
-  }
-
-  const product = new Product({
-    brand: req.body.brand,
-    productname: req.body.productname,
-    description: req.body.description,
-    category: req.body.category,
-    regularprice: req.body.regularprice,
-    saleprice: req.body.saleprice,
-    number: req.body.number,
-    createdon: Date.now(),
-  });
-
-
-if (req.body.croppedImage) {
-  // Check if req.body.croppedImage is an array
-  if (Array.isArray(req.body.croppedImage)) {
-    // If it's an array, iterate over it with forEach
-    req.body.croppedImage.forEach((imageData) => {
-      // Check if imageData is not empty
-      if (imageData.trim() !== '') {
-        // Save the image data to a file and get the file path
-        const filePath = saveImageToFile(imageData);
-
-        // Add the file path to the product images
-        product.images.push("/user/img/product/" + filePath);
-      }
-    });
-  } else {
-    // If it's not an array, directly process the single image
-    if (req.body.croppedImage.trim() !== '') {
-      // Save the image data to a file and get the file path
-      const filePath = saveImageToFile(req.body.croppedImage);
-
-      // Add the file path to the product images
-      product.images.push("/user/img/product/" + filePath);
+  try {
+    // Validate the brand ID
+    const brand = await Brand.findById(req.body.brand);
+    if (!brand) {
+      return res.status(400).send("Invalid brand ID.");
     }
-  }
-}
 
-  await product.save();
-  res.redirect("/admin/addproduct");
-} catch (err) {
-  console.log(err);
-  res.status(500).send("An error occurred while saving the product.");
-}
+    const product = new Product({
+      brand: req.body.brand,
+      productname: req.body.productname,
+      description: req.body.description,
+      category: req.body.category,
+      regularprice: req.body.regularprice,
+      saleprice: req.body.saleprice,
+      number: req.body.number,
+      createdon: Date.now(),
+    });
+
+    if (req.body.croppedImage) {
+      // Check if req.body.croppedImage is an array
+      if (Array.isArray(req.body.croppedImage)) {
+        // If it's an array, iterate over it with forEach
+        req.body.croppedImage.forEach((imageData) => {
+          // Check if imageData is not empty
+          if (imageData.trim() !== "") {
+            // Save the image data to a file and get the file path
+            const filePath = saveImageToFile(imageData);
+
+            // Add the file path to the product images
+            product.images.push("/user/img/product/" + filePath);
+          }
+        });
+      } else {
+        // If it's not an array, directly process the single image
+        if (req.body.croppedImage.trim() !== "") {
+          // Save the image data to a file and get the file path
+          const filePath = saveImageToFile(req.body.croppedImage);
+
+          // Add the file path to the product images
+          product.images.push("/user/img/product/" + filePath);
+        }
+      }
+    }
+
+    await product.save();
+    res.redirect("/admin/addproduct");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("An error occurred while saving the product.");
+  }
 };
 
- 
 const deleteImage = async (req, res) => {
   try {
     const productId = req.params.productId;
@@ -759,14 +780,15 @@ const switchStatus = async (req, res) => {
   console.log(status);
 
   try {
-    const order = await Order.findById(orderId).populate("items.productId").populate("user");
+    const order = await Order.findById(orderId)
+      .populate("items.productId")
+      .populate("user");
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
     // find the user
     const user = await User.findById(order.user._id);
-  
 
     order.is_delivered = false;
     order.user_cancelled = false;
@@ -777,11 +799,12 @@ const switchStatus = async (req, res) => {
     switch (status) {
       case "Delivered":
         order.is_delivered = true;
+        order.delivery_time = new Date();
         break;
       case "User Cancelled":
         order.user_cancelled = true;
         incrementProductQuantity(order.items);
-        user.wallet += order.grandTotal; 
+        user.wallet += order.grandTotal;
         if (order.grandTotal == 0) {
           user.wallet += order.total - order.discount - order.grandTotal;
         }
@@ -789,7 +812,7 @@ const switchStatus = async (req, res) => {
       case "Admin Cancelled":
         order.admin_cancelled = true;
         incrementProductQuantity(order.items);
-        user.wallet += order.grandTotal; 
+        user.wallet += order.grandTotal;
         if (order.grandTotal == 0) {
           user.wallet += order.total - order.discount - order.grandTotal;
         }
@@ -797,7 +820,7 @@ const switchStatus = async (req, res) => {
       case "Returned":
         order.is_returned = true;
         incrementProductQuantity(order.items);
-        user.wallet += order.grandTotal; 
+        user.wallet += order.grandTotal;
         if (order.grandTotal == 0) {
           user.wallet += order.total - order.discount - order.grandTotal;
         }
@@ -828,8 +851,6 @@ async function incrementProductQuantity(items) {
   }
 }
 
-
-
 const vieworder = async (req, res) => {
   try {
     // Fetch the order by its ID, populate product details and user data
@@ -858,99 +879,113 @@ const vieworder = async (req, res) => {
   }
 };
 
-const getCoupon = async(req, res) => {
+const getCoupon = async (req, res) => {
   try {
     const coupons = await Coupon.find();
-    res.render('admin/coupons', { active: "coupons", coupons: coupons, moment: moment });
+    res.render("admin/coupons", {
+      active: "coupons",
+      coupons: coupons,
+      moment: moment,
+    });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-
-const postCoupon = async(req, res) => {
+const postCoupon = async (req, res) => {
   try {
-    const { code, discount, min_amount, max_discount, startDate, expiry_date } = req.body;
+    const { code, discount, min_amount, max_discount, startDate, expiry_date } =
+      req.body;
 
     const existingCoupon = await Coupon.findOne({ code });
     if (existingCoupon) {
-      return res.status(400).json({ message: 'A coupon with this code already exists' });
+      return res
+        .status(400)
+        .json({ message: "A coupon with this code already exists" });
     }
 
-    const coupon = new Coupon({ code, discount, min_amount, max_discount, startDate, expiry_date });
+    const coupon = new Coupon({
+      code,
+      discount,
+      min_amount,
+      max_discount,
+      startDate,
+      expiry_date,
+    });
     console.log(coupon);
     await coupon.save();
 
-    res.redirect('/admin/coupons');
+    res.redirect("/admin/coupons");
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'An error occurred while creating the coupon' });
+    res
+      .status(500)
+      .json({ message: "An error occurred while creating the coupon" });
   }
-}
+};
 
-const getCouponEdit = async(req,res)=>{
+const getCouponEdit = async (req, res) => {
   console.log(req.params.id); // log the ID
 
-    try {
-        const coupon = await Coupon.findById(req.params.id);
-        console.log(coupon); // log the coupon
+  try {
+    const coupon = await Coupon.findById(req.params.id);
+    console.log(coupon); // log the coupon
 
-        if (!coupon) {
-            return res.status(404).send('Coupon not found');
-        }
-
-       res.render('admin/editeCoupon',{active: "coupons",coupon:coupon})
-    } catch (err) {
-        console.log(err); // log any errors
-        res.status(500).send('Server error');
+    if (!coupon) {
+      return res.status(404).send("Coupon not found");
     }
-}
 
+    res.render("admin/editeCoupon", { active: "coupons", coupon: coupon });
+  } catch (err) {
+    console.log(err); // log any errors
+    res.status(500).send("Server error");
+  }
+};
 
-const updateCoupon = async(req,res)=>{
-  const { code, discount, min_amount, max_discount, startDate, expiry_date } = req.body;
+const updateCoupon = async (req, res) => {
+  const { code, discount, min_amount, max_discount, startDate, expiry_date } =
+    req.body;
 
-    try {
-        const coupon = await Coupon.findOne({ code: code });
+  try {
+    const coupon = await Coupon.findOne({ code: code });
 
-        if (!coupon) {
-            return res.status(404).json({ message: 'Coupon not found' });
-        }
-
-        coupon.discount = discount;
-        coupon.min_amount = min_amount;
-        coupon.max_discount = max_discount;
-        coupon.startDate = new Date(startDate);
-        coupon.expiry_date = new Date(expiry_date);
-
-        await coupon.save();
-
-        res.redirect('/admin/coupons')
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Server error' });
+    if (!coupon) {
+      return res.status(404).json({ message: "Coupon not found" });
     }
-}
 
-const deleteCoupon = async (req,res)=>{
+    coupon.discount = discount;
+    coupon.min_amount = min_amount;
+    coupon.max_discount = max_discount;
+    coupon.startDate = new Date(startDate);
+    coupon.expiry_date = new Date(expiry_date);
+
+    await coupon.save();
+
+    res.redirect("/admin/coupons");
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const deleteCoupon = async (req, res) => {
   const { id } = req.body; // assuming you're sending the ID in the request body
 
   try {
-      const coupon = await Coupon.deleteOne({ _id: id });
+    const coupon = await Coupon.deleteOne({ _id: id });
 
+    if (!coupon) {
+      return res.status(404).json({ message: "Coupon not found" });
+    }
 
-      if (!coupon) {
-          return res.status(404).json({ message: 'Coupon not found' });
-      }
+    await coupon.remove();
 
-      await coupon.remove();
-
-      res.json({ message: 'Coupon deleted successfully' });
+    res.json({ message: "Coupon deleted successfully" });
   } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: 'Server error' });
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
-}
+};
 
 module.exports = {
   getAdminLogin,
@@ -980,5 +1015,5 @@ module.exports = {
   getCouponEdit,
   updateCoupon,
   deleteCoupon,
-  salesReport
+  salesReport,
 };

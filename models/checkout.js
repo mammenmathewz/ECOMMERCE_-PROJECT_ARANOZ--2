@@ -68,6 +68,9 @@ paymentStatus: {
   type:String,
   default: 'Failed'
 },
+delivery_time: {
+  type: Date,
+},
   });
 
   module.exports = mongoose.model('Order',orderSchema)

@@ -173,6 +173,28 @@ function aggregateYearlySales() {
   ]).exec();
 }
 
+// Fetch daily delivered orders
+const getDailyDeliveredOrders = async () => {
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
+  return await Order.find({ is_delivered: true, date: { $gte: startOfDay } }).populate('user');
+};
+
+// Fetch weekly delivered orders
+const getWeeklyDeliveredOrders = async () => {
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  return await Order.find({ is_delivered: true, date: { $gte: oneWeekAgo } }).populate('user');
+};
+
+// Fetch yearly delivered orders
+const getYearlyDeliveredOrders = async () => {
+  const oneYearAgo = new Date();
+  oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+  return await Order.find({ is_delivered: true, date: { $gte: oneYearAgo } }).populate('user');
+};
+
+////GET ADMIN DASH/////
 
 const adminDash = async (req, res) => {
   try {
@@ -215,7 +237,6 @@ const adminDash = async (req, res) => {
     const dailyTotal = dailySales.reduce((sum,sale)=> sum+sale.totalSales,0);
     const yearlyTotal = yearlySales.reduce((sum,sale)=> sum+sale.totalSales,0);
 
-    
     console.log("weekly :" + JSON.stringify(dailySales+"  total="+dailyTotal));
 
     res.render("admin/index", {
@@ -233,6 +254,32 @@ const adminDash = async (req, res) => {
   }
 };
 
+const salesReport = async(req, res) => {
+  try {
+    let salesData;
+    switch (req.query.timePeriod) {
+      case 'daily':
+        salesData = await getDailyDeliveredOrders();
+        break;
+      case 'weekly':
+        salesData = await getWeeklyDeliveredOrders();
+        break;
+      case 'yearly':
+        salesData = await getYearlyDeliveredOrders();
+        break;
+      default:
+        // Handle invalid time periods
+        break;
+    }
+
+    res.json({ salesData });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error occurred while fetching sales data');
+  }
+};
+
+///////////////////////////////////////////////
 const dataPerDate = async(req,res)=>{
   try {
     const { startDate, endDate } = req.body;
@@ -932,5 +979,6 @@ module.exports = {
   postCoupon,
   getCouponEdit,
   updateCoupon,
-  deleteCoupon
+  deleteCoupon,
+  salesReport
 };

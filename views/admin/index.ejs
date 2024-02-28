@@ -1,5 +1,11 @@
 
 <%- include('../partials/adminHead') %>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css">
+<style>
+  th {
+    text-align: center;
+  }
+</style>
 <body>
     <div class="container-xxl position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
@@ -106,19 +112,65 @@
             <!-- Widgets End -->
 
      <!-- Footer Start -->
-            <div class="container-fluid pt-4 px-4">
-                <div class="bg-light rounded-top p-4">
-                    <div class="row">
-                        <div class="col-12 col-sm-6 text-center text-sm-start">
-                            &copy; <a href="#">Your Site Name</a>, All Right Reserved. 
-                        </div>
-                        <div class="col-12 col-sm-6 text-center text-sm-end">
-                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                            Designed By <a href="https://htmlcodex.com">HTML Codex</a>
-                        </br>
-                        Distributed By <a class="border-bottom" href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                        </div>
-                    </div>
+     <div class="container-fluid pt-4 px-4">
+      <div class="bg-light rounded-top p-4">
+        <button onclick="updateSalesReport('daily')">Daily</button>
+        <button onclick="updateSalesReport('weekly')">Weekly</button>
+        <button onclick="updateSalesReport('yearly')">Yearly</button>
+    
+        <table id="example" class="display" style="width:100%">
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Order ID</th>
+              <th>Ordered Date</th>
+              <th>Delivered On</th>
+              <th>Payment Type</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody id="orderTableBody">
+            <!-- The order data will be inserted here by the updateSalesReport function -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+    
+    <!-- <script>
+      function updateSalesReport(timePeriod) {
+        fetch(`/admin/salesReport?timePeriod=${timePeriod}`)
+          .then(response => response.json())
+          .then(data => {
+            const tableBody = document.getElementById('orderTableBody');
+            tableBody.innerHTML = ''; // Clear the existing table body
+    
+            // Add new rows to the table
+            data.salesData.forEach(order => {
+              const row = document.createElement('tr');
+    
+              row.innerHTML = `
+                <td>${order.user.first_name || ''} ${order.user.last_name || ''}</td>
+                <td>${order._id}</td>
+                <td>${new Date(order.date).toISOString().slice(0, 10)}</td>
+                <td>${order.is_delivered ? 'Yes' : 'No'}</td>
+                <td>${order.paymentMethod}</td>
+                <td>$${order.grandTotal.toFixed(2)}</td>
+              `;
+    
+              tableBody.appendChild(row);
+            });
+          });
+      }
+    </script> -->
+    
+                
+                
+                
+                    <button type="button" class="btn" style="color: white;background-color: #012970;"
+                      onclick="return ExportToExcel()"><i class="material-icons">Export to Excel</i> </button>
+                    <button type="button" class="btn" style="color: white;background-color: #012970;"
+                      onclick="return printTable()"><i class="material-icons">Print</i> </button>
+                  </div>
                 </div>
             </div>
             <!-- Footer End -->
@@ -131,6 +183,7 @@
     </div>
 
     <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="lib/chart/chart.min.js"></script>
@@ -140,15 +193,20 @@
     <script src="lib/tempusdominus/js/moment.min.js"></script>
     <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script>
+new DataTable('#example');
 
 $(function() {
   $('input[name="daterange"]').daterangepicker({
@@ -262,8 +320,6 @@ $(function() {
         var yearlySalestotal = <%- JSON.stringify(yearlyTotal) %>;
         var weeklySalestotal = <%- JSON.stringify(weeklyTotal) %>;
 
-
-     
         console.log("week"+weeklySalestotal );
 
     document.getElementById('dailySales').textContent = "₹ "+dailySalestotal;
@@ -272,6 +328,98 @@ $(function() {
 
 
       </script>
+<script>
+  $(document).ready(function() {
+  updateSalesReport('weekly');
+});
+
+
+function updateSalesReport(timePeriod) {
+  fetch(`/admin/salesReport?timePeriod=${timePeriod}`)
+    .then(response => response.json())
+    .then(data => {
+      const tableBody = document.getElementById('orderTableBody');
+      tableBody.innerHTML = ''; // Clear the existing table body
+
+      // Add new rows to the table
+      data.salesData.forEach(order => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td>${order.user.first_name || ''} ${order.user.last_name || ''}</td>
+          <td>${order._id}</td>
+          <td>${new Date(order.date).toISOString().slice(0, 10)}</td>
+          <td>${order.is_delivered ? 'Yes' : 'No'}</td>
+          <td>${order.paymentMethod}</td>
+          <td>$${order.grandTotal.toFixed(2)}</td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+
+      // Redraw DataTable
+      $('#example').DataTable().draw();
+    });
+}
+
+
+</script>
+
+
+      <script>
+        function ExportToExcel(type, fn, dl) {
+          var elt = document.getElementById("example");
+          var ws = XLSX.utils.table_to_sheet(elt);
+          
+          // Set column widths
+          ws["!cols"] = [];
+          var colCount = elt.rows[0].cells.length;
+          for (var i = 0; i < colCount; i++) {
+            ws["!cols"].push({ wpx: 100 });
+          }
+          
+          // Set row heights
+          ws["!rows"] = [];
+          var rowCount = elt.rows.length;
+          for (var i = 0; i < rowCount; i++) {
+            ws["!rows"].push({ hpt: 20 });
+          }
+          
+          var wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+        
+          return dl ?
+            XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+            XLSX.writeFile(wb, fn || ('MySheetName.' + (type || 'xlsx')));
+        }
+        
+        function printTable() {
+          var table = document.getElementById("example");
+          var newWin = window.open('', 'Print-Window');
+          newWin.document.open();
+          
+          newWin.document.write('<html><head><title>Print Table</title>');
+          newWin.document.write('<style>table { border-collapse: collapse; } table, th, td { border: 1px solid black; padding: 8px; }</style>');
+          newWin.document.write('</head><body>');
+        
+          newWin.document.write('<table>');
+        
+          for (var i = 0; i < table.rows.length; i++) {
+            newWin.document.write('<tr>');
+            for (var j = 0; j < table.rows[i].cells.length; j++) {
+              newWin.document.write('<td>' + table.rows[i].cells[j].innerHTML + '</td>');
+            }
+            newWin.document.write('</tr>');
+          }
+          newWin.document.write('</table>');
+          newWin.document.write('</body></html>');
+        
+          newWin.document.close();
+          setTimeout(function () { newWin.print(); }, 10);
+        }
+        
+          </script>
+        
       
           
 </body>

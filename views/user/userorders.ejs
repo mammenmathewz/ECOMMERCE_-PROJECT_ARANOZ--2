@@ -1,3 +1,7 @@
+
+
+
+
 <%- include('../partials/head') %>
 
 
@@ -10,8 +14,6 @@
 
     <section style="background-color: #ffffff; margin-top: 5%;">
       <div>
-
-
         <div class="row">
           <div class="col-lg-3">
             <div class="card mb-4">
@@ -26,7 +28,7 @@
                   <div class="btn-group" role="group" style="gap: 3%;">
                     <a href="/account"><button type="button" style="margin-right: 1%;"
                         class="btn btn-outline-primary btn-edit">Edit Profile</button></a>
-                    <a href="/myorder"><button type="button" class="btn btn-outline-primary btn-order">My orders</button></a>
+                    <button type="button" class="btn btn-outline-primary btn-order">My orders</button>
                     <button type="button" class="btn btn-outline-primary btn-password">Change Password</button>
 
 
@@ -125,128 +127,147 @@
           </div>
 
           <div class="col-lg-8">
-            <div class="card mb-4">
-              <div class="card-body">
-                <% if(user.address && user.address.length> 0) { %>
-                  <% user.address.forEach(function(address) { %>
-                    <div>
-                      <a class="edit" href="/editUser/<%= user._id %>/address/<%= address._id %>"
-                        style="margin-left: 80%; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="20"
-                          height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                          <path
-                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                          <path fill-rule="evenodd"
-                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                        </svg></a>
 
+  <h2>My Orders</h2>
+  <div class="table-responsive">
+      <table id="example" class="display" style="width:100%; ">
+        <thead>
+            <tr style="visibility:hidden">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
 
-                      <a href="#" onclick="deleteAddress('<%= user._id %>', '<%= address._id %>')"
-                        style="margin-left: 80%; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="20"
-                          height="20" style="margin-top: 1%;" fill="currentColor" class="bi bi-trash3"
-                          viewBox="0 0 16 16">
-                          <path
-                            d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
-                        </svg></a>
-                    </div>
+            </tr>
+        </thead>
+        <tbody>
+            <% orders.forEach(function(order) { %>
+                <tr>
+            <td>
+            <%= order._id.toString().slice(-4) %>
+          </td>
+         <td>
+            <% if (order.is_delivered) { %>
+                <p class="btn btn-success m-2"> Delivered </p>
+                <% } else if (order.paymentStatus==='Failed' ) { %>
+                <p class="btn btn-danger m-2">Payment failed</p>
+                <% } else if (order.user_cancelled) { %>
+                <p class="btn btn-danger m-2"> User Cancelled</p>
+                <% } else if (order.admin_cancelled) { %>
+                <p class="btn btn-danger m-2"> Admin Cancelled</p>
+                <% } else if (order.is_returned) { %>
+                <p class="btn btn-warning m-2"> Returned</p>
+                <% } else { %>
+                <p class="btn btn-info m-2">Pending</p>
+                <% } %>
+         </td>
 
-                    <p>
-                      <%= address.first_name %>
-                        <%= address.last_name %>
-                    </p>
-                    <p>
-                      <%= address.phone %>
-                    </p>
-                    <p>
-                      <%= address.address1 %>
-                    </p>
-                    <p>
-                      <%= address.address2 %>
-                    </p>
-                    <p>
-                      <%= address.district %>
-                    </p>
-                    <p>
-                      <%= address.state %>
-                    </p>
-                    <p>
-                      <%= address.pin %>
-                    </p>
-                    <hr>
-                    <% }); %>
-                      <% } else { %>
-                        <p>No addresses available.</p>
-                        <% } %>
+         
+          <td>
+            <%="Status: "+order.paymentStatus  %>
+          </td>
+          <td>
+            <%=" ₹"+ order.total %>
+          </td>
+          <td>
+            <select class="form-control" id="status<%= order._id %>">
+              <option value="">Status</option>
+              <% if(!order.is_delivered && !order.user_cancelled &&
+                    !order.admin_cancelled && order.paymentStatus !=='Failed' ) { %>
+              <!-- Show the cancel option if the order is not delivered, not cancelled by the user, and payment status is not failed -->
+              <option value="User Cancelled">Cancel</option>
+              <% } %>
+              <% if(order.is_delivered && !order.is_returned ) { %>
+              <!-- Show the return option if the order is delivered and not returned -->
+              <option value="Returned">Return</option>
+              <% } %>
+            </select>
+          </td>
+          <td>
+            <% order.items.forEach(function(item) { %>
 
+            <li>
+              <%= item.productId.productname +"×"%>
+              <%= item.quantity %>
+            </li>
 
-
-              </div>
+            <% }); %>
+          </td>
+          <td>
+            <div style="background-color: azure;">
+              <p style="padding: 1%;">
+                <% if(order.user.address[order.selectedAddress]) { %>
+                <%= order.user.address[order.selectedAddress].first_name %>
+                <%= order.user.address[order.selectedAddress].last_name %>,
+                <%= order.user.address[order.selectedAddress].address1%><br>
+                <%= order.user.address[order.selectedAddress].address2 %>,
+                <%= order.user.address[order.selectedAddress].district  %> ,
+                <%= order.user.address[order.selectedAddress].state %> ,
+                <%= order.user.address[order.selectedAddress].pin %><br>
+                <%= order.user.address[order.selectedAddress].phone %>
+                <% } else { %>
+                Address Unavailable
+                <% } %>
+              </p>
             </div>
+          </td>
+          </tr>
+        <% }); %>
+        </tbody>
+      </table>
 
-          </div>
+  </div>
+</div>
         </div>
       </div>
     </section>
 
 
-    <!--::footer_part end::-->
-
-    <!-- jquery plugins here-->
-    <!-- jquery -->
+  
     <script src="/user/js/jquery-1.12.1.min.js"></script>
-    <!-- popper js -->
+  
     <script src="/user/js/popper.min.js"></script>
-    <!-- bootstrap js -->
+
     <script src="/user/js/bootstrap.min.js"></script>
-    <!-- easing js -->
+
     <script src="/user/js/jquery.magnific-popup.js"></script>
-    <!-- swiper js -->
+
     <script src="/user/js/swiper.min.js"></script>
-    <!-- swiper js -->
+
     <script src="/user/js/masonry.pkgd.js"></script>
-    <!-- particles js -->
+
     <script src="/user/js/owl.carousel.min.js"></script>
     <script src="/user/js/jquery.nice-select.min.js"></script>
-    <!-- slick js -->
+   
     <script src="/user/js/slick.min.js"></script>
     <script src="/user/js/jquery.counterup.min.js"></script>
     <script src="/user/js/waypoints.min.js"></script>
-    <script src="/user/js/contact.js"></script>
+
     <script src="/user/js/jquery.ajaxchimp.min.js"></script>
     <script src="/user/js/jquery.form.js"></script>
     <script src="/user/js/jquery.validate.min.js"></script>
     <script src="/user/js/mail-script.js"></script>
     <script src="/user/js/stellar.js"></script>
-    <script src="/user/js/price_rangs.js"></script>
-    <!-- custom js -->
+  
     <script src="/user/js/custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
+    <script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
     
     <script>
+    $(document).ready(function() {
+    $('#example').DataTable();
+         columnDefs: [{
+        orderable: false,
+        targets: '_all'
+    }]
+});
 
-
-      function openForm() {
-        document.getElementById("myForm").style.display = "block";
-      }
-
-      function closeForm() {
-        document.getElementById("myForm").style.display = "none";
-      }
-
-
-
-
- 
-
-
-      $(".btn-password").click(function (e) {
-        e.preventDefault();
-        $.get("/changepass", function (data) {
-          $(".col-lg-8").html(data);
-        });
-      });
 
     </script>
     <script>
@@ -259,42 +280,9 @@
 
 
     </script>
-    <script>
-      function deleteAddress(userId, addressId) {
-        swal({
-          title: "Are you sure?",
-          text: "Once deleted, you will not be able to recover this address!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        })
-          .then((willDelete) => {
-            if (willDelete) {
-              fetch(`/deleteaddress/${userId}/address/${addressId}`, {
-                method: 'DELETE',
-              })
-                .then(response => {
-                  if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                  }
-                  return response.json();
-                })
-                .then(data => {
-                  swal("Poof! Your address has been deleted!", {
-                    icon: "success",
-                  });
-                  location.reload();
-                })
-                .catch(error => {
-                  console.error('There was a problem with the fetch operation:', error);
-                });
-            } else {
-              swal("Your address is safe!");
-            }
-          });
-      }
 
-    </script>
+
+
 
     </body>
 

@@ -239,7 +239,7 @@ const myOrder = async (req, res) => {
       .populate("items.productId")
       .populate("user")
       .sort({ date: -1 }); // Sort by date in descending order
-    res.render("user/myorder", { orders });
+    res.render("user/userorders", { orders });
   } catch (error) {
     console.log(error);
   }

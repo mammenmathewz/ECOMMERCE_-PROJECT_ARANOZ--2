@@ -261,12 +261,15 @@
                                     
                                   </div>
                                   <% if (cart.grandTotal > justuser.wallet) { %>
-                                    <div class="payment_item">
-                                        <div class="radion_btn">
-                                            <input type="radio" id="f-option5" name="selector" value="Cash on delivery" />
-                                            <label for="f-option5">Cash on delivery</label>
-                                        </div>
-                                    </div>
+                                    <% if (cart.grandTotal <= 1000) { %>
+                                      <div class="payment_item">
+                                          <div class="radion_btn">
+                                              <input type="radio" id="f-option5" name="selector" value="Cash on delivery" />
+                                              <label for="f-option5">Cash on delivery</label>
+                                          </div>
+                                      </div>
+                                  <% } %>
+                                  
                                     <div class="payment_item active">
                                         <div class="radion_btn">
                                             <input type="radio" id="f-option7" name="selector" value="Online payment" />

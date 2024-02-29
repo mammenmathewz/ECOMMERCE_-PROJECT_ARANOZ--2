@@ -1,267 +1,303 @@
 <%- include('../partials/head') %>
 
 
-<!-- Header part end-->
-<%- include('../partials/navbar') %>
-  <!--================Checkout Area =================-->
-
- 
+  <!-- Header part end-->
+  <%- include('../partials/navbar') %>
+    <!--================Checkout Area =================-->
 
 
-  <section style="background-color: #ffffff; margin-top: 5%;">
-    <div >
-     
-  
-      <div class="row">
-        <div class="col-lg-4">
-          <div class="card mb-4">
-            <div class="card-body text-center">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                class="rounded-circle img-fluid" style="width: 150px;">
-              <h5 class="my-3"> <%= user.first_name + " " + user.last_name %></h5>
-             <div class="d-flex justify-content-center mb-2">
- 
-    <div class="btn-group" role="group" style="gap: 3%;">
-      <a href="/account"><button type="button"  style="margin-right: 1%;" class="btn btn-outline-primary btn-edit">Edit Profile</button></a>
-      <button type="button" class="btn btn-outline-primary btn-order">My orders</button>
-      <button type="button" class="btn btn-outline-primary btn-password">Change Password</button>
 
-      
-      
-  </div>
-</div>
-<div class="d-flex justify-content-center mb-2">
-    <a href="/logout"><button type="button" class="btn btn-outline-dark">logout</button></a>
-</div>
-<button data-toggle="modal"  class="btn_3" data-target="#addressModal">CLICK TO ADD NEW ADDRESS</button>
-<% if (messages.info) { %>
-  <div style="margin-top: 2% ;" class="<%= messages.type %>" id="alert">
-      <%= messages.info %>
-  </div>
-  <% } %>
-<!-- Modal -->
-<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addressModalLabel">Add New Address</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form class="row contact_form" action="/addAddress" method="post" >
-          <input type="hidden" name="redirect" value="/account">
-            <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="first" name="first_name" placeholder="First name" required/>
-                
+
+    <section style="background-color: #ffffff; margin-top: 5%;">
+      <div>
+
+
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card mb-4">
+              <div class="card-body text-center">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                  class="rounded-circle img-fluid" style="width: 150px;">
+                <h5 class="my-3">
+                  <%= user.first_name + " " + user.last_name %>
+                </h5>
+                <div class="d-flex justify-content-center mb-2">
+
+                  <div class="btn-group" role="group" style="gap: 3%;">
+                    <a href="/account"><button type="button" style="margin-right: 1%;"
+                        class="btn btn-outline-primary btn-edit">Edit Profile</button></a>
+                    <button type="button" class="btn btn-outline-primary btn-order">My orders</button>
+                    <button type="button" class="btn btn-outline-primary btn-password">Change Password</button>
+
+
+
+                  </div>
+                </div>
+                <div class="d-flex justify-content-center mb-2">
+                  <a href="/logout"><button type="button" class="btn btn-outline-dark">logout</button></a>
+                </div>
+                <button data-toggle="modal" class="btn_3" data-target="#addressModal">CLICK TO ADD NEW ADDRESS</button>
+                <% if (messages.info) { %>
+                  <div style="margin-top: 2% ;" class="<%= messages.type %>" id="alert">
+                    <%= messages.info %>
+                  </div>
+                  <% } %>
+                    <!-- Modal -->
+                    <div class="modal fade" id="addressModal" tabindex="-1" role="dialog"
+                      aria-labelledby="addressModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="addressModalLabel">Add New Address</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">×</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            <form class="row contact_form" action="/addAddress" method="post">
+                              <input type="hidden" name="redirect" value="/account">
+                              <div class="col-md-6 form-group p_star">
+                                <input type="text" class="form-control" id="first" name="first_name"
+                                  placeholder="First name" required />
+
+                              </div>
+                              <div class="col-md-6 form-group p_star">
+                                <input type="text" class="form-control" id="last" name="last_name"
+                                  placeholder="Last name" required />
+
+                              </div>
+
+                              <div class="col-md-6 form-group p_star">
+                                <input type="text" class="form-control" id="number" name="phone"
+                                  placeholder="Phone number" required />
+
+                              </div>
+
+
+                              <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="add1" name="address1"
+                                  placeholder="Address line 01" required />
+
+                              </div>
+                              <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="add2" name="address2"
+                                  placeholder="Address line 02" required />
+
+                              </div>
+                              <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="city" name="city" placeholder="Town/City"
+                                  required />
+
+                              </div>
+                              <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="district" name="district"
+                                  placeholder="District" required />
+
+                              </div>
+                              <div class="col-md-12 form-group p_star">
+                                <input type="text" class="form-control" id="state" name="state" placeholder="State"
+                                  required />
+
+                              </div>
+
+                              <div class="col-md-12 form-group">
+                                <input type="text" class="form-control" id="zip" name="pin" placeholder="Postcode/ZIP"
+                                  required />
+                              </div>
+
+                              <button style="margin-left: auto; margin-right: auto;" class="tp_btn" type="submit">ADD
+                                NEW ADDRESS </button>
+                            </form>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                          </div>
+                        </div>
+                      </div>
+
+
+                    </div>
+
+              </div>
             </div>
-            <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="last" name="last_name" placeholder="Last name" required/>
-                
-            </div>
 
-            <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="number" name="phone" placeholder="Phone number" required/>
-               
-            </div>
-
-
-            <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add1" name="address1" placeholder="Address line 01" required/>
-               
-            </div>
-            <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="add2" name="address2" placeholder="Address line 02" required/>
-              
-            </div>
-            <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" required/>
-               
-            </div>
-            <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="district" name="district" placeholder="District"required/>
-                
-            </div>
-            <div class="col-md-12 form-group p_star">
-                <input type="text" class="form-control" id="state" name="state" placeholder="State" required/>
-               
-            </div>
-
-            <div class="col-md-12 form-group">
-                <input type="text" class="form-control" id="zip" name="pin"
-                    placeholder="Postcode/ZIP" required/>
-            </div>
-
-           <button style="margin-left: auto; margin-right: auto;" class="tp_btn" type="submit">ADD NEW ADDRESS </button>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-     
-      </div>
-    </div>
-  </div>
-
-  
-</div>
-
-            </div>
           </div>
-          
-        </div>
 
-        <div class="col-lg-8">
-          <div class="card mb-4">
-            <div class="card-body">
-              <% if(user.address && user.address.length > 0) { %>
-                <% user.address.forEach(function(address) { %>
+          <div class="col-lg-8">
+            <div class="card mb-4">
+              <div class="card-body">
+                <% if(user.address && user.address.length> 0) { %>
+                  <% user.address.forEach(function(address) { %>
                     <div>
-                        <a class="edit" href="/editUser/<%= user._id %>/address/<%= address._id %>" style="margin-left: 80%; cursor: pointer;"><svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                  </svg></a>
+                      <a class="edit" href="/editUser/<%= user._id %>/address/<%= address._id %>"
+                        style="margin-left: 80%; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                          height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                          <path
+                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                          <path fill-rule="evenodd"
+                            d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                        </svg></a>
 
-                  
-                  <a href="#" onclick="deleteAddress('<%= user._id %>', '<%= address._id %>')" style="margin-left: 80%; cursor: pointer;"><svg  xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="margin-top: 1%;" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
-                  </svg></a>
-                 </div>
 
-                    <p><%= address.first_name %> <%= address.last_name %></p>
-                    <p><%= address.phone %></p>
-                    <p><%= address.address1 %></p>
-                    <p><%= address.address2 %></p>
-                    <p><%= address.district %></p>
-                    <p><%= address.state %></p>
-                    <p><%= address.pin %></p>
+                      <a href="#" onclick="deleteAddress('<%= user._id %>', '<%= address._id %>')"
+                        style="margin-left: 80%; cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="20"
+                          height="20" style="margin-top: 1%;" fill="currentColor" class="bi bi-trash3"
+                          viewBox="0 0 16 16">
+                          <path
+                            d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                        </svg></a>
+                    </div>
+
+                    <p>
+                      <%= address.first_name %>
+                        <%= address.last_name %>
+                    </p>
+                    <p>
+                      <%= address.phone %>
+                    </p>
+                    <p>
+                      <%= address.address1 %>
+                    </p>
+                    <p>
+                      <%= address.address2 %>
+                    </p>
+                    <p>
+                      <%= address.district %>
+                    </p>
+                    <p>
+                      <%= address.state %>
+                    </p>
+                    <p>
+                      <%= address.pin %>
+                    </p>
                     <hr>
-                <% }); %>
-            <% } else { %>
-                <p>No addresses available.</p>
-            <% } %>
-            
-             
-              
+                    <% }); %>
+                      <% } else { %>
+                        <p>No addresses available.</p>
+                        <% } %>
+
+
+
+              </div>
             </div>
+
           </div>
-          
         </div>
       </div>
-    </div>
-  </section>
-  
- 
-  <!--::footer_part end::-->
-
-  <!-- jquery plugins here-->
-  <!-- jquery -->
-  <script src="/user/js/jquery-1.12.1.min.js"></script>
-  <!-- popper js -->
-  <script src="/user/js/popper.min.js"></script>
-  <!-- bootstrap js -->
-  <script src="/user/js/bootstrap.min.js"></script>
-  <!-- easing js -->
-  <script src="/user/js/jquery.magnific-popup.js"></script>
-  <!-- swiper js -->
-  <script src="/user/js/swiper.min.js"></script>
-  <!-- swiper js -->
-  <script src="/user/js/masonry.pkgd.js"></script>
-  <!-- particles js -->
-  <script src="/user/js/owl.carousel.min.js"></script>
-  <script src="/user/js/jquery.nice-select.min.js"></script>
-  <!-- slick js -->
-  <script src="/user/js/slick.min.js"></script>
-  <script src="/user/js/jquery.counterup.min.js"></script>
-  <script src="/user/js/waypoints.min.js"></script>
-  <script src="/user/js/contact.js"></script>
-  <script src="/user/js/jquery.ajaxchimp.min.js"></script>
-  <script src="/user/js/jquery.form.js"></script>
-  <script src="/user/js/jquery.validate.min.js"></script>
-  <script src="/user/js/mail-script.js"></script>
-  <script src="/user/js/stellar.js"></script>
-  <script src="/user/js/price_rangs.js"></script>
-  <!-- custom js -->
-  <script src="/user/js/custom.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    </section>
 
 
-  <script>
-    function openForm() {
-  document.getElementById("myForm").style.display = "block";
-}
+    <!--::footer_part end::-->
 
-function closeForm() {
-  document.getElementById("myForm").style.display = "none";
-}
+    <!-- jquery plugins here-->
+    <!-- jquery -->
+    <script src="/user/js/jquery-1.12.1.min.js"></script>
+    <!-- popper js -->
+    <script src="/user/js/popper.min.js"></script>
+    <!-- bootstrap js -->
+    <script src="/user/js/bootstrap.min.js"></script>
+    <!-- easing js -->
+    <script src="/user/js/jquery.magnific-popup.js"></script>
+    <!-- swiper js -->
+    <script src="/user/js/swiper.min.js"></script>
+    <!-- swiper js -->
+    <script src="/user/js/masonry.pkgd.js"></script>
+    <!-- particles js -->
+    <script src="/user/js/owl.carousel.min.js"></script>
+    <script src="/user/js/jquery.nice-select.min.js"></script>
+    <!-- slick js -->
+    <script src="/user/js/slick.min.js"></script>
+    <script src="/user/js/jquery.counterup.min.js"></script>
+    <script src="/user/js/waypoints.min.js"></script>
+    <script src="/user/js/contact.js"></script>
+    <script src="/user/js/jquery.ajaxchimp.min.js"></script>
+    <script src="/user/js/jquery.form.js"></script>
+    <script src="/user/js/jquery.validate.min.js"></script>
+    <script src="/user/js/mail-script.js"></script>
+    <script src="/user/js/stellar.js"></script>
+    <script src="/user/js/price_rangs.js"></script>
+    <!-- custom js -->
+    <script src="/user/js/custom.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 
+    <script>
+      function openForm() {
+        document.getElementById("myForm").style.display = "block";
+      }
 
-
-$(".btn-order").click(function(e) {
-    e.preventDefault();
-    $.get("/myorder", function(data) {
-        $(".col-lg-8").html(data);
-    });
-});
-
-
-$(".btn-password").click(function(e) {
-    e.preventDefault();
-    $.get("/changepass", function(data) {
-        $(".col-lg-8").html(data);
-    });
-});
-
-  </script>
-     <script>
-      window.onload = function () {
-          setTimeout(function () {
-              var alert = document.getElementById('alert');
-              if (alert) alert.remove()
-          }, 3000);
+      function closeForm() {
+        document.getElementById("myForm").style.display = "none";
       }
 
 
-  </script>
-  <script>
- function deleteAddress(userId, addressId) {
-  swal({
-    title: "Are you sure?",
-    text: "Once deleted, you will not be able to recover this address!",
-    icon: "warning",
-    buttons: true,
-    dangerMode: true,
-  })
-  .then((willDelete) => {
-    if (willDelete) {
-      fetch(`/deleteaddress/${userId}/address/${addressId}`, {
-        method: 'DELETE',
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        swal("Poof! Your address has been deleted!", {
-          icon: "success",
+
+
+      $(".btn-order").click(function (e) {
+        e.preventDefault();
+        $.get("/myorder", function (data) {
+          $(".col-lg-8").html(data);
         });
-        location.reload();
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
       });
-    } else {
-      swal("Your address is safe!");
-    }
-  });
-}
 
-</script>
 
-</body>
+      $(".btn-password").click(function (e) {
+        e.preventDefault();
+        $.get("/changepass", function (data) {
+          $(".col-lg-8").html(data);
+        });
+      });
 
-</html>
+    </script>
+    <script>
+      window.onload = function () {
+        setTimeout(function () {
+          var alert = document.getElementById('alert');
+          if (alert) alert.remove()
+        }, 3000);
+      }
+
+
+    </script>
+    <script>
+      function deleteAddress(userId, addressId) {
+        swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover this address!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+          .then((willDelete) => {
+            if (willDelete) {
+              fetch(`/deleteaddress/${userId}/address/${addressId}`, {
+                method: 'DELETE',
+              })
+                .then(response => {
+                  if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                  }
+                  return response.json();
+                })
+                .then(data => {
+                  swal("Poof! Your address has been deleted!", {
+                    icon: "success",
+                  });
+                  location.reload();
+                })
+                .catch(error => {
+                  console.error('There was a problem with the fetch operation:', error);
+                });
+            } else {
+              swal("Your address is safe!");
+            }
+          });
+      }
+
+    </script>
+
+    </body>
+
+    </html>

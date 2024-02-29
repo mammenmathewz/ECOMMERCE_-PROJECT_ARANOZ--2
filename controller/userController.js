@@ -22,7 +22,7 @@ const getHome = async (req, res) => {
 
 const getProducts = async (req, res) => {
   try {
-    const { page = 1, limit = 2 } = req.query;
+    const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
 
     // Count the total number of products
@@ -34,12 +34,24 @@ const getProducts = async (req, res) => {
     // Calculate the total number of pages
     const pages = Math.ceil(totalProducts / limit);
 
+    const mostOrderedProducts = await Order.aggregate([
+      { $unwind: "$items" },
+      { $group: { _id: "$items.productId", total: { $sum: "$items.quantity" } } },
+      { $sort: { total: -1 } },
+      { $limit: 10 }
+    ]);
+
+    // Get the product IDs
+    const productIds = mostOrderedProducts.map(item => item._id);
+    console.log("id:"+productIds);
+
     let product = await Product.find({ deleted: false, number: { $gte: 1 } })
       .limit(limit)
       .skip(skip);
 
     // Fetch the brands
     let brands = await Brand.find();
+    let mostOrderedProductsDisplay = await Product.find({ _id: { $in: productIds } });
 
     // Pass the current page, total pages, and brands to the EJS template
     res.render("user/products", {
@@ -47,7 +59,10 @@ const getProducts = async (req, res) => {
       currentPage: page,
       pages: pages,
       brands: brands,
+      mostOrderedProducts: JSON.stringify(productIds),// Convert the array to a JSON string
+      mostOrderedProductsDisplay: mostOrderedProductsDisplay
     });
+    
   } catch (error) {
     console.log(error);
     res.send("Error occurred while fetching data");
@@ -428,10 +443,18 @@ const resetPasswordWithoutOTP = async (req, res) => {
 
 const filterAndSortProducts = async (req, res) => {
   try {
-    const { page = 1, limit = 2, sort = "1", categories, brands } = req.query;
+    const { page = 1, limit = 10, sort = "1", categories, brands, search = "" } = req.query;
     const skip = (page - 1) * limit;
 
     let query = { deleted: false, number: { $gte: 1 } };
+
+    // Handle search
+    if (search) {
+      query.$or = [
+        { productname: { $regex: search, $options: 'i' } },
+        { 'brand.name': { $regex: search, $options: 'i' } }
+      ];
+    }
 
     // Handle category filtering
     if (categories) {
@@ -458,18 +481,30 @@ const filterAndSortProducts = async (req, res) => {
     // Calculate the total number of pages
     const pages = Math.ceil(totalProducts / limit);
 
+    // Find the 10 most ordered products
+    const mostOrderedProducts = await Order.aggregate([
+      { $unwind: "$items" },
+      { $group: { _id: "$items.productId", total: { $sum: "$items.quantity" } } },
+      { $sort: { total: -1 } },
+      { $limit: 10 }
+    ]);
+
+    // Get the product IDs
+    const productIds = mostOrderedProducts.map(item => item._id.toString());
+
     let product = await Product.find(query)
       .sort(sortQuery)
       .limit(limit)
       .skip(skip);
 
     // Send a JSON response
-    res.json({ product: product, currentPage: page, pages: pages });
+    res.json({ product: product, currentPage: page, pages: pages, mostOrderedProducts: productIds });
   } catch (error) {
     console.log(error);
     res.status(500).send("Error occurred while fetching data");
   }
 };
+
 
 const getWallet = async(req,res)=>{
   try {

@@ -77,11 +77,9 @@
                                 
                                 <div class="single_product_menu d-flex">
                                     <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="search"
-                                            aria-describedby="inputGroupPrepend">
+                                        <input type="text" class="form-control" id="search-input" placeholder="search" aria-describedby="inputGroupPrepend">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroupPrepend"><i
-                                                    class="ti-search"></i></span>
+                                            <span class="input-group-text" id="inputGroupPrepend"><i class="ti-search"></i></span>
                                         </div>
                                     </div>
                                 </div>
@@ -93,9 +91,16 @@
                         <% product.forEach((product)=> { %>
                             <div class="col-lg-4 col-sm-6">
                                 <div class="single_product_item">
-                                    <div style="margin-left: 20%;"> <a href="/viewproduct/<%= product._id %>">
+                                    <% if (mostOrderedProducts.includes(product._id.toString())) { %>
+                                        <div style="position: absolute; top: 0; left: 0;">
+                                            <img style="height: 55px; width: 35px;" src="\user\img\best-seller.png" alt="Best Selling" />
+                                        </div>
+                                    <% } %>
+                                    <div style="margin-left: 20%; position: relative;"> 
+                                        <a href="/viewproduct/<%= product._id %>">
                                             <img src="<%= product.images[0] %>" alt="watch" style="object-fit:scale-down"; height="300px">
-                                        </a></div>
+                                        </a>
+                                    </div>
                                     <div class="single_product_text">
                                         <h4>
                                             <%= product.productname %>
@@ -106,8 +111,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <% }) %>
-
+                        <% }) %>
+                        
+                        
+                        
+                        
                             
                             
                             
@@ -158,45 +166,25 @@
             </div>
             <div class="row align-items-center justify-content-between">
                 <div class="col-lg-12">
-                    <div class="best_product_slider owl-carousel">
-                        <div class="single_product_item">
-                            <img src="/img/product/product_1.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
+                  <div class="best_product_slider owl-carousel">
+                    <% mostOrderedProductsDisplay.forEach((product) => { %>
+                      <div class="single_product_item">
+                        <a href="/viewproduct/<%= product._id %>">
+                            <img src="<%= product.images[0] %>" alt="watch" style="object-fit:scale-down"; height="300px">
+                        </a>
+                        <div class="single_product_text">
+                          <h4><%= product.productname %></h4>
+                          <h3>$<%= product.saleprice %></h3>
                         </div>
-                        <div class="single_product_item">
-                            <img src="/img/product/product_2.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="/img/product/product_3.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="/img/product/product_4.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="img/product/product_5.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                    </div>
+                      </div>
+                    <% }) %>
+                  </div>
                 </div>
-            </div>
+              </div>
+              
+              
+              
+              
         </div>
     </section>
     <!-- product_list part end-->
@@ -236,7 +224,10 @@
     <!-- custom js -->
     <script src="/user/js/custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+    <script>
+        var mostOrderedProducts = <%= mostOrderedProducts %>; // Parse the JSON string to a JavaScript array
+      </script>
+      
 
     <script>
 $(document).ready(function() {
@@ -244,24 +235,22 @@ $(document).ready(function() {
   var selectedBrands = [];
   var sortOption = '';
   var currentPage = 1;
-  var limit = 2;
+  var limit = 10;
 
   // Set up an event handler for the pagination links
   $(document).on('click', '.pagination a', function(event) {
-    // Prevent the default action
     event.preventDefault();
-
-    // Get the page number from the link's href attribute
     var page = $(this).attr('href').split('=')[1];
-
-    // Update the currentPage variable
     currentPage = parseInt(page);
-
-    // Trigger the AJAX request
     $('.category-checkbox, .brand-checkbox, select').trigger('change');
   });
-    $('.category-checkbox, .brand-checkbox, select').change(function() {
-        if ($(this).hasClass('category-checkbox')) {
+
+  $('#search-input').on('input', function() {
+    $('.category-checkbox, .brand-checkbox, select').trigger('change');
+  });
+
+  $('.category-checkbox, .brand-checkbox, select').change(function() {
+    if ($(this).hasClass('category-checkbox')) {
             var category = $(this).siblings('a').text();
             if ($(this).is(':checked')) {
                 selectedCategories.push(category);
@@ -283,56 +272,62 @@ $(document).ready(function() {
             }
         } else if ($(this).is('select')) {
             sortOption = $(this).val();
+        } 
+
+    var searchTerm = $('#search-input').val();
+
+    $.ajax({
+      url: '/filterAndSortProducts',
+      type: 'GET',
+      data: { categories: selectedCategories, brands: selectedBrands, sort: sortOption, page: currentPage, limit: limit, search: searchTerm },
+      success: function(data) {
+        // Clear the current products
+        $('.latest_product_inner').empty();
+
+        // Check if there are any products in the response
+        if (data.product.length > 0) {
+          // Loop through the products and add them to the page
+          data.product.forEach(function(product) {
+            var isBestSeller = data.mostOrderedProducts.includes(product._id);
+            $('.latest_product_inner').append(`
+              <div class="col-lg-4 col-sm-6">
+                <div class="single_product_item">
+                    ${isBestSeller ? '<div style="position: absolute; top: 0; left: 0;"><img style="height: 55px; width: 35px;" src="/user/img/best-seller.png" alt="Best Selling" /></div>' : ''}
+                  <div style="margin-left: 20%;"> 
+                    <a href="/viewproduct/${product._id}">
+                      <img src="${product.images[0]}" alt="watch" style="object-fit:scale-down"; height="300px">
+                    </a>
+                  </div>
+                  <div class="single_product_text">
+                    <h4>${product.productname}</h4>
+                    <h3>$ ${product.saleprice}</h3>
+                    <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+                  </div>
+                </div>
+              </div>
+            `);
+          });
+        } else {
+          // If there are no products, display a message
+          $('.latest_product_inner').append('<p>No products found for your search.</p>');
         }
-       
 
-        $.ajax({
-            url: '/filterAndSortProducts',
-            type: 'GET',
-            data: { categories: selectedCategories, brands: selectedBrands, sort: sortOption, page: currentPage, limit: limit },
-            success: function(data) {
-  // Clear the current products
-  $('.latest_product_inner').empty();
-
-  // Loop through the products and add them to the page
-  data.product.forEach(function(product) {
-    $('.latest_product_inner').append(`
-      <div class="col-lg-4 col-sm-6">
-        <div class="single_product_item">
-          <div style="margin-left: 20%;"> 
-            <a href="/viewproduct/${product._id}">
-              <img src="${product.images[0]}" alt="watch" style="object-fit:scale-down"; height="300px">
-            </a>
-          </div>
-          <div class="single_product_text">
-            <h4>${product.productname}</h4>
-            <h3>$ ${product.saleprice}</h3>
-            <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-          </div>
-        </div>
-      </div>
-    `);
-  });
-
-  
-  // Update the pagination links
-  var pagination = $('.pagination');
-  pagination.empty();
-  if (data.currentPage > 1) {
-    pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage - 1) + '"><i class="ti-angle-double-left"></i></a></li>');
-  }
-  for (var i = 1; i <= data.pages; i++) {
-    pagination.append('<li class="page-item' + (i == data.currentPage ? ' active' : '') + '"><a class="page-link" href="?page=' + i + '">' + i + '</a></li>');
-  }
-  if (data.currentPage < data.pages) {
-    pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage + 1) + '"><i class="ti-angle-double-right"></i></a></li>');
-  }
-}
-
-        });
+        // Update the pagination links
+        var pagination = $('.pagination');
+        pagination.empty();
+        if (data.currentPage > 1) {
+          pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage - 1) + '"><i class="ti-angle-double-left"></i></a></li>');
+        }
+        for (var i = 1; i <= data.pages; i++) {
+          pagination.append('<li class="page-item' + (i == data.currentPage ? ' active' : '') + '"><a class="page-link" href="?page=' + i + '">' + i + '</a></li>');
+        }
+        if (data.currentPage < data.pages) {
+          pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage + 1) + '"><i class="ti-angle-double-right"></i></a></li>');
+        }
+      }
     });
+  });
 });
-
 
 
     

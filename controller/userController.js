@@ -231,19 +231,29 @@ const deleteAddress = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 const myOrder = async (req, res) => {
   try {
+    const page = req.query.page || 1; // Get the page number from the query parameters
+    const limit = 10; // Set the number of orders per page
+    const skip = (page - 1) * limit; // Calculate the number of orders to skip
+
     const user_id = req.session.user._id;
     const orders = await Order.find({ user: user_id })
       .populate("items.productId")
       .populate("user")
-      .sort({ date: -1 }); // Sort by date in descending order
-    res.render("user/userorders", { orders });
+      .sort({ date: -1 })
+      .skip(skip)
+      .limit(limit); // Limit the number of orders and skip the orders from the previous pages
+
+    const count = await Order.countDocuments({ user: user_id });
+    const pages = Math.ceil(count / limit);
+
+    res.render("user/userorders", { orders, currentPage: page, pages });
   } catch (error) {
     console.log(error);
   }
 };
+
 
 const changePassword_Profile = async (req, res) => {
   try {

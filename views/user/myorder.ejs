@@ -61,16 +61,17 @@
                                 
                                 <div style="background-color: azure;">
                                     <p style="padding: 1%;">
-                                        <%= order.user.address[order.selectedAddress].first_name %>
-                                        <%= order.user.address[order.selectedAddress].last_name %>,
+                                        <% if(order.user.address[order.selectedAddress]) { %>
+                                            <%= order.user.address[order.selectedAddress].first_name %> <%= order.user.address[order.selectedAddress].last_name %>,
                                             <%= order.user.address[order.selectedAddress].address1 %><br>
-                                                <%= order.user.address[order.selectedAddress].adddress2 %>,
-                                                    <%= order.user.address[order.selectedAddress].district %> ,
-                                                        <%= order.user.address[order.selectedAddress].state %> ,
-                                                            <%= order.user.address[order.selectedAddress].pin %>
-                                                                <br>
-                                                                <%= order.user.address[order.selectedAddress].phone
-                                                                    %>
+                                            <%= order.user.address[order.selectedAddress].address2 %>,
+                                            <%= order.user.address[order.selectedAddress].district %> ,
+                                            <%= order.user.address[order.selectedAddress].state %> ,
+                                            <%= order.user.address[order.selectedAddress].pin %><br>
+                                            <%= order.user.address[order.selectedAddress].phone %>
+                                        <% } else { %>
+                                            Address Unavailable
+                                        <% } %>
                                     </p>
                                 </div>
                             </td>

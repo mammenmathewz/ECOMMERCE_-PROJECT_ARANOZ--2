@@ -8,6 +8,12 @@ const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const flash = require("express-flash");
 const Order = require("../models/checkout");
+const Razorpay = require('razorpay')
+
+var instance = new Razorpay({
+  key_id: process.env.KEY_ID,
+  key_secret: process.env.API_KEY,
+});
 
 const saltRounds = 10;
 
@@ -231,10 +237,12 @@ const deleteAddress = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 const myOrder = async (req, res) => {
   try {
     const page = req.query.page || 1; // Get the page number from the query parameters
-    const limit = 10; // Set the number of orders per page
+    const limit = 4; // Set the number of orders per page
     const skip = (page - 1) * limit; // Calculate the number of orders to skip
 
     const user_id = req.session.user._id;
@@ -527,6 +535,45 @@ const getWallet = async(req,res)=>{
 }
 
 
+const generateOrderid = async(req,res)=>{
+  try {
+    const userId = req.session.user._id;
+    const clientOrderId = req.body.orderId; 
+
+    let existingOrder;
+
+    try {
+      existingOrder = await Order.findOne({ _id: clientOrderId,user:userId }).populate("user").populate("items.productId");
+     
+    } catch (error) {
+      console.log('Error message:', error.message);
+      console.log('Error stack:', error.stack);
+    }
+    
+    var options = {
+      amount: existingOrder.grandTotal * 100,  // Use the grandTotal of the existing order
+      currency: "INR",
+      receipt: "order_rcptid_" + Math.random().toString(36).substring(7)
+    };
+    console.log(options.receipt);
+
+    instance.orders.create(options)
+    .then(function(order) { 
+      req.session.orderId = existingOrder._id;
+      res.json({ orderId: order.id });
+    })
+    .catch(function(err) {
+      console.log(err);
+      return res.status(500).send({ message: err.message });
+    });
+
+  } catch (error) {
+    console.log('Error message:', error.message);
+    console.log('Error stack:', error.stack);
+  }
+}
+
+
 
 module.exports = {
   getHome,
@@ -548,5 +595,6 @@ module.exports = {
   changePassword_Profile,
   resetPasswordWithoutOTP,
   filterAndSortProducts,
-  getWallet
+  getWallet,
+  generateOrderid
 };

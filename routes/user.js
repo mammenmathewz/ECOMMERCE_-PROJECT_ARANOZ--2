@@ -39,6 +39,8 @@ userRouter.post('/paymentverify',auth.isUserLogin,orderController.verify)
 
 userRouter.get('/confirmation/:orderId',auth.isUserLogin,orderController.getConfirmation)
 userRouter.get('/myorder',auth.isUserLogin,userController.myOrder)
+userRouter.post('/getOrderDetails',auth.isUserLogin,userController.generateOrderid)
+
 userRouter.get('/editUser/:userId/address/:addressId', auth.isUserLogin, userController.editUser);
 userRouter.post('/reset-password',auth.isUserLogout,userController.resetPassword)
 userRouter.post('/updateaddress/:userId/address/:addressId',auth.isUserLogin,userController.updateAddress)

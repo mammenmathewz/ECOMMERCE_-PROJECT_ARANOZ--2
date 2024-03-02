@@ -71,6 +71,9 @@ paymentStatus: {
 delivery_time: {
   type: Date,
 },
+invoice:{
+  type:String
+},
   });
 
   module.exports = mongoose.model('Order',orderSchema)

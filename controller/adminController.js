@@ -774,10 +774,11 @@ const getOrderManagement = async (req, res) => {
     console.log(error);
   }
 };
+
 const switchStatus = async (req, res) => {
   const orderId = req.params.id; // Get the order ID from the URL
   const status = req.body.status; // Get the new status from the request body
-  console.log(status);
+  console.log("status  : : "+status);
 
   try {
     const order = await Order.findById(orderId)

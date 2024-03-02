@@ -533,8 +533,6 @@ const getWallet = async(req,res)=>{
     console.log(error);
   }
 }
-
-
 const generateOrderid = async(req,res)=>{
   try {
     const userId = req.session.user._id;
@@ -545,6 +543,16 @@ const generateOrderid = async(req,res)=>{
     try {
       existingOrder = await Order.findOne({ _id: clientOrderId,user:userId }).populate("user").populate("items.productId");
      
+      // Check if products are in stock
+      for (let item of existingOrder.items) {
+        if (item.productId.number < item.quantity) {
+          return res.status(400).json({ message: `Product ${item.productId.productname} is out of stock.` });
+        } else {
+          console.log(true);
+        }
+      }
+      
+
     } catch (error) {
       console.log('Error message:', error.message);
       console.log('Error stack:', error.stack);
@@ -572,6 +580,7 @@ const generateOrderid = async(req,res)=>{
     console.log('Error stack:', error.stack);
   }
 }
+
 
 
 

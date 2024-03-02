@@ -21,21 +21,22 @@
                 <h5 class="my-3">
                   <%= user.first_name + " " + user.last_name %>
                 </h5>
-                <div class="d-flex justify-content-center mb-2">
-
-                  <div class="btn-group" role="group" style="gap: 3%;">
-                    <a href="/account"><button type="button" style="margin-right: 1%;"
-                        class="btn btn-outline-primary btn-edit">Edit Profile</button></a>
-                    <a href="/myorder"><button type="button" class="btn btn-outline-primary btn-order">My orders</button></a>
-                    <button type="button" class="btn btn-outline-primary btn-password">Change Password</button>
-
-
-
+                <style>
+                  .btn {
+                    width: 200px;  /* Adjust as needed */
+                    height: 50px;  /* Adjust as needed */
+                  }
+                  </style>
+                  
+                  <div class="d-flex justify-content-center mb-2">
+                    <div class="btn-group d-flex flex-column align-items-stretch" role="group" style="gap: 1%;">
+                      <a href="/account"><button type="button" class="btn btn-outline-primary btn-edit my-2">Edit Profile</button></a>
+                      <a href="/myorder"><button type="button" class="btn btn-outline-primary btn-order my-2">My orders</button></a>
+                      <button type="button" class="btn btn-outline-primary btn-order my-2 btn-password">Change Password</button>
+                      <a href="/logout"><button type="button" class="btn btn-outline-dark my-2">logout</button></a>
+                    </div>
                   </div>
-                </div>
-                <div class="d-flex justify-content-center mb-2">
-                  <a href="/logout"><button type="button" class="btn btn-outline-dark">logout</button></a>
-                </div>
+               
                 <button data-toggle="modal" class="btn_3" data-target="#addressModal">CLICK TO ADD NEW ADDRESS</button>
                 <% if (messages.info) { %>
                   <div style="margin-top: 2% ;" class="<%= messages.type %>" id="alert">

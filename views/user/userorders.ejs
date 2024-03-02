@@ -1,402 +1,479 @@
 <%- include('../partials/head') %>
 
 
-  <!-- Header part end-->
-  <%- include('../partials/navbar') %>
-    <!--================Checkout Area =================-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+<!-- Header part end-->
+<%- include('../partials/navbar') %>
+<!--================Checkout Area =================-->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
+<style>
+  #rzp-button1 {
+    background-color: #3363ff;
+    border: #3363ff;
+    border-radius: 10px;
+    color: #ffffff;
+    width: 100px;
+    height: 50px;
+  }
+
+  #rzp-button1:hover {
+    background-color: #0019bb;
+  }
+</style>
 
 
 
-    <section style="background-color: #ffffff; margin-top: 5%;">
-      <div>
-        <div class="row">
-          <div class="col-lg-3">
-            <div class="card mb-4">
-              <div class="card-body text-center">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                  class="rounded-circle img-fluid" style="width: 150px;">
-                <h5 class="my-3">
-                  <%= user.first_name + " " + user.last_name %>
-                </h5>
-                <div class="d-flex justify-content-center mb-2">
-
-                  <div class="btn-group" role="group" style="gap: 1%;">
-                    <a href="/account"><button type="button" style="margin-right: 1%;"
-                        class="btn btn-outline-primary btn-edit">Edit Profile</button></a>
-                    <button type="button" class="btn btn-outline-primary btn-order">My
-                      orders</button>
-                    <button type="button" class="btn btn-outline-primary btn-password">Change
-                      Password</button>
-
-
-
-                  </div>
+<section style="background-color: #ffffff; margin-top: 5%;">
+  <div>
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+            <h5 class="my-3">
+              <%= user.first_name + " " + user.last_name %>
+            </h5>
+            <style>
+              .btn {
+                width: 200px;  /* Adjust as needed */
+                height: 50px;  /* Adjust as needed */
+              }
+              </style>
+              
+              <div class="d-flex justify-content-center mb-2">
+                <div class="btn-group d-flex flex-column align-items-stretch" role="group" style="gap: 1%;">
+                  <a href="/account"><button type="button" class="btn btn-outline-primary btn-edit my-2">Edit Profile</button></a>
+                  <a href="/myorder"><button type="button" class="btn btn-outline-primary btn-order my-2">My orders</button></a>
+                  <button type="button" class="btn btn-outline-primary btn-order my-2 btn-password">Change Password</button>
+                  <a href="/logout"><button type="button" class="btn btn-outline-dark my-2">logout</button></a>
                 </div>
-                <div class="d-flex justify-content-center mb-2">
-                  <a href="/logout"><button type="button" class="btn btn-outline-dark">logout</button></a>
-                </div>
-                <button data-toggle="modal" class="btn_3" data-target="#addressModal">CLICK TO ADD NEW
-                  ADDRESS</button>
-                <% if (messages.info) { %>
-                  <div style="margin-top: 2% ;" class="<%= messages.type %>" id="alert">
-                    <%= messages.info %>
+              </div>
+              
+            
+            
+            <button data-toggle="modal" class="btn_3" data-target="#addressModal">CLICK TO ADD NEW
+              ADDRESS</button>
+            <% if (messages.info) { %>
+            <div style="margin-top: 2% ;" class="<%= messages.type %>" id="alert">
+              <%= messages.info %>
+            </div>
+            <% } %>
+            <!-- Modal -->
+            <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="addressModalLabel">Add New Address
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">×</span>
+                    </button>
                   </div>
-                  <% } %>
-                    <!-- Modal -->
-                    <div class="modal fade" id="addressModal" tabindex="-1" role="dialog"
-                      aria-labelledby="addressModalLabel" aria-hidden="true">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="addressModalLabel">Add New Address
-                            </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">×</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            <form class="row contact_form" action="/addAddress" method="post">
-                              <input type="hidden" name="redirect" value="/account">
-                              <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="first" name="first_name"
-                                  placeholder="First name" required />
+                  <div class="modal-body">
+                    <form class="row contact_form" action="/addAddress" method="post">
+                      <input type="hidden" name="redirect" value="/account">
+                      <div class="col-md-6 form-group p_star">
+                        <input type="text" class="form-control" id="first" name="first_name" placeholder="First name" required />
 
-                              </div>
-                              <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="last" name="last_name"
-                                  placeholder="Last name" required />
+                      </div>
+                      <div class="col-md-6 form-group p_star">
+                        <input type="text" class="form-control" id="last" name="last_name" placeholder="Last name" required />
 
-                              </div>
+                      </div>
 
-                              <div class="col-md-6 form-group p_star">
-                                <input type="text" class="form-control" id="number" name="phone"
-                                  placeholder="Phone number" required />
+                      <div class="col-md-6 form-group p_star">
+                        <input type="text" class="form-control" id="number" name="phone" placeholder="Phone number" required />
 
-                              </div>
-
-
-                              <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="add1" name="address1"
-                                  placeholder="Address line 01" required />
-
-                              </div>
-                              <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="add2" name="address2"
-                                  placeholder="Address line 02" required />
-
-                              </div>
-                              <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="city" name="city" placeholder="Town/City"
-                                  required />
-
-                              </div>
-                              <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="district" name="district"
-                                  placeholder="District" required />
-
-                              </div>
-                              <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="state" name="state" placeholder="State"
-                                  required />
-
-                              </div>
-
-                              <div class="col-md-12 form-group">
-                                <input type="text" class="form-control" id="zip" name="pin" placeholder="Postcode/ZIP"
-                                  required />
-                              </div>
-
-                              <button style="margin-left: auto; margin-right: auto;" class="tp_btn" type="submit">ADD
-                                NEW ADDRESS </button>
-                            </form>
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-                          </div>
-                        </div>
                       </div>
 
 
-                    </div>
+                      <div class="col-md-12 form-group p_star">
+                        <input type="text" class="form-control" id="add1" name="address1" placeholder="Address line 01" required />
 
+                      </div>
+                      <div class="col-md-12 form-group p_star">
+                        <input type="text" class="form-control" id="add2" name="address2" placeholder="Address line 02" required />
+
+                      </div>
+                      <div class="col-md-12 form-group p_star">
+                        <input type="text" class="form-control" id="city" name="city" placeholder="Town/City" required />
+
+                      </div>
+                      <div class="col-md-12 form-group p_star">
+                        <input type="text" class="form-control" id="district" name="district" placeholder="District" required />
+
+                      </div>
+                      <div class="col-md-12 form-group p_star">
+                        <input type="text" class="form-control" id="state" name="state" placeholder="State" required />
+
+                      </div>
+
+                      <div class="col-md-12 form-group">
+                        <input type="text" class="form-control" id="zip" name="pin" placeholder="Postcode/ZIP" required />
+                      </div>
+
+                      <button style="margin-left: auto; margin-right: auto;" class="tp_btn" type="submit">ADD
+                        NEW ADDRESS </button>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                  </div>
+                </div>
               </div>
+
+
             </div>
 
           </div>
+        </div>
 
-          <div class="col-lg-8">
+      </div>
 
-            <h2>My Orders</h2>
-            <div class="table-responsive">
-              <table id="example" class="table " style="width:100%; overflow: hidden;">
-                <thead>
-                  <tr style="visibility:hidden">
+      <div class="col-lg-8">
 
-
-                  </tr>
-                </thead>
-                <tbody>
-                  <% orders.forEach(function(order) { %>
-                    <tr>
-                      <td>
-                        <%= order._id.toString().slice(-4) %>
-                      </td>
-                      <td>
-                        <% if (order.is_delivered) { %>
-                          <p class="btn btn-success m-2"> Delivered </p>
-                          <% } else if (order.paymentStatus==='Failed' ) { %>
-                            <p class="btn btn-danger m-2">Payment Pending</p>
-                            <% } else if (order.user_cancelled) { %>
-                              <p class="btn btn-danger m-2"> User Cancelled</p>
-                              <% } else if (order.admin_cancelled) { %>
-                                <p class="btn btn-danger m-2"> Admin Cancelled</p>
-                                <% } else if (order.is_returned) { %>
-                                  <p class="btn btn-warning m-2"> Returned</p>
-                                  <% } else { %>
-                                    <p class="btn btn-info m-2">Pending</p>
-                                    <% } %>
-                      </td>
+        <h2>My Orders</h2>
+        <div class="table-responsive">
+          <table id="example" class="table " style="width:100%; overflow: hidden;">
+            <thead>
+              <tr style="visibility:hidden">
 
 
-                      <td>
-                        <%="Status: "+order.paymentStatus  %>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach(function(order) { %>
+                
+              <tr>
+                <td>
+                  <%= order._id.toString().slice(-4) %>
                 </td>
+                <td>
+                  <% if (order.is_delivered) { %>
+                  <p class="btn btn-success m-2"> Delivered </p>
+                  <% } else if (order.paymentStatus==='Failed' ) { %>
+                  <p class="btn btn-danger m-2">Payment Pending</p>
+                  <% } else if (order.user_cancelled) { %>
+                  <p class="btn btn-danger m-2"> User Cancelled</p>
+                  <% } else if (order.admin_cancelled) { %>
+                  <p class="btn btn-danger m-2"> Admin Cancelled</p>
+                  <% } else if (order.is_returned) { %>
+                  <p class="btn btn-warning m-2"> Returned</p>
+                  <% } else { %>
+                  <p class="btn btn-info m-2">Pending</p>
+                  <% } %>
+                </td>
+
+
+                
                 <td>
                   <% if(order.grandTotal == 0) { %>
                   ₹<%= order.total - order.discount - order.grandTotal %>
                   <% }  else { %>
                   <%=" ₹"+ order.grandTotal %>
-                          <% } %>
+                  <% } %>
 
-                      </td>
-                      <td>
-                        <% if (order.paymentStatus==='Failed' ) {%>
-                          <button type="button" class="" id="rzp-button1"
-                            onclick="completePayment('<%= order._id %>', '<%= order.grandTotal %>')"> Complete Payment
-                          </button>
-                          <p>Valid for</p>
-                          <% } else { %>
-                            <select class="form-control" id="status<%= order._id %>">
-                              <option value="">Status</option>
-                              <% if(!order.is_delivered && !order.user_cancelled && !order.admin_cancelled &&
-                                order.paymentStatus !=='Failed' ) { %>
-                                <!-- Show the cancel option if the order is not delivered, not cancelled by the user, and payment status is not failed -->
-                                <option value="User Cancelled">Cancel</option>
-                                <% } %>
-                                  <% if(order.is_delivered && !order.is_returned ) { %>
-                                    <!-- Show the return option if the order is delivered and not returned -->
-                                    <option value="Returned">Return</option>
-                                    <% } %>
-                            </select>
-                            <% } %>
-                      </td>
-                      <td>
-                        <% order.items.forEach(function(item) { %>
+                </td>
+                <td>
+                  <% if (order.paymentStatus==='Failed' ) { %>
+                    <% var hoursSinceOrder = (new Date() - new Date(order.date)) / 1000 / 60 / 60; %>
+                    <% if (hoursSinceOrder <= 24) { %>
+                      <button type="button" id="rzp-button1" onclick="completePayment('<%= order._id %>', '<%= order.grandTotal %>')">
+                        <div class="container"> Pay </div>
+                      </button>
+                    <% } %>
+                  <% } else { %>
+                    <select class="form-control order-status" id="status<%= order._id %>" onchange="changeOrderStatus('<%= order._id %>', this.value)">
+                      <option value="">Status</option>
+                      <% if(!order.is_delivered && !order.user_cancelled && !order.admin_cancelled && order.paymentStatus !=='Failed' ) { %>
+                      <option value="User Cancelled">Cancel</option>
+                      <% } %>
+                      <% if(order.is_delivered && !order.is_returned ) { %>
+                      <option value="Returned">Return</option>
+                      <% } %>
+                  </select>
+                  
+                  <% } %>
+                </td>
+                <td>
+                  <% order.items.forEach(function(item) { %>
 
-                          <li>
-                            <%= item.productId.productname +"×"%>
-                              <%= item.quantity %>
-                          </li>
+                  <li>
+                    <%= item.productId.productname +"×"%>
+                    <%= item.quantity %>
+                  </li>
 
-                          <% }); %>
-                      </td>
-                      <td>
-                        <div style="background-color: azure;">
-                          <p style="padding: 1%;">
-                            <% if(order.user.address[order.selectedAddress]) { %>
-                              <%= order.user.address[order.selectedAddress].first_name %>
-                                <%= order.user.address[order.selectedAddress].last_name %>,
-                                  <%= order.user.address[order.selectedAddress].address1%>
-                                    <br>
-                                    <%= order.user.address[order.selectedAddress].address2 %>,
-                                      <%= order.user.address[order.selectedAddress].district %> ,
-                                        <%= order.user.address[order.selectedAddress].state %> ,
-                                          <%= order.user.address[order.selectedAddress].pin %><br>
-                                            <%= order.user.address[order.selectedAddress].phone %>
-                                              <% } else { %>
-                                                Address Unavailable
-                                                <% } %>
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                    <% }); %>
-                </tbody>
-              </table>
+                  <% }); %>
+                </td>
+                <td>
+                  <div style="background-color: azure;">
+                    <p style="padding: 1%;">
+                      <% if(order.user.address[order.selectedAddress]) { %>
+                      <%= order.user.address[order.selectedAddress].first_name %>
+                      <%= order.user.address[order.selectedAddress].last_name %>,
+                      <%= order.user.address[order.selectedAddress].address1%>
+                      <br>
+                      <%= order.user.address[order.selectedAddress].address2 %>,
+                      <%= order.user.address[order.selectedAddress].district %> ,
+                      <%= order.user.address[order.selectedAddress].state %> ,
+                      <%= order.user.address[order.selectedAddress].pin %><br>
+                      <%= order.user.address[order.selectedAddress].phone %>
+                      <% } else { %>
+                      Address Unavailable
+                      <% } %>
+                    </p>
+                  </div>
+                </td>
+              </tr>
+             
+              <% }); %>
+            </tbody>
+          </table>
 
-            </div>
-          </div>
         </div>
       </div>
-    </section>
-
-    <div class="col-lg-12">
-      <div class="pageination">
-        <nav aria-label="Page navigation example">
-          <ul class="pagination justify-content-center">
-            <% if (currentPage> 1) { %>
-              <li class="page-item">
-                <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
-                  <i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                      class="bi bi-arrow-left" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd"
-                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-                    </svg></i>
-                </a>
-              </li>
-              <% } %>
-                <% for(let i=1; i <=pages; i++) { %>
-                  <li class="page-item <%= i == currentPage ? 'active' : '' %>">
-                    <a class="page-link" href="?page=<%= i %>">
-                      <%= i %>
-                    </a>
-                  </li>
-                  <% } %>
-                    <% if (currentPage < pages) { %>
-                      <li class="page-item">
-                        <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
-                          <i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                              class="bi bi-arrow-right" viewBox="0 0 16 16">
-                              <path fill-rule="evenodd"
-                                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                            </svg></i>
-                        </a>
-                      </li>
-                      <% } %>
-          </ul>
-        </nav>
-      </div>
     </div>
+  </div>
+</section>
 
-    <script src="/user/js/jquery-1.12.1.min.js"></script>
+<div class="col-lg-12 pagination-div">
+  <div class="pageination">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <% if (currentPage> 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+            <i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+              </svg></i>
+          </a>
+        </li>
+        <% } %>
+        <% for(let i=1; i <=pages; i++) { %>
+        <li class="page-item <%= i == currentPage ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>">
+            <%= i %>
+          </a>
+        </li>
+        <% } %>
+        <% if (currentPage < pages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+            <i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+              </svg></i>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</div>
 
-    <script src="/user/js/popper.min.js"></script>
+<script src="/user/js/jquery-1.12.1.min.js"></script>
 
-    <script src="/user/js/bootstrap.min.js"></script>
+<script src="/user/js/popper.min.js"></script>
 
-    <script src="/user/js/jquery.magnific-popup.js"></script>
+<script src="/user/js/bootstrap.min.js"></script>
 
-    <script src="/user/js/swiper.min.js"></script>
+<script src="/user/js/jquery.magnific-popup.js"></script>
 
-    <script src="/user/js/masonry.pkgd.js"></script>
+<script src="/user/js/swiper.min.js"></script>
 
-    <script src="/user/js/owl.carousel.min.js"></script>
-    <script src="/user/js/jquery.nice-select.min.js"></script>
+<script src="/user/js/masonry.pkgd.js"></script>
 
-    <script src="/user/js/slick.min.js"></script>
-    <script src="/user/js/jquery.counterup.min.js"></script>
-    <script src="/user/js/waypoints.min.js"></script>
+<script src="/user/js/owl.carousel.min.js"></script>
+<script src="/user/js/jquery.nice-select.min.js"></script>
 
-    <script src="/user/js/jquery.ajaxchimp.min.js"></script>
-    <script src="/user/js/jquery.form.js"></script>
-    <script src="/user/js/jquery.validate.min.js"></script>
-    <script src="/user/js/mail-script.js"></script>
-    <script src="/user/js/stellar.js"></script>
+<script src="/user/js/slick.min.js"></script>
+<script src="/user/js/jquery.counterup.min.js"></script>
+<script src="/user/js/waypoints.min.js"></script>
 
-    <script src="/user/js/custom.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="/user/js/jquery.ajaxchimp.min.js"></script>
+<script src="/user/js/jquery.form.js"></script>
+<script src="/user/js/jquery.validate.min.js"></script>
+<script src="/user/js/mail-script.js"></script>
+<script src="/user/js/stellar.js"></script>
 
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="/user/js/custom.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-    <script>
-      window.onload = function () {
-        setTimeout(function () {
-          var alert = document.getElementById('alert');
-          if (alert) alert.remove()
-        }, 3000);
-      }
-    </script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
-    <script>
-      function completePayment(orderId, grandTotal) {
-        console.log(orderId);
-        var settings = {
-          url: "/getOrderDetails", // Change this to the endpoint that fetches the existing order details
-          method: "POST",
-          timeout: 0,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          data: JSON.stringify({
-            orderId: orderId, // Use the orderId of the existing order
+<script>
+  window.onload = function() {
+    setTimeout(function() {
+      var alert = document.getElementById('alert');
+      if (alert) alert.remove()
+    }, 3000);
+  }
+</script>
 
-          }),
-        };
 
-        // Fetch the existing order details
-        $.ajax(settings).done(function (orderDetailsResponse) {
-          console.log(orderDetailsResponse);
-          var orderId = orderDetailsResponse.orderId;
-          console.log(orderId);
+<script>
+  function completePayment(orderId, grandTotal) {
+    console.log(orderId);
+    var settings = {
+      url: "/getOrderDetails", // Change this to the endpoint that fetches the existing order details
+      method: "POST",
+      timeout: 0,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: JSON.stringify({
+        orderId: orderId, // Use the orderId of the existing order
 
-          var options = {
-            key: "rzp_test_O7L5XOIOghh2QG", // Enter the Key ID generated from the Dashboard
-            amount: grandTotal.toString(), // Use the grandTotal of the existing order
-            currency: "INR",
-            name: "Aranoz",
-            description: "Test Transaction",
-            image: "/user/img/logo.png",
-            order_id: orderId, // Use the orderId from the previous request
-            handler: function (response) {
-              var data = {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                orderId: orderId, // Pass the orderId to the server
-              };
+      }),
+    };
 
-              // Send a POST request to the server to verify the payment
-              $.ajax({
-                url: "/paymentverify",
-                method: "POST",
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                success: function (verifyPaymentResponse) {
-                  console.log(verifyPaymentResponse); // Log the response
-                  window.location.href = verifyPaymentResponse.redirectUrl; // Redirect the user
-                },
+    // Fetch the existing order details
+    $.ajax(settings).done(function(orderDetailsResponse) {
+      console.log(orderDetailsResponse);
+      var orderId = orderDetailsResponse.orderId;
+      console.log(orderId);
 
-                error: function (err) {
-                  // Handle any errors
-                  console.log("Payment verification and order saving failed", err);
-                },
-              });
-            },
-
-            prefill: {
-              name: '<%= user.first_name %><%=" "+ user.last_name  %>',
-              email: "<%= user.email %>",
-              contact: "<%= user.phone %>",
-            },
-
-            notes: {
-              address: "Razorpay Corporate Office",
-            },
-            theme: {
-              color: "#FF3368",
-            },
+      var options = {
+        key: "rzp_test_O7L5XOIOghh2QG", // Enter the Key ID generated from the Dashboard
+        amount: grandTotal.toString(), // Use the grandTotal of the existing order
+        currency: "INR",
+        name: "Aranoz",
+        description: "Test Transaction",
+        image: "/user/img/logo.png",
+        order_id: orderId, // Use the orderId from the previous request
+        handler: function(response) {
+          var data = {
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            orderId: orderId, // Pass the orderId to the server
           };
 
-          var rzp1 = new Razorpay(options);
-          rzp1.on("payment.failed", function (response) {
-            // Handle the error here. You might want to log the error or display a message to the user.
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Payment failed. Please try again. You can complete this order in 24 hours from your orders.'
-            });
+          // Send a POST request to the server to verify the payment
+          $.ajax({
+            url: "/paymentverify",
+            method: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function(verifyPaymentResponse) {
+              console.log(verifyPaymentResponse); // Log the response
+              window.location.href = verifyPaymentResponse.redirectUrl; // Redirect the user
+            },
+
+            error: function(err) {
+              // Handle any errors
+              console.log("Payment verification and order saving failed", err);
+            },
           });
-          rzp1.open();
+        },
+
+        prefill: {
+          name: '<%= user.first_name %><%=" "+ user.last_name  %>',
+          email: "<%= user.email %>",
+          contact: "<%= user.phone %>",
+        },
+
+        notes: {
+          address: "Razorpay Corporate Office",
+        },
+        theme: {
+          color: "#FF3368",
+        },
+      };
+
+      var rzp1 = new Razorpay(options);
+      rzp1.on("payment.failed", function(response) {
+        // Handle the error here. You might want to log the error or display a message to the user.
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Payment failed. Please try again. You can complete this order in 24 hours from your orders.'
         });
-      }
+      });
+      rzp1.open();
+    }).fail(function(jqXHR, textStatus, errorThrown) {
+  if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: jqXHR.responseJSON.message
+    });
+  }
+});
+  }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-    </script>
+<script>
+  var orderId; 
+  function changeOrderStatus(orderId, status) {
+      console.log(orderId, status);
+  
+      swal({
+          title: "Are you sure?",
+          text: "You are about to change the status to: " + status,
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+      })
+      .then((willChange) => {
+          if (willChange) {
+              var settings = {
+                  url: "/admin/change-order-status/" + orderId,
+                  method: "POST",
+                  timeout: 0,
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  data: JSON.stringify({
+                      status: status
+                  }),
+              };
+  
+              $.ajax(settings)
+              .done(function(response) {
+                  swal("Status has been changed!", {
+                      icon: "success",
+                  }).then(() => {
+                      location.reload();
+                  });
+              })
+              .fail(function(xhr, ajaxOptions, thrownError) {
+                  swal("Error changing status!", {
+                      icon: "error",
+                  });
+              });
+          } else {
+              swal("Status change cancelled!");
+          }
+      });
+  }
+  
+  $(document).ready(function() {
+    $(".order-status").change(function() {
+        var status = $(this).val();
+        var orderId = $(this).attr('id').substring(6);
+        changeOrderStatus(orderId, status);
+        console.log(orderId+" "+status);
+    });
+});
 
-    </body>
+$(".btn-password").click(function (e) {
+    e.preventDefault();
 
-    </html>
+    // Hide the pagination
+    $(".pagination-div").hide();
+
+    $.get("/changepass", function (data) {
+        $(".col-lg-8").html(data);
+    });
+});
+
+
+  </script>
+  
+</body>
+
+</html>

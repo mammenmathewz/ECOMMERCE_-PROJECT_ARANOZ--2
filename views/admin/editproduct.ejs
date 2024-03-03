@@ -1,6 +1,6 @@
 <%- include('../partials/adminHead') %>
 
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" integrity="sha512-hvNR0F/e2J7zPPfLC9auFe3/SE0yG4aJCOd/qxew74NN7eyiSKjr7xJJMu1Jy2wf7FXITpWS1E/RY8yzuXN7VA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <body>
     <div class="container-xxl position-relative bg-white d-flex p-0">
         <!-- Spinner Start -->
@@ -13,7 +13,7 @@
         <%- include('../partials/adminsidebar') %>
 
         <!-- Sidebar End -->
-
+     
 
         <!-- Content Start -->
         <div class="content">
@@ -90,44 +90,71 @@
                         <label for="formImage" class="form-label">Images</label>
                         <% product.images.forEach(function(image, index) { %>
                             <div>
-                                <img src="<%= image %>" alt="Product Image" style="width: 100px; height: 100px; object-fit: scale-down;" >
-                                <button type="button" data-index="<%= index %>" data-product-id="<%= product._id %>"
+                                <img src="<%= image %>" alt="Product Image" style="width: 100px; height: 100px; object-fit: scale-down;">
+                                <button type="button" class="delete-button btn btn-outline-danger" data-index="<%= index %>" data-product-id="<%= product._id %>"
                                     onclick="deleteImage(this)">Delete</button>
-
-
                             </div>
-                            <% }); %>
-                                <input class="form-control" type="file" id="formImage" name="images" multiple>
+                        <% }); %>
+                        <input style="margin-top: 3%;" type="file" id="image" class="image" multiple>
                     </div>
 
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
-
+                
             </div>
 
-
+          
 
 
 
         </div>
+        
     </div>
     <!-- Form End -->
-
-
-    <!-- Footer Start -->
-    <div class="container-fluid pt-4 px-4">
-        <div class="bg-light rounded-top p-4">
-            <div class="row">
-                <div class="col-12 col-sm-6 text-center text-sm-start">
-                    &copy; <a href="#">Your Site Name</a>, All Right Reserved.
+   <style type="text/css">
+            img {
+                display: block;
+                max-width: 100%;
+            }
+            .preview {
+                overflow: hidden;
+                width: 160px; 
+                height: 160px;
+                margin: 10px;
+                border: 1px solid red;
+            }
+            
+        </style>
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Crop image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
                 </div>
-                <div class="col-12 col-sm-6 text-center text-sm-end">
-                    <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-                    Designed By <a href="https://htmlcodex.com">HTML Codex</a>
+                <div class="modal-body">
+                    <div class="img-container">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <img id="imagePreview">
+                            </div>
+                            <div class="col-md-4">
+                                <div class="preview"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="crop">Crop</button>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Footer Start -->
+   
     <!-- Footer End -->
     </div>
     <!-- Content End -->
@@ -147,7 +174,7 @@
     <script src="/Admin/lib/tempusdominus/js/moment.min.js"></script>
     <script src="/Admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
     <script src="/Admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" integrity="sha512-9KkIqdfN7ipEW6B6k+Aq20PV31bjODg4AA52W+tYtAE0jE0kMx49bjJ3FgvS56wzmyfMUHbQ4Km2b7l9+Y/+Eg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Template Javascript -->
     <script src="/Admin/js/main.js"></script>
     <!-- <script>
@@ -183,6 +210,92 @@
         }
 
 
+    </script>
+    <script>
+        var bs_modal = $('#modal');
+        var imageElement = document.getElementById('image');
+        var imagePreview = document.getElementById('imagePreview');
+        var cropper, reader, files;
+    
+        $("body").on("change", "#image", function(e) {
+            files = e.target.files;
+    
+            if (files && files.length > 0) {
+                reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    bs_modal.modal('show');
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+    
+        bs_modal.on('shown.bs.modal', function() {
+            cropper = new Cropper(imagePreview, {
+                aspectRatio: 1,
+                viewMode: 3,
+                preview: '.preview'
+            });
+        }).on('hidden.bs.modal', function() {
+            cropper.destroy();
+            cropper = null;
+        });
+    
+        $("#crop").click(function() {
+            var canvas = cropper.getCroppedCanvas({
+                width: 530, // Set the width
+                height: 518, // Set the height
+            });
+            canvas.toBlob(function(blob) {
+                var reader = new FileReader();
+                reader.onloadend = function() {
+                    var base64data = reader.result;
+    
+                    // Create a new hidden input field for the cropped image
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'croppedImage';
+                    input.value = base64data;
+    
+                    // Append the hidden input field to the form
+                    document.querySelector('form').appendChild(input);
+    
+                    // Remove the processed file from the file list
+                    files = Array.from(files);
+                    files.shift();
+                    if (files.length > 0) {
+                        // Load the next image
+                        reader = new FileReader();
+                        reader.onload = function(e) {
+                            imagePreview.src = e.target.result;
+                            cropper.replace(e.target.result);
+                        };
+                        reader.readAsDataURL(files[0]);
+                    } else {
+                        // Close the modal if there are no more images
+                        bs_modal.modal('hide');
+                    }
+                };
+                reader.readAsDataURL(blob);
+            });
+        });
+    
+        function validateForm() {
+            // Get the value of the croppedImage input field
+            var croppedImage = document.querySelector('input[name="croppedImage"]').value;
+            // If no images have been cropped, prevent form submission
+            console.log("cropped img::::" + croppedImage);
+            if (!croppedImage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please crop images before submitting.',
+                })
+                return false;
+            }
+    
+            return true;
+        }
     </script>
 </body>
 

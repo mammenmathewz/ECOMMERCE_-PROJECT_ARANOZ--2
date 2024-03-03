@@ -486,10 +486,30 @@ const updateProduct = async (req, res) => {
     product.number = req.body.number;
 
     // If there are new images, add them to the product
-    if (req.files) {
-      req.files.forEach((file) => {
-        product.images.push("/user/img/product/" + file.originalname);
-      });
+    if (req.body.croppedImage) {
+      // Check if req.body.croppedImage is an array
+      if (Array.isArray(req.body.croppedImage)) {
+        // If it's an array, iterate over it with forEach
+        req.body.croppedImage.forEach((imageData) => {
+          // Check if imageData is not empty
+          if (imageData.trim() !== "") {
+            // Save the image data to a file and get the file path
+            const filePath = saveImageToFile(imageData);
+
+            // Add the file path to the product images
+            product.images.push("/user/img/product/" + filePath);
+          }
+        });
+      } else {
+        // If it's not an array, directly process the single image
+        if (req.body.croppedImage.trim() !== "") {
+          // Save the image data to a file and get the file path
+          const filePath = saveImageToFile(req.body.croppedImage);
+
+          // Add the file path to the product images
+          product.images.push("/user/img/product/" + filePath);
+        }
+      }
     }
 
     // Save the updated product
@@ -501,6 +521,7 @@ const updateProduct = async (req, res) => {
     res.status(500).send("An error occurred while updating the product.");
   }
 };
+
 const addProduct = async (req, res) => {
   try {
     const brands = await Brand.find();
@@ -713,7 +734,6 @@ const addBrands = async (req, res) => {
   if (existingBrand) {
     return res.status(400).json({ message: "Brand already exists" });
   }
-
   console.log(req.body);
   const brandName = req.body.name;
 

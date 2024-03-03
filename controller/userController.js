@@ -9,6 +9,8 @@ const crypto = require("crypto");
 const flash = require("express-flash");
 const Order = require("../models/checkout");
 const Razorpay = require('razorpay')
+const path = require('path');
+const fs = require('fs');
 
 var instance = new Razorpay({
   key_id: process.env.KEY_ID,
@@ -581,7 +583,19 @@ const generateOrderid = async(req,res)=>{
   }
 }
 
-
+const downlodeInvoice = async(req,res)=>{
+  try {
+    const orderId = req.params.orderId;
+    const filePath = path.join(__dirname, '..', 'public', 'Invoice', `${orderId}.pdf`);
+  
+    fs.readFile(filePath , function (err,data){
+      res.contentType("application/pdf");
+      res.send(data);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 module.exports = {
@@ -605,5 +619,6 @@ module.exports = {
   resetPasswordWithoutOTP,
   filterAndSortProducts,
   getWallet,
-  generateOrderid
+  generateOrderid,
+  downlodeInvoice
 };

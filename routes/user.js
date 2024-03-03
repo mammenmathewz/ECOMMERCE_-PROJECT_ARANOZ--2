@@ -53,7 +53,7 @@ userRouter.put('/applyCoupon',auth.isUserLogin,cartController.applyCoupon)
 userRouter.get('/wallet',auth.isUserLogin,userController.getWallet)
 userRouter.get('/addFromWallet',auth.isUserLogin,orderController.addFromWallet)
 
-
+userRouter.get('/invoice/:orderId',userController.downlodeInvoice)
 
 
 module.exports = userRouter;

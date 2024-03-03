@@ -806,6 +806,7 @@ const switchStatus = async (req, res) => {
         order.delivery_time = new Date();
         await generateInvoice(orderId);
         break;
+    
       case "User Cancelled":
         order.user_cancelled = true;
         incrementProductQuantity(order.items);

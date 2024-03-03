@@ -75,5 +75,6 @@ invoice:{
   type:String
 },
   });
+  orderSchema.index({ user: 1, orderId: 1 });
 
   module.exports = mongoose.model('Order',orderSchema)

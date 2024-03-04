@@ -734,11 +734,15 @@ const addBrands = async (req, res) => {
   if (existingBrand) {
     return res.status(400).json({ message: "Brand already exists" });
   }
-  console.log(req.body);
+console.log(req.body);
   const brandName = req.body.name;
+  let brandImage = '';
+  if (req.file) {
+    brandImage = "/user/img/product/" + req.file.originalname; // Save the path of the image file to the database
+  }
 
   // Create a new brand
-  const brand = new Brand({ name: brandName });
+  const brand = new Brand({ name: brandName, brandImage: brandImage });
 
   try {
     // Save the brand to the database
@@ -754,6 +758,27 @@ const addBrands = async (req, res) => {
     res.status(500).send("An error occurred while saving the brand.");
   }
 };
+
+
+const toggleBrandDisplay = async(req,res)=>{
+  
+  try {
+    const brand = await Brand.findById(req.params.brandId);
+    if (!brand) {
+        return res.status(400).json({ message: "Brand not found" });
+    }
+    brand.display = !brand.display;
+    await brand.save();
+
+    // Send different messages based on the value of brand.display
+    let message = brand.display ? "Brand added to home page" : "Brand removed from home page";
+    res.json({ message: message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("An error occurred while toggling the display.");
+  }
+};
+
 
 const deleteBrand = async (req, res) => {
   try {
@@ -1082,6 +1107,15 @@ const generateInvoice = async (orderId) => {
   }
 };
 
+const getHomeSettings = async(req,res)=>{
+  try {
+    const active = "settings";
+    res.render('admin/settings',{active})
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports = {
   getAdminLogin,
   postAdminLogin,
@@ -1111,4 +1145,6 @@ module.exports = {
   updateCoupon,
   deleteCoupon,
   salesReport,
+  toggleBrandDisplay,
+  getHomeSettings
 };

@@ -21,12 +21,14 @@ const saltRounds = 10;
 
 const getHome = async (req, res) => {
   try {
-    res.render("user/home", { user: req.session.user });
+    const brands = await Brand.find({ display: true });
+    res.render("user/home", { user: req.session.user, brands: brands });
   } catch (error) {
     console.log(error);
     res.send("Error occurred while fetching data");
   }
 };
+
 
 const getProducts = async (req, res) => {
   try {
@@ -77,6 +79,61 @@ const getProducts = async (req, res) => {
     res.send("Error occurred while fetching data");
   }
 };
+
+const getProductsByBrand = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
+
+    let query = { deleted: false, number: { $gte: 1 } };
+
+    // If a brand ID is provided, add it to the query
+    if (req.params.brandId) {
+      query.brand = req.params.brandId;
+    }
+
+    // Count the total number of products
+    const totalProducts = await Product.countDocuments(query);
+
+    // Calculate the total number of pages
+    const pages = Math.ceil(totalProducts / limit);
+
+    const mostOrderedProducts = await Order.aggregate([
+      { $unwind: "$items" },
+      { $group: { _id: "$items.productId", total: { $sum: "$items.quantity" } } },
+      { $sort: { total: -1 } },
+      { $limit: 10 }
+    ]);
+
+    // Get the product IDs
+    const productIds = mostOrderedProducts.map(item => item._id);
+
+    let product = await Product.find(query)
+      .limit(limit)
+      .skip(skip);
+
+    // Fetch the brands
+    let brands = await Brand.find();
+    let mostOrderedProductsDisplay = await Product.find({ _id: { $in: productIds } });
+
+    // Pass the current page, total pages, and brands to the EJS template
+    res.render("user/products", {
+      product: product,
+      currentPage: page,
+      pages: pages,
+      brands: brands,
+      mostOrderedProducts: JSON.stringify(productIds),// Convert the array to a JSON string
+      mostOrderedProductsDisplay: mostOrderedProductsDisplay,
+      totalProducts: totalProducts
+    });
+    
+  } catch (error) {
+    console.log(error);
+    res.send("Error occurred while fetching data");
+  }
+};
+
+
 
 const getProduct = async (req, res) => {
   try {
@@ -621,5 +678,6 @@ module.exports = {
   filterAndSortProducts,
   getWallet,
   generateOrderid,
-  downlodeInvoice
+  downlodeInvoice,
+  getProductsByBrand
 };

@@ -5,6 +5,13 @@ const brandSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    brandImage:{
+        type:String,
+    },
+    display:{
+        type:Boolean,
+        default:false
+    }
 });
 
 const Brand = mongoose.model("Brand", brandSchema);

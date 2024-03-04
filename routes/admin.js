@@ -41,7 +41,9 @@ adminRouter.post('/uploadeproduct', upload.single("image"), auth.isAdminLogin, a
 adminRouter.delete('/deleteimage/:productId/:imageIndex',auth.isAdminLogin,adminController.deleteImage)
 adminRouter.post('/delete-product/:id',auth.isAdminLogin,adminController.deleteProduct)
 adminRouter.get('/brands',auth.isAdminLogin,adminController.getBrands)
-adminRouter.post('/addbrand',auth.isAdminLogin,adminController.addBrands)
+adminRouter.post('/addbrand', auth.isAdminLogin, upload.single('brandImage'), adminController.addBrands);
+adminRouter.post('/toggle-display/:brandId',auth.isAdminLogin,adminController.toggleBrandDisplay)
+
 adminRouter.post('/delete-brand/:id',auth.isAdminLogin,adminController.deleteBrand)
 adminRouter.get('/orders',auth.isAdminLogin,adminController.getOrderManagement)
 adminRouter.post('/change-order-status/:id',adminController.switchStatus)
@@ -52,4 +54,5 @@ adminRouter.post('/addCoupons',auth.isAdminLogin,adminController.postCoupon)
 adminRouter.get('/editCoupon/:id',auth.isAdminLogin,adminController.getCouponEdit)
 adminRouter.post('/updateCoupon',auth.isAdminLogin,adminController.updateCoupon)
 adminRouter.delete('/couponDelete', auth.isAdminLogin,adminController.deleteCoupon)
+adminRouter.get('/homeSettings',auth.isAdminLogin,adminController.getHomeSettings)
 module.exports = adminRouter;

@@ -17,6 +17,7 @@ const orderController = require('../controller/orderController')
 
 userRouter.get('/',userController.getHome)
 userRouter.get('/products',userController.getProducts)
+userRouter.get('/products/brand/:brandId',userController.getProductsByBrand)
 userRouter.get('/viewproduct/:id',userController.getProduct)
 userRouter.get('/login',auth.isUserLogout,userController.getLogin)
 userRouter.post('/login',auth.isUserLogout,userController.postLogin)

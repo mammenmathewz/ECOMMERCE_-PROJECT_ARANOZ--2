@@ -1111,12 +1111,10 @@ const generateInvoice = async (orderId) => {
 const getHomeSettings = async(req, res) => {
   try {
     const active = "settings";
-    
-    // Fetch all banners from the database
     const banners = await Banner.find();
+    const coupons = await Coupon.find();
 
-    // Pass the banners to the view
-    res.render('admin/settings', { active, banners });
+    res.render('admin/settings', { active, banners,coupons });
   } catch (error) {
     console.log(error);
     res.status(500).send('An error occurred while fetching the banners.');
@@ -1125,27 +1123,24 @@ const getHomeSettings = async(req, res) => {
 
 const addBanner = async(req, res) => {
   try {
-    // Extract the data from the request
     const { mainDescription, description } = req.body;
-    const image = '/user/img/product/' + req.file.filename;  // Use the path of the saved file
+    const image = '/user/img/product/' + req.file.filename;  
 
-    // Create a new banner
     const banner = new Banner({
       mainDescription,
       description,
       image
     });
 
-    // Save the banner to the database
     await banner.save();
 
-    // Send a success response
     res.redirect('/admin/homeSettings')
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'An error occurred while adding the banner' });
   }
 };
+
 
 const updateBanner = async(req,res)=>{
   try {
@@ -1178,6 +1173,19 @@ const deleteBanner = async(req,res)=>{
   }
 }
 
+
+const switchCoupon = async(req,res)=>{
+  try {
+    const { couponId } = req.body;
+
+    await Coupon.updateMany({}, { display_home: false });
+    await Coupon.findByIdAndUpdate(couponId, { display_home: true });
+
+    res.send('Coupon selected successfully');
+  } catch (error) {
+    console.log(err);
+  }
+}
 module.exports = {
   getAdminLogin,
   postAdminLogin,
@@ -1211,5 +1219,6 @@ module.exports = {
   getHomeSettings,
   addBanner,
   updateBanner,
-  deleteBanner 
+  deleteBanner,
+  switchCoupon 
 };

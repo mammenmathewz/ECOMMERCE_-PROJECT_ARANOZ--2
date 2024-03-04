@@ -23,6 +23,10 @@ const couponSchema = new mongoose.Schema({
     expiry_date: {
         type: Date,
     },
+    display_home:{
+        type:Boolean,
+        default:false
+    },
     users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

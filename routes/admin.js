@@ -59,5 +59,6 @@ adminRouter.post('/addBanner',auth.isAdminLogin, upload.single('image'),adminCon
 adminRouter.post('/updateBanner',auth.isAdminLogin, upload.single('image'),adminController.updateBanner)
 adminRouter.delete('/deletebanner/id=:id',auth.isAdminLogin,adminController.deleteBanner)
 
+adminRouter.post("/select-coupon",auth.isAdminLogin,adminController.switchCoupon)
 
 module.exports = adminRouter;

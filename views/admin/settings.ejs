@@ -28,7 +28,7 @@
                                     <!-- Button trigger modal -->
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
-                                        Open Form
+                                        New Banner
                                     </button>
 
                                     <!-- Modal -->
@@ -37,7 +37,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">ADD Banner</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">Add banner</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
@@ -76,7 +76,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="card">
+                                    <div class="card" style="margin-top: 3%;">
                                         <div class="table-responsive text-nowrap">
                                             <table class="table table-hover">
                                                 <thead>
@@ -85,6 +85,8 @@
                                                         <th>Main Description</th>
                                                         <th>Description 2</th>
                                                         <th></th>
+                                                        <th></th>
+
                                                     </tr>
                                                 </thead>
                                                 <tbody class="table-border-bottom-0">
@@ -103,7 +105,9 @@
                                                             <td><a href="#" class="btn btn-info" data-bs-toggle="modal"
                                                                     data-bs-target="#editModal">Edit</a></td>
 
-                                                                    <td><button class="btn btn-danger" onclick="deleteBanner('<%=banner._id%>')">Delete</button></td>
+                                                            <td><button class="btn btn-danger"
+                                                                    onclick="deleteBanner('<%=banner._id%>')">Delete</button>
+                                                            </td>
 
                                                         </tr>
                                                         <% }) %>
@@ -111,12 +115,8 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <style>
-                                        #editForm input[type="text"] {
-                                          text-align: left;
-                                        }
-                                      </style>
-                                      
+                                   
+
                                     <!-- Edit Modal -->
                                     <div class="modal fade" id="editModal" tabindex="-1"
                                         aria-labelledby="editModalLabel" aria-hidden="true">
@@ -163,13 +163,27 @@
                                         </div>
                                     </div>
 
+                                    <div style="padding-bottom: 30%; width: 40%; margin-top: 10%;">
+                                        <h6 style="margin-top: 3%;">OFFER BANNER :</h6>
+                                        <% coupons.forEach(function(coupon){ %>
+                                            <div class="form-check" style="margin: 5%;">
+                                                <input class="form-check-input" type="radio" name="coupon"
+                                                    id="<%= coupon._id %>" value="<%= coupon._id %>">
+                                                <label class="form-check-label" for="<%= coupon._id %>">
+                                                    <%= coupon.code %>
+                                                </label>
+                                            </div>
+                                            <% }) %>
+                                    </div>
 
                                 </div>
                             </div>
+
+
+
+
+
                     </div>
-
-
-
 
 
 
@@ -192,14 +206,16 @@
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+            integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
-           $(document).ready(function () {
+         $(document).ready(function () {
     $('.btn-info').click(function () {
         const row = $(this).closest('tr');
-        const id = row.find('a.btn-danger').attr('href').split('=')[1];
-        const mainDescription = row.find('td:nth-child(2)').text();  // Adjusted index
-        const description = row.find('td:nth-child(3)').text();  // Adjusted index
+        const id = row.find('button.btn-danger').attr('onclick').split("'")[1];
+        const mainDescription = row.find('td:nth-child(2)').text();
+        const description = row.find('td:nth-child(3)').text();
 
         $('#editId').val(id);
         $('#editMainDescription').val(mainDescription);
@@ -207,35 +223,61 @@
     });
 });
 
+            function deleteBanner(id) {
+                swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this banner!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            fetch('/admin/deletebanner/id=' + id, {
+                                method: 'DELETE',
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    swal("Poof! Your banner has been deleted!", {
+                                        icon: "success",
+                                    });
+                                    location.reload()
+                                })
+                                .catch((error) => {
+                                    console.error('Error:', error);
+                                });
+                        } else {
+                            swal("Your banner is safe!");
+                        }
+                    });
+            }
 
-function deleteBanner(id) {
-  swal({
-    title: "Are you sure?",
-    text: "Once deleted, you will not be able to recover this banner!",
-    icon: "warning",
-    buttons: true,
-    dangerMode: true,
-  })
-  .then((willDelete) => {
-    if (willDelete) {
-      fetch('/admin/deletebanner/id=' + id, {
-        method: 'DELETE',
-      })
-      .then(response => response.json())
-      .then(data => {
-        swal("Poof! Your banner has been deleted!", {
-          icon: "success",
-        });
-        location.reload()
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-    } else {
-      swal("Your banner is safe!");
-    }
-  });
-}
+
+
+
+            // Get the selected coupon id
+            // let selectedCouponId = document.querySelector('input[name="coupon"]:checked').value;
+
+            // // Create the request body
+            // let data = { couponId: selectedCouponId };
+
+            // // Create the fetch options
+            // let options = {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(data)
+            // };
+
+            // // Send the request
+            // fetch('/admin/select-coupon', options)
+            //     .then(response => response.text())
+            //     .then(data => console.log(data))
+            //     .catch((error) => {
+            //         console.error('Error:', error);
+            //     });
+
         </script>
 
 

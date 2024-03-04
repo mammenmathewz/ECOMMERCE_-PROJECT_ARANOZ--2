@@ -346,6 +346,10 @@
                     <div class="offer_text">
                         <h2>Weekly Sale on
                             60% Off All Products</h2>
+                            <div class="coupon_code">
+                                <input type="text" value="COUPONCODE" id="couponCode" readonly>
+                                <button onclick="copyCouponCode()">Copy Code</button>
+                            </div>
                         <div class="date_countdown">
                             <div id="timer">
                                 <div id="days" class="date"></div>
@@ -483,6 +487,22 @@
   <script src="/user/js/price_rangs.js"></script>
   <!-- custom js -->
   <script src="/user/js/custom.js"></script>
+  <script>
+    function copyCouponCode() {
+        /* Get the text field */
+        var copyText = document.getElementById("couponCode");
+    
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+    
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+    
+        /* Alert the copied text */
+        alert("Copied the coupon code: " + copyText.value);
+    }
+    </script>
 
 </body>
 

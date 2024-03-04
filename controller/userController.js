@@ -68,7 +68,8 @@ const getProducts = async (req, res) => {
       pages: pages,
       brands: brands,
       mostOrderedProducts: JSON.stringify(productIds),// Convert the array to a JSON string
-      mostOrderedProductsDisplay: mostOrderedProductsDisplay
+      mostOrderedProductsDisplay: mostOrderedProductsDisplay,
+      totalProducts: totalProducts
     });
     
   } catch (error) {
@@ -128,7 +129,7 @@ const postLogin = async (req, res) => {
         res.redirect("/");
       } else {
         // Passwords don't match
-        req.flash("info", "Invalide Password");
+        req.flash("info", "Invalid Password");
         req.flash("type", "alert alert-danger");
 
         return res.redirect("/login");

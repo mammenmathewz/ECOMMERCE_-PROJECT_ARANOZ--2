@@ -5,6 +5,7 @@ const Product = require("../models/products");
 const Brand = require("../models/brand");
 const Order = require("../models/checkout");
 const Coupon = require("../models/coupons");
+const Banner = require('../models/banners')
 const moment = require("moment");
 const fs = require("fs");
 const path = require("path");
@@ -1107,12 +1108,73 @@ const generateInvoice = async (orderId) => {
   }
 };
 
-const getHomeSettings = async(req,res)=>{
+const getHomeSettings = async(req, res) => {
   try {
     const active = "settings";
-    res.render('admin/settings',{active})
+    
+    // Fetch all banners from the database
+    const banners = await Banner.find();
+
+    // Pass the banners to the view
+    res.render('admin/settings', { active, banners });
   } catch (error) {
     console.log(error);
+    res.status(500).send('An error occurred while fetching the banners.');
+  }
+};
+
+const addBanner = async(req, res) => {
+  try {
+    // Extract the data from the request
+    const { mainDescription, description } = req.body;
+    const image = '/user/img/product/' + req.file.filename;  // Use the path of the saved file
+
+    // Create a new banner
+    const banner = new Banner({
+      mainDescription,
+      description,
+      image
+    });
+
+    // Save the banner to the database
+    await banner.save();
+
+    // Send a success response
+    res.redirect('/admin/homeSettings')
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'An error occurred while adding the banner' });
+  }
+};
+
+const updateBanner = async(req,res)=>{
+  try {
+    const { mainDescription, Description } = req.body;
+    let image = '';
+if (req.file) {
+  image = '/user/img/product/' + req.file.filename;
+}
+
+
+    await Banner.findByIdAndUpdate(req.body.id, {
+      mainDescription,
+      Description,
+      image
+    });
+    res.redirect('/admin/homeSettings')
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'An error occurred while updating the banner' });
+  }
+}
+
+const deleteBanner = async(req,res)=>{
+  try {
+    await Banner.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Banner deleted successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'An error occurred while deleting the banner' });
   }
 }
 
@@ -1146,5 +1208,8 @@ module.exports = {
   deleteCoupon,
   salesReport,
   toggleBrandDisplay,
-  getHomeSettings
+  getHomeSettings,
+  addBanner,
+  updateBanner,
+  deleteBanner 
 };

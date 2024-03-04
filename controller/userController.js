@@ -2,6 +2,7 @@ require("dotenv").config();
 const Product = require("../models/products");
 const Brand = require("../models/brand");
 const { User, Address } = require("../models/users");
+const Banner = require('../models/banners')
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const nodemailer = require("nodemailer");
@@ -22,7 +23,8 @@ const saltRounds = 10;
 const getHome = async (req, res) => {
   try {
     const brands = await Brand.find({ display: true });
-    res.render("user/home", { user: req.session.user, brands: brands });
+    const banners = await Banner.find()
+    res.render("user/home", { user: req.session.user, brands: brands,banners });
   } catch (error) {
     console.log(error);
     res.send("Error occurred while fetching data");

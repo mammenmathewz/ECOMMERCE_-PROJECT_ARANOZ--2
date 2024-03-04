@@ -55,4 +55,9 @@ adminRouter.get('/editCoupon/:id',auth.isAdminLogin,adminController.getCouponEdi
 adminRouter.post('/updateCoupon',auth.isAdminLogin,adminController.updateCoupon)
 adminRouter.delete('/couponDelete', auth.isAdminLogin,adminController.deleteCoupon)
 adminRouter.get('/homeSettings',auth.isAdminLogin,adminController.getHomeSettings)
+adminRouter.post('/addBanner',auth.isAdminLogin, upload.single('image'),adminController.addBanner)
+adminRouter.post('/updateBanner',auth.isAdminLogin, upload.single('image'),adminController.updateBanner)
+adminRouter.delete('/deletebanner/id=:id',auth.isAdminLogin,adminController.deleteBanner)
+
+
 module.exports = adminRouter;

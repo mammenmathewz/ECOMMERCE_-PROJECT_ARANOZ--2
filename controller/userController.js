@@ -3,6 +3,7 @@ const Product = require("../models/products");
 const Brand = require("../models/brand");
 const { User, Address } = require("../models/users");
 const Banner = require('../models/banners')
+const Coupon = require("../models/coupons")
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const nodemailer = require("nodemailer");
@@ -23,14 +24,38 @@ const saltRounds = 10;
 const getHome = async (req, res) => {
   try {
     const brands = await Brand.find({ display: true });
-    const banners = await Banner.find()
-    res.render("user/home", { user: req.session.user, brands: brands,banners });
+    const banners = await Banner.find();
+
+    // Get the most ordered products
+    const mostOrderedProducts = await getMostOrderedProducts();
+
+    // Get the product IDs
+    const productIds = mostOrderedProducts.map(item => item._id);
+
+    let mostOrderedProductsDisplay = await Product.find({ _id: { $in: productIds } });
+
+    // Fetch the coupon that is currently set to be displayed
+    let coupon = await Coupon.findOne({ display_home: true });
+
+    console.log("id:"+productIds);
+    res.render("user/home", { user: req.session.user, brands: brands, banners: banners, mostOrderedProductsDisplay: mostOrderedProductsDisplay, coupon: coupon });
+
   } catch (error) {
     console.log(error);
     res.send("Error occurred while fetching data");
   }
 };
 
+
+
+const getMostOrderedProducts = async () => {
+  return await Order.aggregate([
+    { $unwind: "$items" },
+    { $group: { _id: "$items.productId", total: { $sum: "$items.quantity" } } },
+    { $sort: { total: -1 } },
+    { $limit: 10 }
+  ]);
+};
 
 const getProducts = async (req, res) => {
   try {
@@ -46,12 +71,7 @@ const getProducts = async (req, res) => {
     // Calculate the total number of pages
     const pages = Math.ceil(totalProducts / limit);
 
-    const mostOrderedProducts = await Order.aggregate([
-      { $unwind: "$items" },
-      { $group: { _id: "$items.productId", total: { $sum: "$items.quantity" } } },
-      { $sort: { total: -1 } },
-      { $limit: 10 }
-    ]);
+    const mostOrderedProducts = await getMostOrderedProducts();
 
     // Get the product IDs
     const productIds = mostOrderedProducts.map(item => item._id);
@@ -65,7 +85,7 @@ const getProducts = async (req, res) => {
     let brands = await Brand.find();
     let mostOrderedProductsDisplay = await Product.find({ _id: { $in: productIds } });
 
-    // Pass the current page, total pages, and brands to the EJS template
+  
     res.render("user/products", {
       product: product,
       currentPage: page,
@@ -81,6 +101,7 @@ const getProducts = async (req, res) => {
     res.send("Error occurred while fetching data");
   }
 };
+
 
 const getProductsByBrand = async (req, res) => {
   try {
@@ -246,16 +267,16 @@ const editUser = async (req, res) => {
 
 const updateAddress = async (req, res) => {
   try {
-    const userId = req.params.userId; // get the user's ID from the request parameters
-    const addressId = req.params.addressId; // get the address ID from the request parameters
+    const userId = req.params.userId; 
+    const addressId = req.params.addressId; 
 
-    const user = await User.findById(userId); // find the user by their ID
+    const user = await User.findById(userId); 
 
     if (!user) {
       return res.status(404).send("User not found");
     }
 
-    const address = user.address.id(addressId); // find the address by its ID
+    const address = user.address.id(addressId); 
 
     if (!address) {
       return res.status(404).send("Address not found");
@@ -328,9 +349,9 @@ const myOrder = async (req, res) => {
 const changePassword_Profile = async (req, res) => {
   try {
     const user_id = req.session.user._id;
-    // Fetch the user from the database
+    
     const user = await User.findById(user_id);
-    // Pass the user's email to the view
+  
     res.render("user/changepassword", { email: user.email });
   } catch (error) {
     console.log(error);

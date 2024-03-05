@@ -115,7 +115,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                   
+
 
                                     <!-- Edit Modal -->
                                     <div class="modal fade" id="editModal" tabindex="-1"
@@ -167,13 +167,13 @@
                                         <h6 style="margin-top: 3%;">OFFER BANNER :</h6>
                                         <% coupons.forEach(function(coupon){ %>
                                             <div class="form-check" style="margin: 5%;">
-                                                <input class="form-check-input" type="radio" name="coupon"
-                                                    id="<%= coupon._id %>" value="<%= coupon._id %>">
-                                                <label class="form-check-label" for="<%= coupon._id %>">
-                                                    <%= coupon.code %>
-                                                </label>
+                                              <input class="form-check-input" type="radio" name="coupon" id="<%= coupon._id %>" value="<%= coupon._id %>" onclick="switchCoupon('<%= coupon._id %>')" <%= coupon.display_home ? 'checked' : '' %>>
+                                              <label class="form-check-label" for="<%= coupon._id %>">
+                                                <%= coupon.code %>
+                                              </label>
                                             </div>
-                                            <% }) %>
+                                          <% }) %>
+                                          
                                     </div>
 
                                 </div>
@@ -210,18 +210,18 @@
             integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
-         $(document).ready(function () {
-    $('.btn-info').click(function () {
-        const row = $(this).closest('tr');
-        const id = row.find('button.btn-danger').attr('onclick').split("'")[1];
-        const mainDescription = row.find('td:nth-child(2)').text();
-        const description = row.find('td:nth-child(3)').text();
+            $(document).ready(function () {
+                $('.btn-info').click(function () {
+                    const row = $(this).closest('tr');
+                    const id = row.find('button.btn-danger').attr('onclick').split("'")[1];
+                    const mainDescription = row.find('td:nth-child(2)').text();
+                    const description = row.find('td:nth-child(3)').text();
 
-        $('#editId').val(id);
-        $('#editMainDescription').val(mainDescription);
-        $('#editDescription').val(description);
-    });
-});
+                    $('#editId').val(id);
+                    $('#editMainDescription').val(mainDescription);
+                    $('#editDescription').val(description);
+                });
+            });
 
             function deleteBanner(id) {
                 swal({
@@ -256,27 +256,43 @@
 
 
             // Get the selected coupon id
-            // let selectedCouponId = document.querySelector('input[name="coupon"]:checked').value;
+            function switchCoupon(couponId) {
+  swal({
+    title: "Are you sure?",
+    text: "You are about to change the displayed coupon.",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willChange) => {
+    if (willChange) {
+      fetch('/admin/select-coupon', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ couponId }),
+      })
+      .then(response => response.text())
+      .then(data => {
+        console.log(data);
+        swal("Coupon selected successfully!", {
+          icon: "success",
+        });
+        location.reload()
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        swal("Error occurred while selecting coupon.", {
+          icon: "error",
+        });
+      });
+    } else {
+      swal("Your action has been cancelled.");
+    }
+  });
+}
 
-            // // Create the request body
-            // let data = { couponId: selectedCouponId };
-
-            // // Create the fetch options
-            // let options = {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify(data)
-            // };
-
-            // // Send the request
-            // fetch('/admin/select-coupon', options)
-            //     .then(response => response.text())
-            //     .then(data => console.log(data))
-            //     .catch((error) => {
-            //         console.error('Error:', error);
-            //     });
 
         </script>
 

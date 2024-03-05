@@ -1180,8 +1180,7 @@ const switchCoupon = async(req,res)=>{
 
     await Coupon.updateMany({}, { display_home: false });
     await Coupon.findByIdAndUpdate(couponId, { display_home: true });
-
-    res.send('Coupon selected successfully');
+    res.json({ message: 'Coupon selected successfully' });
   } catch (error) {
     console.log(err);
   }

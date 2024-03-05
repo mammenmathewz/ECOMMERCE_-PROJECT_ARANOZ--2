@@ -82,20 +82,21 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="offer_text">
-                        <h2>Weekly Sale on
-                            60% Off All Products</h2>
-                            <div class="coupon_code">
-                                <input type="text" value="COUPONCODE" id="couponCode" readonly>
-                                <button onclick="copyCouponCode()">Copy Code</button>
-                            </div>
-                        <div class="date_countdown">
-                            <div id="timer">
-                                <div id="days" class="date"></div>
-                                <div id="hours" class="date"></div>
-                                <div id="minutes" class="date"></div>
-                                <div id="seconds" class="date"></div>
-                            </div>
-                        </div>
+                        <h2>OFF upto ₹ <%=coupon.max_discount %> for above ₹ <%=coupon.min_amount %></h2>
+                        
+                            <div class="coupon_code" style="display: flex;" >
+                                <input style="border: none; height: 60px; text-align: center; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" type="text" value="<%= coupon.code %>" id="couponCode" readonly>
+                                <button class="input-group-text btn_2"  onclick="copyCouponCode()">Copy Code</button>
+                              </div>
+                              <div class="date_countdown">
+                                <div id="timer">
+                                  <div id="days" class="date"></div>
+                                  <div id="hours" class="date"></div>
+                                  <div id="minutes" class="date"></div>
+                                  <div id="seconds" class="date"></div>
+                                </div>
+                              </div>
+                              
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="enter email address"
                                 aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -111,7 +112,7 @@
     <!-- awesome_shop part start-->
 
     <!-- product_list part start-->
-    <section class="product_list best_seller section_padding">
+    <section class="product_list best_seller">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-12">
@@ -122,45 +123,25 @@
             </div>
             <div class="row align-items-center justify-content-between">
                 <div class="col-lg-12">
-                    <div class="best_product_slider owl-carousel">
-                        <div class="single_product_item">
-                            <img src="img/product/product_1.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
+                  <div class="best_product_slider owl-carousel">
+                    <% mostOrderedProductsDisplay.forEach((product) => { %>
+                      <div class="single_product_item">
+                        <a href="/viewproduct/<%= product._id %>">
+                            <img src="<%= product.images[0] %>" alt="watch" style="object-fit:scale-down"; height="300px">
+                        </a>
+                        <div class="single_product_text">
+                          <h4><%= product.productname %></h4>
+                          <h3>$<%= product.saleprice %></h3>
                         </div>
-                        <div class="single_product_item">
-                            <img src="img/product/product_2.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="img/product/product_3.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="img/product/product_4.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                        <div class="single_product_item">
-                            <img src="img/product/product_5.png" alt="">
-                            <div class="single_product_text">
-                                <h4>Quartz Belt Watch</h4>
-                                <h3>$150.00</h3>
-                            </div>
-                        </div>
-                    </div>
+                      </div>
+                    <% }) %>
+                  </div>
                 </div>
-            </div>
+              </div>
+              
+              
+              
+              
         </div>
     </section>
     <!-- product_list part end-->
@@ -215,6 +196,9 @@
   <!-- slick js -->
   <script src="/user/js/slick.min.js"></script>
   <script src="/user/js/jquery.counterup.min.js"></script>
+ 
+<script src="/user/js/jquery.downCount.js"></script>
+
   <script src="/user/js/waypoints.min.js"></script>
   <script src="/user/js/contact.js"></script>
   <script src="/user/js/jquery.ajaxchimp.min.js"></script>
@@ -223,23 +207,108 @@
   <script src="/user/js/mail-script.js"></script>
   <script src="/user/js/stellar.js"></script>
   <script src="/user/js/price_rangs.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
   <!-- custom js -->
   <script src="/user/js/custom.js"></script>
   <script>
-    function copyCouponCode() {
-        /* Get the text field */
-        var copyText = document.getElementById("couponCode");
-    
-        /* Select the text field */
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); /* For mobile devices */
-    
-        /* Copy the text inside the text field */
-        document.execCommand("copy");
-    
-        /* Alert the copied text */
-        alert("Copied the coupon code: " + copyText.value);
+$(document).ready(function() {
+  // Get the expiry date from the server
+  var expiryDate = "<%= coupon.expiry_date %>";
+
+  $('#timer').downCount({
+    date: expiryDate,
+    offset: +5.5
+  }, function () {
+    alert('Countdown ended!');
+  });
+
+  function makeTimer() {
+    // Use the expiryDate for the endTime
+    var endTime = new Date(expiryDate);
+    endTime = (Date.parse(endTime) / 1000);
+
+    var now = new Date();
+    now = (Date.parse(now) / 1000);
+
+    var timeLeft = endTime - now;
+
+    var days = Math.floor(timeLeft / 86400);
+    var hours = Math.floor((timeLeft - (days * 86400)) / 3600);
+    var minutes = Math.floor((timeLeft - (days * 86400) - (hours * 3600)) / 60);
+    var seconds = Math.floor((timeLeft - (days * 86400) - (hours * 3600) - (minutes * 60)));
+
+    if (hours < "10") { hours = "0" + hours; }
+    if (minutes < "10") { minutes = "0" + minutes; }
+    if (seconds < "10") { seconds = "0" + seconds; }
+
+    $("#days").html("<span>Days</span>" + days);
+    $("#hours").html("<span>Hours</span>" + hours);
+    $("#minutes").html("<span>Minutes</span>" + minutes);
+    $("#seconds").html("<span>Seconds</span>" + seconds);
+  }
+
+  // click counter js
+  (function() {
+    window.inputNumber = function(el) {
+      var min = el.attr('min') || false;
+      var max = el.attr('max') || false;
+      var els = {};
+      els.dec = el.prev();
+      els.inc = el.next();
+
+      el.each(function() {
+        init($(this));
+      });
+
+      function init(el) {
+        els.dec.on('click', decrement);
+        els.inc.on('click', increment);
+
+        function decrement() {
+          var value = el[0].value;
+          value--;
+          if(!min || value >= min) {
+            el[0].value = value;
+          }
+        }
+
+        function increment() {
+          var value = el[0].value;
+          value++;
+          if(!max || value <= max) {
+            el[0].value = value++;
+          }
+        }
+      }
     }
+  })();
+
+  inputNumber($('.input-number'));
+
+  setInterval(function () {
+    makeTimer();
+  }, 1000);
+});
+
+
+  </script>
+  
+  <script>
+    
+    function copyCouponCode() {
+    /* Get the text field */
+    var copyText = document.getElementById("couponCode");
+
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+
+    /* Copy the text inside the text field */
+    document.execCommand("copy");
+
+    swal("Copied!", "Copied the coupon code: " + copyText.value, "success");
+}
 
 
  

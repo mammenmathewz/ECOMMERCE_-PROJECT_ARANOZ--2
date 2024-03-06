@@ -455,6 +455,7 @@ const editProduct = async (req, res) => {
       product: product,
       brands: brands,
       active: "productmanagement",
+      selectedCategory: product.category
     });
   } catch (error) {
     console.error(error);
@@ -625,6 +626,14 @@ const uploadProduct = async (req, res) => {
     const brand = await Brand.findById(req.body.brand);
     if (!brand) {
       return res.status(400).send("Invalid brand ID.");
+    }
+
+    const existingProduct = await Product.findOne({ productname: req.body.productname });
+    if (existingProduct) {
+      console.log("Fdwsa");
+      req.flash("info", "User does not exist");
+      req.flash("type", "alert alert-danger");
+    return  res.redirect("/admin/addproduct");
     }
 
     const product = new Product({
@@ -845,7 +854,7 @@ const switchStatus = async (req, res) => {
     order.admin_cancelled = false;
     order.is_returned = false;
 
-    // Set the selected status to true
+    
     switch (status) {
       case "Delivered":
         order.is_delivered = true;

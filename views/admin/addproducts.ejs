@@ -42,6 +42,11 @@
                         <div class="bg-light rounded h-100 p-4">
                             <h6 class="mb-4">Add Product</h6>
                             
+                            <% if (locals.info) { %>
+                                <div class="<%= locals.type %>">
+                                  <%= locals.info %>
+                                </div>
+                              <% } %>
                               
                             <form action="/admin/uploadeproduct" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
                                 <div class="mb-3">
@@ -69,15 +74,15 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="regularPrice" class="form-label">Regular Price</label>
-                                    <input id="regularPrice" name="regularprice" class="form-control mb-3" type="number" placeholder="" aria-label="default input example" required>
+                                    <input id="regularPrice" name="regularprice" class="form-control mb-3" type="number" min="0" placeholder="" aria-label="default input example" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="offerPrice" class="form-label">Offer Price</label>
-                                    <input id="offerPrice" name="saleprice" class="form-control mb-3" type="number" placeholder="" aria-label="default input example" required>
+                                    <input id="offerPrice" name="saleprice" class="form-control mb-3" type="number"  min="0" placeholder="" aria-label="default input example" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="offerPrice" class="form-label">Number of items</label>
-                                    <input id="offerPrice" name="number" class="form-control mb-3" type="number" placeholder="" aria-label="default input example" required>
+                                    <input id="offerPrice" name="number" class="form-control mb-3" type="number"  min="0" placeholder="" aria-label="default input example" required>
                                 </div>
                                 
                                 <div class="mb-3">
@@ -95,15 +100,15 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-12 col-xl-4">
+                    <div class="col-sm-12 col-xl-4" id="imageDiv" style="display: none;">
                         <div class="bg-light rounded h-100 p-4">
-                            <h4 class="mb-4">ADD IMAGES</h4>
-                            
-                            
-
-                            
+                          <h4 class="mb-4">CROPED IMAGES</h4>
+                          <div id="croppedImageDiv">
+                      
+                          </div>
                         </div>
-                    </div>
+                      </div>
+                      
                     
                 </div>
             </div>
@@ -207,6 +212,7 @@ $("body").on("change", "#image", function(e) {
     files = e.target.files;
 
     if (files && files.length > 0) {
+        document.getElementById('imageDiv').style.display = 'block';
         reader = new FileReader();
         reader.onload = function(e) {
             imagePreview.src = e.target.result;
@@ -246,6 +252,16 @@ $("#crop").click(function() {
             // Append the hidden input field to the form
             document.querySelector('form').appendChild(input);
 
+            // Create an img element for the cropped image
+            var img = document.createElement('img');
+            img.src = base64data;
+            img.style.width = '200px'; // Set the width
+            img.style.height = '200px'; // Set the height
+            img.style.margin = '15px'; // Add some space between images
+
+            // Append the img element to the separate div
+            document.querySelector('#croppedImageDiv').appendChild(img);
+
             // Remove the processed file from the file list
             files = Array.from(files);
             files.shift();
@@ -265,6 +281,7 @@ $("#crop").click(function() {
         reader.readAsDataURL(blob);
     });
 });
+
 
  
 

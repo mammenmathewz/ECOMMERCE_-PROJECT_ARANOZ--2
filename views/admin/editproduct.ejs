@@ -62,28 +62,28 @@
                     </div>
                     
                     <div>
-                        <select class="form-select mb-3" name="category" style="margin-top: 3%;"
-                            value="<%= product.category %>" aria-label=".form-select-lg example" required>
-                            <option value="Mens">Mens</option>
-                            <option value="Womens">Womens</option>
-                            <option value="Unisex">Unisex</option>
-                        </select>
+                        <select class="form-select mb-3" name="category" style="margin-top: 3%;" required>
+                            <option value="Mens" <%= selectedCategory === 'Mens' ? 'selected' : '' %>>Mens</option>
+                            <option value="Womens" <%= selectedCategory === 'Womens' ? 'selected' : '' %>>Womens</option>
+                            <option value="Unisex" <%= selectedCategory === 'Unisex' ? 'selected' : '' %>>Unisex</option>
+                          </select>
+                          
                     </div>
                     <div class="mb-3">
                         <label for="regularPrice" class="form-label">Regular Price</label>
                         <input id="regularPrice" name="regularprice" class="form-control mb-3"
-                            value="<%= product.regularprice %>" type="number" placeholder=""
+                            value="<%= product.regularprice %>" type="number" min="0" placeholder=""
                             aria-label="default input example" required>
                     </div>
                     <div class="mb-3">
                         <label for="offerPrice" class="form-label">Offer Price</label>
                         <input id="offerPrice" name="saleprice" class="form-control mb-3" type="number"
-                            value="<%= product.saleprice %>" placeholder="" aria-label="default input example" required>
+                            value="<%= product.saleprice %>" min="0" placeholder="" aria-label="default input example" required>
                     </div>
                     <div class="mb-3">
                         <label for="offerPrice" class="form-label">Number of items</label>
                         <input id="offerPrice" name="number" class="form-control mb-3" type="number"
-                            value="<%= product.number%>" placeholder="" aria-label="default input example" required>
+                            value="<%= product.number%>" placeholder="" min="0" aria-label="default input example" required>
                     </div>
 
                     <div class="mb-3">

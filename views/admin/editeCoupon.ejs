@@ -39,20 +39,20 @@
                     </div>
                     <div class="mb-3">
                         <label for="discountAmount" class="form-label">Minimum Discount Amount:</label>
-                        <input type="number" class="form-control" value="<%= coupon.discount %>" id="discountAmount" name="discount" placeholder="Enter discount amount" required>
+                        <input type="number"  min="0" class="form-control" value="<%= coupon.discount %>" id="discountAmount" name="discount" placeholder="Enter discount amount" required>
                     </div>
                     <div class="mb-3" >
                         <label for="maxDiscount" class="form-label">Maximum Discount Amount:</label>
-                        <input type="number" class="form-control" value="<%= coupon.max_discount %>" id="maxDiscount" name="max_discount" placeholder="Enter maximum discount" required>
+                        <input type="number"  min="0" class="form-control" value="<%= coupon.max_discount %>" id="maxDiscount" name="max_discount" placeholder="Enter maximum discount" required>
                     </div>
                     <div class="mb-3">
                         <label for="minOrderValue" class="form-label">Minimum Order Value:</label>
-                        <input type="number" class="form-control" value="<%= coupon.min_amount %>" id="minOrderValue" name="min_amount" placeholder="Enter minimum order value" required>
+                        <input type="number"  min="0" class="form-control" value="<%= coupon.min_amount %>" id="minOrderValue" name="min_amount" placeholder="Enter minimum order value" required>
                     </div>
                     
                     <div class="mb-3">
                         <label for="validFrom" class="form-label">Valid From:</label>
-                        <input type="datetime-local" class="form-control" value="<%= coupon.startDate.toISOString().substring(0, 16) %>" name="startDate" id="validFrom" required>
+                        <input type="datetime-local"  class="form-control" value="<%= coupon.startDate.toISOString().substring(0, 16) %>" name="startDate" id="validFrom" required>
                     </div>
                     <div class="mb-3">
                         <label for="validUntil" class="form-label">Valid Until:</label>

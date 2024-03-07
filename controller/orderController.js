@@ -38,7 +38,7 @@ const getOrder = async (req, res) => {
       }
     }
 
-    res.render("user/checkout", {justuser:justuser, cart: cart ,addMoneySuccess: req.flash('addMoneySuccess')}); // Pass the cart to the view
+    res.render("user/checkout", {justuser:justuser, cart: cart ,addMoneySuccess: req.query.addMoneySuccess}); // Pass the cart to the view
   } catch (err) {
     console.log(err);
   }
@@ -353,11 +353,9 @@ const addFromWallet = async(req,res)=>{
     await user.save(); // Save the updated user
     await cart.save(); // Save the updated cart
 
-    // Update the user object in the session
-    req.session.user = user;
 
-    req.flash('addMoneySuccess', 'true');
-    res.redirect('/checkout');
+
+    res.redirect('/checkout?addMoneySuccess=true');
   } catch (error) {
     console.error('Error in addFromWallet:', error);
     res.status(500).json({ message: 'Server error', error: error.toString() });

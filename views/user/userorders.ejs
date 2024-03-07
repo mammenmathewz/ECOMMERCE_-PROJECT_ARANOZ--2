@@ -19,6 +19,45 @@
   .butten-1:hover {
     background-color: #0019bb;
   }
+  .loader {
+  /* background-color: blue; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loader-text {
+  font-size: 15px;
+  color: rgb(0, 0, 0);
+  margin-bottom: 5px;
+  align-self: center;
+}
+
+.loader-bar {
+  width: 10%;
+  height: 10px;
+  border-radius: 2px;
+  background-color: rgb(0, 0, 0);
+  animation: loader-bar-animation 2s ease-in-out infinite;
+}
+
+@keyframes loader-bar-animation {
+  0% {
+    /* transform: translateX(-100%) rotate(270deg); */
+    transform: translateX(-100%);
+  }
+
+  50% {
+    /* transform: translateX(100%) rotate(-90deg); */
+    transform: translateX(100%);
+  }
+
+  100% {
+    /* transform: translateX(-100%) rotate(270deg); */
+    transform: translateX(-100%);
+  }
+}
 </style>
 
 
@@ -227,12 +266,18 @@
                   </div>
                 </td>
                 <td>
-                  <% if(order.invoice) { %>
-                    <a  href="/invoice/<%= order._id %>" download>
+                  <% if(order. is_delivered) { %>
+                    <a class="g_pdf" href="/invoice/<%= order._id %>" download>
                       <button type="button" class="butten-1">
                         <div class="container"> Download Invoice </div>
                       </button>
                     </a>
+                    <div class="loader" style="display: none;">
+                      <div class="loader-text">Loading...</div>
+                      <div class="loader-bar"></div>
+                    </div>
+                    
+                    
                   <% } %>
                 </td>
               </tr>
@@ -480,6 +525,27 @@ $(".btn-password").click(function (e) {
     $.get("/changepass", function (data) {
         $(".col-lg-8").html(data);
     });
+});
+
+$('g_pdf').click(function() {
+  // Show the loader
+  $(this).siblings('.loader').show();
+
+  // Download the file
+  $.ajax({
+    url: $(this).attr('href'),
+    success: function() {
+      // Hide the loader
+      $(this).siblings('.loader').hide();
+    }.bind(this),
+    error: function() {
+      // Hide the loader
+      $(this).siblings('.loader').hide();
+    }.bind(this)
+  });
+
+  // Prevent the default action
+  return false;
 });
 
 

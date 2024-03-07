@@ -38,9 +38,7 @@ const orderSchema = new mongoose.Schema({
   selectedAddress: {
     type: Number
 },
-
-
-  is_delivered: {
+ is_delivered: {
     type: Boolean,
     default: false,
   },

@@ -119,6 +119,7 @@
           <button class="btn btn-primary" onclick="updateSalesReport('daily')">Daily</button>
         <button class="btn btn-primary" onclick="updateSalesReport('weekly')">Weekly</button>
         <button class="btn btn-primary" onclick="updateSalesReport('yearly')">Yearly</button>
+        <input id="salesDateRange" style="border: none; background-color: #F3F6F9; border-radius: 8px; height: 20%;" type="text" name="salesDateRange" value="" />
         </div>
    
     
@@ -308,9 +309,21 @@ $(function() {
 
       </script>
 <script>
+ 
   $(document).ready(function() {
   updateSalesReport('weekly');
 });
+
+$('#salesDateRange').daterangepicker({
+    minSpan: {
+      days: 7
+    },
+    maxSpan: {
+      days: 31
+    }
+  }, function(start, end, label) {
+    updateSalesReportByDate(start.format('YYYY-MM-DD'), end.format('YYYY-MM-DD'));
+  });
 
 
 function updateSalesReport(timePeriod) {
@@ -335,7 +348,7 @@ function updateSalesReport(timePeriod) {
 <td>${moment(order.delivery_time).format('DD-MM-YYYY HH:mm')}</td>
 
           <td>${order.paymentMethod}</td>
-          <td> ₹ ${order.grandTotal.toFixed(2)}</td>
+          <td>₹ ${(order.grandTotal === 0 ? (order.total - order.discount - order.grandTotal) : order.grandTotal).toFixed(2)}</td>
         `;
 
         tableBody.appendChild(row);
@@ -346,7 +359,38 @@ function updateSalesReport(timePeriod) {
     });
 }
 
+function updateSalesReportByDate(startDate, endDate) {
+  document.querySelector('h5').innerText = 'Sales report from ' + startDate + ' to ' + endDate;
+  fetch(`/admin/salesReport?startDate=${startDate}&endDate=${endDate}`)
+    .then(response => response.json())
+    .then(data => {
+      // Destroy existing DataTable
+      $('#example').DataTable().destroy();
 
+      const tableBody = document.getElementById('orderTableBody');
+      tableBody.innerHTML = ''; // Clear the existing table body
+
+      // Add new rows to the table
+      data.salesData.forEach(order => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td>${order.user.first_name || ''} ${order.user.last_name || ''}</td>
+          <td>${order._id}</td>
+          <td>${moment(order.date).format('DD-MM-YYYY HH:mm')}</td>
+<td>${moment(order.delivery_time).format('DD-MM-YYYY HH:mm')}</td>
+
+          <td>${order.paymentMethod}</td>
+          <td>₹ ${(order.grandTotal === 0 ? (order.total - order.discount - order.grandTotal) : order.grandTotal).toFixed(2)}</td>
+        `;
+
+        tableBody.appendChild(row);
+      });
+
+      // Re-initialize DataTable
+      $('#example').DataTable();
+    });
+}
 
 </script>
 

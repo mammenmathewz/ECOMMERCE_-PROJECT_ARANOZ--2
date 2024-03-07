@@ -5,14 +5,12 @@ const Product = require("../models/products");
 const Brand = require("../models/brand");
 const Order = require("../models/checkout");
 const Coupon = require("../models/coupons");
-const Banner = require('../models/banners')
+const Banner = require("../models/banners");
 const moment = require("moment");
 const fs = require("fs");
 const path = require("path");
-const easyinvoice = require('easyinvoice');
+const easyinvoice = require("easyinvoice");
 const { json } = require("express");
-
-
 
 const getAdminLogin = async (req, res) => {
   try {
@@ -288,19 +286,32 @@ const adminDash = async (req, res) => {
 const salesReport = async (req, res) => {
   try {
     let salesData;
-    switch (req.query.timePeriod) {
-      case "daily":
-        salesData = await getDailyDeliveredOrders();
-        break;
-      case "weekly":
-        salesData = await getWeeklyDeliveredOrders();
-        break;
-      case "yearly":
-        salesData = await getYearlyDeliveredOrders();
-        break;
-      default:
-        // Handle invalid time periods
-        break;
+
+    if (req.query.startDate && req.query.endDate) {
+      const startDate = new Date(req.query.startDate);
+      startDate.setHours(0, 0, 0, 0); 
+      const endDate = new Date(req.query.endDate);
+      endDate.setHours(23, 59, 59, 999);
+
+      salesData = await Order.find({
+        is_delivered: true,
+        date: { $gte: startDate, $lte: endDate },
+      }).populate("user");
+    } else {
+      switch (req.query.timePeriod) {
+        case "daily":
+          salesData = await getDailyDeliveredOrders();
+          break;
+        case "weekly":
+          salesData = await getWeeklyDeliveredOrders();
+          break;
+        case "yearly":
+          salesData = await getYearlyDeliveredOrders();
+          break;
+        default:
+          // Handle invalid time periods
+          break;
+      }
     }
 
     res.json({ salesData });
@@ -455,7 +466,7 @@ const editProduct = async (req, res) => {
       product: product,
       brands: brands,
       active: "productmanagement",
-      selectedCategory: product.category
+      selectedCategory: product.category,
     });
   } catch (error) {
     console.error(error);
@@ -628,12 +639,14 @@ const uploadProduct = async (req, res) => {
       return res.status(400).send("Invalid brand ID.");
     }
 
-    const existingProduct = await Product.findOne({ productname: req.body.productname });
+    const existingProduct = await Product.findOne({
+      productname: req.body.productname,
+    });
     if (existingProduct) {
       console.log("Fdwsa");
       req.flash("info", "User does not exist");
       req.flash("type", "alert alert-danger");
-    return  res.redirect("/admin/addproduct");
+      return res.redirect("/admin/addproduct");
     }
 
     const product = new Product({
@@ -744,9 +757,9 @@ const addBrands = async (req, res) => {
   if (existingBrand) {
     return res.status(400).json({ message: "Brand already exists" });
   }
-console.log(req.body);
+  console.log(req.body);
   const brandName = req.body.name;
-  let brandImage = '';
+  let brandImage = "";
   if (req.file) {
     brandImage = "/user/img/product/" + req.file.originalname; // Save the path of the image file to the database
   }
@@ -769,26 +782,25 @@ console.log(req.body);
   }
 };
 
-
-const toggleBrandDisplay = async(req,res)=>{
-  
+const toggleBrandDisplay = async (req, res) => {
   try {
     const brand = await Brand.findById(req.params.brandId);
     if (!brand) {
-        return res.status(400).json({ message: "Brand not found" });
+      return res.status(400).json({ message: "Brand not found" });
     }
     brand.display = !brand.display;
     await brand.save();
 
     // Send different messages based on the value of brand.display
-    let message = brand.display ? "Brand added to home page" : "Brand removed from home page";
+    let message = brand.display
+      ? "Brand added to home page"
+      : "Brand removed from home page";
     res.json({ message: message });
   } catch (err) {
     console.error(err);
     res.status(500).send("An error occurred while toggling the display.");
   }
 };
-
 
 const deleteBrand = async (req, res) => {
   try {
@@ -854,13 +866,12 @@ const switchStatus = async (req, res) => {
     order.admin_cancelled = false;
     order.is_returned = false;
 
-    
     switch (status) {
       case "Delivered":
         order.is_delivered = true;
         order.delivery_time = new Date();
         break;
-    
+
       case "User Cancelled":
         order.user_cancelled = true;
         incrementProductQuantity(order.items);
@@ -1047,85 +1058,86 @@ const deleteCoupon = async (req, res) => {
   }
 };
 
-
-
-const getHomeSettings = async(req, res) => {
+const getHomeSettings = async (req, res) => {
   try {
     const active = "settings";
     const banners = await Banner.find();
     const coupons = await Coupon.find();
 
-    res.render('admin/settings', { active, banners,coupons });
+    res.render("admin/settings", { active, banners, coupons });
   } catch (error) {
     console.log(error);
-    res.status(500).send('An error occurred while fetching the banners.');
+    res.status(500).send("An error occurred while fetching the banners.");
   }
 };
 
-const addBanner = async(req, res) => {
+const addBanner = async (req, res) => {
   try {
     const { mainDescription, description } = req.body;
-    const image = '/user/img/product/' + req.file.filename;  
+    const image = "/user/img/product/" + req.file.filename;
 
     const banner = new Banner({
       mainDescription,
       description,
-      image
+      image,
     });
 
     await banner.save();
 
-    res.redirect('/admin/homeSettings')
+    res.redirect("/admin/homeSettings");
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'An error occurred while adding the banner' });
+    res
+      .status(500)
+      .json({ message: "An error occurred while adding the banner" });
   }
 };
 
-
-const updateBanner = async(req,res)=>{
+const updateBanner = async (req, res) => {
   try {
     const { mainDescription, Description } = req.body;
-    let image = '';
-if (req.file) {
-  image = '/user/img/product/' + req.file.filename;
-}
-
+    let image = "";
+    if (req.file) {
+      image = "/user/img/product/" + req.file.filename;
+    }
 
     await Banner.findByIdAndUpdate(req.body.id, {
       mainDescription,
       Description,
-      image
+      image,
     });
-    res.redirect('/admin/homeSettings')
+    res.redirect("/admin/homeSettings");
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'An error occurred while updating the banner' });
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating the banner" });
   }
-}
+};
 
-const deleteBanner = async(req,res)=>{
+const deleteBanner = async (req, res) => {
   try {
     await Banner.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Banner deleted successfully' });
+    res.json({ message: "Banner deleted successfully" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'An error occurred while deleting the banner' });
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting the banner" });
   }
-}
+};
 
-
-const switchCoupon = async(req,res)=>{
+const switchCoupon = async (req, res) => {
   try {
     const { couponId } = req.body;
 
     await Coupon.updateMany({}, { display_home: false });
     await Coupon.findByIdAndUpdate(couponId, { display_home: true });
-    res.json({ message: 'Coupon selected successfully' });
+    res.json({ message: "Coupon selected successfully" });
   } catch (error) {
     console.log(err);
   }
-}
+};
 module.exports = {
   getAdminLogin,
   postAdminLogin,
@@ -1160,5 +1172,5 @@ module.exports = {
   addBanner,
   updateBanner,
   deleteBanner,
-  switchCoupon 
+  switchCoupon,
 };

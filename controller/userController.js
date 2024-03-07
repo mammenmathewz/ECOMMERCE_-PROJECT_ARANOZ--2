@@ -612,7 +612,7 @@ const getWallet = async(req,res)=>{
   try {
     const user = await User.findById(req.session.user._id);
     console.log(user);
-    res.render('user/wallet',{user:user})
+    res.render('user/wallet', { user: user, moment: moment });
   } catch (error) {
     console.log(error);
   }

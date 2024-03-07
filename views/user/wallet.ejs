@@ -1,15 +1,11 @@
 <%- include('../partials/head') %>
   <!-- Header part end-->
   <%- include('../partials/navbar') %>
-  
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.0.1/css/dataTables.dataTables.css" />
 
-  
-    <!--================Home Banner Area =================-->
-    <!-- breadcrumb start-->
 
-    <!-- breadcrumb start-->
 
-    <!--================Cart Area =================-->
+ 
     <section class="h-100 h-custom" style="background-color: #ffffff; margin-top: 3%;">
       <div class="container py-5 h-100">
       <h1>Your Wallet Balance is:<span style="color: red;"><%= user.wallet %></span> </h1>
@@ -19,12 +15,39 @@
         
       </div>
     </section>
-    <!--================End Cart Area =================-->
-
-    <!--::footer_part start::-->
+    <section class="h-100 h-custom" style="background-color: #ffffff; margin-top: 3%;">
+      
+      <div class="container" style="width: 80%;">
+        <table id="example" class="display" style="width:100%;">
+          <thead>
+              <tr>
+                  <th style="text-align:center;">Transaction Id</th>
+                  <th style="text-align:center;">Amount</th>
+                  <th style="text-align:center;">Type</th>
+                  <th style="text-align:center;">Date & Time</th>
+              </tr>
+          </thead>
+          <tbody>
+              <% user.transactions.forEach((transaction, index) => { %>
+                  <tr>
+                      <td style="text-align:center;"><%= transaction._id %></td>
+                      <td style="text-align:center; color: <%= transaction.type == 'debit' ? 'red' : 'green' %>;">
+                          <%= transaction.type == 'debit' ? '-' : '+' %><%= transaction.amount %>
+                      </td>
+                      <td style="text-align:center; color: <%= transaction.type == 'debit' ? 'red' : 'green' %>;"><%= transaction.type %></td>
+                      <td style="text-align:center;"><%= moment(transaction.date).format('DD.MM.YYYY HH.mm') %></td>
+                  </tr>
+              <% }) %>   
+          </tbody>
+      </table>
+      
+      
+        
+      </div>
+    </section>
 
     <%- include('../partials/footer') %>
-    <!--::footer_part end::-->
+
 
 
     <script src="/user/js/jquery-1.12.1.min.js"></script>
@@ -56,6 +79,15 @@
     <script src="js/custom.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/user/js/cartscript.js"></script>
+
+  
+<script src="https://cdn.datatables.net/2.0.1/js/dataTables.js"></script>
+
+
+
+<script>
+  new DataTable('#example');
+</script>
     </body>
    
 

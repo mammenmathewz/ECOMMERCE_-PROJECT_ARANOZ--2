@@ -289,7 +289,7 @@ const salesReport = async (req, res) => {
 
     if (req.query.startDate && req.query.endDate) {
       const startDate = new Date(req.query.startDate);
-      startDate.setHours(0, 0, 0, 0); 
+      startDate.setHours(0, 0, 0, 0);
       const endDate = new Date(req.query.endDate);
       endDate.setHours(23, 59, 59, 999);
 
@@ -849,7 +849,7 @@ const switchStatus = async (req, res) => {
   const orderId = req.params.id; // Get the order ID from the URL
   const status = req.body.status; // Get the new status from the request body
   console.log("status  : : " + status);
-
+  let amount
   try {
     const order = await Order.findById(orderId)
       .populate("items.productId")
@@ -869,33 +869,58 @@ const switchStatus = async (req, res) => {
     switch (status) {
       case "Delivered":
         order.is_delivered = true;
+        order.paymentStatus == "Paid";
         order.delivery_time = new Date();
         break;
 
-      case "User Cancelled":
-        order.user_cancelled = true;
-        incrementProductQuantity(order.items);
-        user.wallet += order.grandTotal;
-        if (order.grandTotal == 0) {
-          user.wallet += order.total - order.discount - order.grandTotal;
-        }
-        break;
-      case "Admin Cancelled":
-        order.admin_cancelled = true;
-        incrementProductQuantity(order.items);
-        user.wallet += order.grandTotal;
-        if (order.grandTotal == 0) {
-          user.wallet += order.total - order.discount - order.grandTotal;
-        }
-        break;
-      case "Returned":
-        order.is_returned = true;
-        incrementProductQuantity(order.items);
-        user.wallet += order.grandTotal;
-        if (order.grandTotal == 0) {
-          user.wallet += order.total - order.discount - order.grandTotal;
-        }
-        break;
+        case "User Cancelled":
+          order.user_cancelled = true;
+          incrementProductQuantity(order.items);
+          amount = order.total - order.discount;
+            if (order.paymentStatus == "Paid") {
+                user.transactions.push({
+                    amount: amount,
+                    type: 'credit',
+                    orderId: order._id 
+                });
+            }
+          
+                user.wallet += amount;
+          
+          break;
+      
+          case "Admin Cancelled":
+            order.admin_cancelled = true;
+            incrementProductQuantity(order.items);
+             amount = order.total - order.discount;
+            if (order.paymentStatus == "Paid") {
+                user.transactions.push({
+                    amount: amount,
+                    type: 'credit',
+                    orderId: order._id 
+                });
+            }
+          
+                user.wallet += amount;
+          
+            break;
+        
+            case "Returned":
+              order.is_returned = true;
+              incrementProductQuantity(order.items);
+              amount = order.total - order.discount;
+            if (order.paymentStatus == "Paid") {
+                user.transactions.push({
+                    amount: amount,
+                    type: 'credit',
+                    orderId: order._id 
+                });
+            }
+          
+                user.wallet += amount;
+          
+              break;
+          
       case "Pending":
         order.is_delivered = false;
         order.user_cancelled = false;

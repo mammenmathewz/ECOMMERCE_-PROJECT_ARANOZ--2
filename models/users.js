@@ -35,6 +35,25 @@ const addressSchema = new mongoose.Schema({
     },
     
 });
+const transactionSchema = new mongoose.Schema({
+    orderId:{
+      type:String
+    },
+    amount: {
+      type: Number,
+      required: true
+    },
+    type: {
+      type: String,
+      enum: ['credit', 'debit'],
+      required: true
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  });
+  
 
 const userSchema = new mongoose.Schema({
     first_name: {
@@ -71,7 +90,8 @@ const userSchema = new mongoose.Schema({
         default:0
     
     },
-    address: [addressSchema]
+    address: [addressSchema],
+    transactions: [transactionSchema],
 });
 
 userSchema.index({ 'address.first_name': 'text', 'address.last_name': 'text', email: 'text', phone: 'text' });

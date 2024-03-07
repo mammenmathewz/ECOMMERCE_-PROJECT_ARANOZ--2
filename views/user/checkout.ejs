@@ -249,7 +249,7 @@
                                       <p class="balance"><span id="currency">₹</span><%= justuser.wallet %></p>
                                     </div>
                                   
-                                   <a href="/addFromWallet"> <button class="addmoney"><span class="plussign">+</span>Add Money</button></a>
+                                    <a href="/addFromWallet" id="addMoneyButton"> <button class="addmoney"><span class="plussign">+</span>Add Money</button></a>
                                   </div>
 
                                 <form id="paymentForm" style="padding-top: 2%">
@@ -260,15 +260,15 @@
                                     
                                     
                                   </div>
-                                  <% if (cart.grandTotal > justuser.wallet) { %>
-                                    <% if (cart.grandTotal <= 1000) { %>
-                                      <div class="payment_item">
-                                          <div class="radion_btn">
-                                              <input type="radio" id="f-option5" name="selector" value="Cash on delivery" />
-                                              <label for="f-option5">Cash on delivery</label>
-                                          </div>
-                                      </div>
-                                  <% } %>
+                                  <% if (cart.grandTotal > justuser.wallet ) { %>
+                                    <% if (cart.grandTotal <= 1000 && !locals.addMoneySuccess) { %>
+                                        <div class="payment_item">
+                                            <div class="radion_btn">
+                                                <input type="radio" id="f-option5" name="selector" value="Cash on delivery" />
+                                                <label for="f-option5">Cash on delivery</label>
+                                            </div>
+                                        </div>
+                                    <% } %>
                                   
                                     <div class="payment_item active">
                                         <div class="radion_btn">

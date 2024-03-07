@@ -149,6 +149,7 @@ const walletPayment = async (req, res) => {
       console.log(true);
       return res.json({ 
         redirectUrl: "/checkout?flashMessage=please add money from wallet to continue"
+        
       });
     }
     
@@ -323,7 +324,6 @@ const addFromWallet = async(req,res)=>{
   try {
     const userId = req.session.user._id;
 
-    // find the user and the cart for the user
     const user = await User.findById(userId);
     const cart = await Cart.findOne({ user: userId });
 
@@ -336,9 +336,17 @@ const addFromWallet = async(req,res)=>{
       // subtract grandTotal from user's wallet
       user.wallet -= cart.grandTotal;
       cart.grandTotal = 0;
+      user.transactions.push({
+        amount: cart.total-cart.discount,
+        type: 'debit'
+      });
     } else {
       // subtract from grandTotal and save on a new field on cart
       cart.grandTotal -= user.wallet;
+      user.transactions.push({
+        amount: user.wallet,
+        type: 'debit',
+      });
       user.wallet = 0;
     }
 
@@ -355,21 +363,6 @@ const addFromWallet = async(req,res)=>{
     res.status(500).json({ message: 'Server error', error: error.toString() });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

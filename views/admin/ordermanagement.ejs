@@ -73,11 +73,9 @@
                                                     <% } %>
                                                 </td>
                                                 <td>
-                                                    <% if(order.grandTotal == 0) { %>
-                                                       ₹<%= order.total - order.discount - order.grandTotal %>
-                                                    <% } else { %>
-                                                       ₹<%= order.grandTotal %>
-                                                    <% } %>
+                                              
+                                                       ₹<%= order.total - order.discount  %>
+                                                   
                                                   </td>
                                                 <td>
                                                     <% if(!order.admin_cancelled && !order.is_returned && !order.user_cancelled) { %>

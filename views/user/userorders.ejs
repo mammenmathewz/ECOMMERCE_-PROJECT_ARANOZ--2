@@ -226,11 +226,7 @@
                     </div>
                     <div>
                       <h5>
-                        <% if(order.grandTotal==0) { %>
-                          ₹<%= order.total - order.discount - order.grandTotal %>
-                            <% } else { %>
-                              <%=" ₹"+ order.grandTotal %>
-                                <% } %>
+                        ₹<%= order.total - order.discount  %>
                       </h5>
                     </div>
                     <div>

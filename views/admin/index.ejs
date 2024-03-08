@@ -348,7 +348,7 @@ function updateSalesReport(timePeriod) {
 <td>${moment(order.delivery_time).format('DD-MM-YYYY HH:mm')}</td>
 
           <td>${order.paymentMethod}</td>
-          <td>₹ ${(order.grandTotal === 0 ? (order.total - order.discount - order.grandTotal) : order.grandTotal).toFixed(2)}</td>
+          <td>₹ ${order.total - order.discount.toFixed(2)}</td>
         `;
 
         tableBody.appendChild(row);
@@ -381,7 +381,7 @@ function updateSalesReportByDate(startDate, endDate) {
 <td>${moment(order.delivery_time).format('DD-MM-YYYY HH:mm')}</td>
 
           <td>${order.paymentMethod}</td>
-          <td>₹ ${(order.grandTotal === 0 ? (order.total - order.discount - order.grandTotal) : order.grandTotal).toFixed(2)}</td>
+          <td>₹ ${order.total - order.discount.toFixed(2)}</td>
         `;
 
         tableBody.appendChild(row);

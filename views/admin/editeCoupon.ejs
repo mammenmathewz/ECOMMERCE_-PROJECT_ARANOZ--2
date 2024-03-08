@@ -31,16 +31,24 @@
                 <!-- Content End -->
 
             <div class="container-fluid">
-                <form action="/admin/updateCoupon" method="post">
+                <form action="/admin/updateCoupon" method="post" style="width: 70%; height: 70%;">
                     <h4>Edit coupon</h4>
                     <div class="mb-3" >
                         <label for="couponCode" class="form-label">Coupon Code:</label>
                         <input type="text" class="form-control" value="<%= coupon.code %>" id="couponCode" name="code" placeholder="Enter coupon code" oninput="this.value = this.value.toUpperCase()" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="discountAmount" class="form-label">Minimum Discount Amount:</label>
-                        <input type="number"  min="0" class="form-control" value="<%= coupon.discount %>" id="discountAmount" name="discount" placeholder="Enter discount amount" required>
-                    </div>
+                    <% if(coupon.discount_type === 'amount') { %>
+                        <div class="mb-3">
+                          <label for="discountValue" class="form-label">Minimum Discount Amount:</label>
+                          <input type="number" min="0" class="form-control" value="<%= coupon.discount_value %>"  id="discountValue" name="discount_value" placeholder="Enter discount amount" required>
+                        </div>
+                      <% } else if(coupon.discount_type === 'percentage') { %>
+                        <div class="mb-3">
+                          <label for="discountValue" class="form-label">Percentage of Offer:</label>
+                          <input type="number" min="0" class="form-control" value="<%= coupon.discount_value %>" id="discountValue" name="discount_value" placeholder="Enter percentage of offer" required>
+                        </div>
+                      <% } %>
+                      
                     <div class="mb-3" >
                         <label for="maxDiscount" class="form-label">Maximum Discount Amount:</label>
                         <input type="number"  min="0" class="form-control" value="<%= coupon.max_discount %>" id="maxDiscount" name="max_discount" placeholder="Enter maximum discount" required>
@@ -59,7 +67,7 @@
                         <input type="datetime-local" class="form-control" value="<%= coupon.expiry_date.toISOString().substring(0, 16) %>" name="expiry_date" id="validUntil" required>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </div>
                 </form>

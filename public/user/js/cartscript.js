@@ -112,7 +112,11 @@ $(document).on('click', '.decrement-button', function(e) {
       $('.gtotal').text('₹  ' + result.grandTotal.toFixed(2));
     },
     error: function(err) {
-      console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err.responseJSON.message,
+      });
     }
   });
 });

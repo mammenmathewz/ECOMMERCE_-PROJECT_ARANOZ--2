@@ -22,11 +22,12 @@ const getCart = async(req, res) => {
     // Add your discount reset logic here
     if (cart.discount > 0) {
       const now = new Date();
-      const discountDuration =   6*1000; // 5 minutes in milliseconds
+      const discountDuration =   3*60*1000; // 5 minutes in milliseconds
 
       if (now - cart.discountAppliedAt > discountDuration || cart.items.length == 0) {
         cart.discount = 0;
         cart.grandTotal = cart.total;
+        cart.couponCode=""
         await cart.save();
       }
     }
@@ -101,6 +102,7 @@ const deleteItem = async(req,res)=>{
     // Fetch the product to get its price
     const product = await Product.findById(productId).populate('brand');
     const price = product.saleprice;
+    
 
     // Subtract the total price of the item from the cart's total
     cart.total -= item.quantity * price;
@@ -171,7 +173,6 @@ const increment = async(req,res)=>{
     console.log(error);
   }
 }
-
 const decrement = async(req,res)=>{
   try{
     const userId = req.session.user._id;
@@ -188,12 +189,20 @@ const decrement = async(req,res)=>{
     if (!item) {
       return res.status(404).send('Item not found in cart');
     }
-  
+    
     // Decrement the quantity of the item, but not below 1
     if (item.quantity > 1) {
       item.quantity--;
       // Update the total price
       cart.total -= item.productId.saleprice;  
+    }
+
+    // Fetch the coupon data
+    const coupon = await Coupon.findOne({ code: cart.couponCode }); // replace 'couponCode' with the actual coupon code field in your cart model
+
+    // Check if the cart total is less than coupon.min_amount
+    if (coupon && cart.total < coupon.min_amount) {
+      return res.status(400).json({ message: `The minimum order value for this coupon is ${coupon.min_amount}. The cart total is less than that.` });
     }
 
     // Update the grand total
@@ -205,14 +214,20 @@ const decrement = async(req,res)=>{
   } catch(error){
     console.log(error);
   }
-}
+};
 
-// Server-side code
+
 const applyCoupon = async(req,res)=>{
   const { code } = req.body; // assuming you're sending the coupon code in the request body
   const userId = req.session.user._id;
 
   try {
+    const cart = await Cart.findOne({ user: userId });
+
+    // Check if the cart exists
+    if (!cart) {
+      return res.status(404).json({ message: 'Cart not found' });
+    }
     const coupon = await Coupon.findOne({ code: code });
 
     // Check if the coupon exists
@@ -225,6 +240,10 @@ const applyCoupon = async(req,res)=>{
       return res.status(400).json({ message: 'Coupon is not valid' });
     }
 
+    if (cart.total < coupon.min_amount) {
+      return res.status(400).json({ message: `The minimum order value for this coupon is ${coupon.min_amount}. The cart total is less than that.` });
+    }
+
     if (!coupon.users.includes(userId)) {
       coupon.users.push(userId);
       await coupon.save();
@@ -232,22 +251,22 @@ const applyCoupon = async(req,res)=>{
       return res.status(400).json({ message: 'User has already used this coupon' });
     }
 
-    const cart = await Cart.findOne({ user: userId });
-
-    // Check if the cart exists
-    if (!cart) {
-      return res.status(404).json({ message: 'Cart not found' });
+    let discountAmount;
+    if (coupon.discount_type === 'amount') {
+      discountAmount = Math.floor(Math.random() * (coupon.max_discount - coupon.discount_value + 1)) + coupon.discount_value;
+    } else if (coupon.discount_type === 'percentage') {
+      discountAmount = Math.floor((coupon.discount_value / 100) * cart.total);
+      if (discountAmount > coupon.max_discount) {
+        discountAmount = coupon.max_discount;
+      }
     }
 
-    // Generate a random discount amount between coupon.discount and coupon.max_discount
-    const discountAmount = Math.floor(Math.random() * (coupon.max_discount - coupon.discount) + coupon.discount);
-
-
-    // Apply the discount to the cart
     cart.discount = discountAmount;
     cart.grandTotal = cart.total - discountAmount;
 
-    // Update the discountAppliedAt field with the current date and time
+    // Add the coupon code to the cart
+    cart.couponCode = code;
+
     cart.discountAppliedAt = new Date();
 
     await cart.save();
@@ -257,8 +276,7 @@ const applyCoupon = async(req,res)=>{
     console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
-}
-
+};
 
 
 

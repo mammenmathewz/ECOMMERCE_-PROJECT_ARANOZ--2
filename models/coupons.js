@@ -6,12 +6,18 @@ const couponSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    discount: {
+    discount_type: {
+        type: String,
+        required: true,
+        enum: ['amount', 'percentage']  // 'amount' for Minimum Discount Amount, 'percentage' for Percentage of Offer
+    },
+    discount_value: {
         type: Number,
-  
+        default:0
     },
     min_amount: {
         type: Number,
+        default:0
     },
     max_discount: {
         type: Number,
@@ -19,7 +25,7 @@ const couponSchema = new mongoose.Schema({
     startDate:{
         type:Date,
         
-       },
+    },
     expiry_date: {
         type: Date,
     },
@@ -39,5 +45,4 @@ const couponSchema = new mongoose.Schema({
 
 const Coupon = mongoose.model("Coupon", couponSchema);
 
-module.exports = Coupon
-
+module.exports = Coupon;

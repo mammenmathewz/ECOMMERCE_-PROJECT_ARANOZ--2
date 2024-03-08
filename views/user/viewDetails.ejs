@@ -1,0 +1,88 @@
+<%- include('../partials/head') %>
+
+
+  <!-- Header part end-->
+  <%- include('../partials/navbar') %>
+ <div style="padding-top: 10%; padding-left: 5%;">
+    <a style="height: 30px; width: 50px; " href="/myorder"><button style="border: none; background-color: white; "><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+      </svg>Back</button></a>
+ </div>
+<div class="container" style="padding: 3%; margin-top: 1%;">
+    
+  <div style="display: flex; justify-content: space-between; ">
+    <div>
+      <h3>Order ID: <%= order._id %>
+      </h3>
+      <h5>Date: <%= date %></h5>
+
+      <h5>User: <%= order.user.first_name %>
+        <%= order.user.last_name %>
+      </h5>
+    </div>
+    <div>
+      <h5>Payment : <%= order.paymentMethod %></h5>
+      <h5>Pyment status: <%= order.paymentStatus %></h5>
+      <h5>order status: <% if (order.is_delivered) { %>
+        Delivered :  <% } else if (order.paymentStatus==='Failed' ) { %>
+            Payment Pending
+            <% } else if (order.user_cancelled) { %>
+               User Cancelled
+              <% } else if (order.admin_cancelled) { %>
+                 Admin Cancelled
+                <% } else if (order.is_returned) { %>
+                   Returned
+                  <% } else { %>
+                    Pending
+                    <% } %></h5>
+       
+
+    </div>
+  </div>
+  <hr>
+
+  <h3>Products:</h3>
+  <% order.items.forEach((item)=> { %>
+  <div class="row">
+    <div class="col-md-4">
+      <p>
+        Product ID: <%= item.productId._id %><br>
+        Product Name: <%= item.productId.productname %><br>
+        Quantity: <%= item.quantity %><br>
+      </p>
+    </div>
+    <div class="col-md-4">
+      <img width="20%" height="25%" class="img-fluid" src="<%= item.productId.images[0] %>" alt="<%= item.productId.name %>">
+    </div>
+    <div class="col-md-4">
+        
+      </div>
+  </div>
+  <hr>
+
+
+  <% }) %>
+
+
+  <div>
+    <h4>Address: </h4>
+    <h6>
+      <%= order.user.address[order.selectedAddress].first_name %>
+      <%= order.user.address[order.selectedAddress].last_name %>,
+      <%= order.user.address[order.selectedAddress].address1 %><br>
+      <%= order.user.address[order.selectedAddress].adddress2 %>,
+      <%= order.user.address[order.selectedAddress].district %> ,
+      <%= order.user.address[order.selectedAddress].state %> ,
+      <%= order.user.address[order.selectedAddress].pin %>
+      <br>
+      <%= order.user.address[order.selectedAddress].phone
+                                                %>
+
+    </h6>
+  </div>
+
+
+
+
+
+</div>

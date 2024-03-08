@@ -40,6 +40,7 @@ userRouter.post('/paymentverify',auth.isUserLogin,orderController.verify)
 
 userRouter.get('/confirmation/:orderId',auth.isUserLogin,orderController.getConfirmation)
 userRouter.get('/myorder',auth.isUserLogin,userController.myOrder)
+userRouter.get('/viewdetails/:orderId',auth.isUserLogin,userController.viewDetails)
 userRouter.post('/getOrderDetails',auth.isUserLogin,userController.generateOrderid)
 
 userRouter.get('/editUser/:userId/address/:addressId', auth.isUserLogin, userController.editUser);

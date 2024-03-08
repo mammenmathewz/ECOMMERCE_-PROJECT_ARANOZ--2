@@ -346,6 +346,30 @@ const myOrder = async (req, res) => {
   }
 };
 
+const viewDetails = async(req,res)=>{
+  try {
+   
+    console.log(req.params.orderId);
+    const order = await Order.findById(req.params.orderId)
+      .populate("items.productId")
+      .populate("user");
+
+    if (!order) {
+      return res.status(404).send({ message: "Order not found" });
+    }
+    const formattedDate = moment(order.date).format("DD-MM-YYYY HH:MM");
+
+    res.render("user/viewDetails", {
+      order,
+      date: formattedDate,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Server error" });
+  }
+}
+
+
 
 const changePassword_Profile = async (req, res) => {
   try {
@@ -775,6 +799,7 @@ module.exports = {
   updateAddress,
   deleteAddress,
   viewOrder,
+  viewDetails,
   changePassword_Profile,
   resetPasswordWithoutOTP,
   filterAndSortProducts,

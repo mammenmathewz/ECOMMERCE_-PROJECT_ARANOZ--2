@@ -443,8 +443,6 @@ const getProducts = async (req, res) => {
     // Get the most ordered products
     const mostOrderedProducts = await getMostOrderedProducts();
 
-
-
     // Pass the products, current page, total pages, and most ordered products to the view
     res.render("admin/manageproducts", {
       product: product,
@@ -452,7 +450,7 @@ const getProducts = async (req, res) => {
       active: "productmanagement",
       currentPage: page,
       pages,
-      mostOrderedProducts: mostOrderedProducts.map(p => p._id.toString()),
+      mostOrderedProducts: mostOrderedProducts.map((p) => p._id.toString()),
     });
   } catch (error) {
     console.log(error);
@@ -460,13 +458,12 @@ const getProducts = async (req, res) => {
   }
 };
 
-
 const getMostOrderedProducts = async () => {
   return await Order.aggregate([
     { $unwind: "$items" },
     { $group: { _id: "$items.productId", total: { $sum: "$items.quantity" } } },
     { $sort: { total: -1 } },
-    { $limit: 10 }
+    { $limit: 10 },
   ]);
 };
 
@@ -865,7 +862,7 @@ const switchStatus = async (req, res) => {
   const orderId = req.params.id; // Get the order ID from the URL
   const status = req.body.status; // Get the new status from the request body
   console.log("status  : : " + status);
-  let amount
+  let amount;
   try {
     const order = await Order.findById(orderId)
       .populate("items.productId")
@@ -885,61 +882,56 @@ const switchStatus = async (req, res) => {
     switch (status) {
       case "Delivered":
         order.is_delivered = true;
-        order.paymentStatus == "Paid";
+        order.paymentStatus = "Paid";
         order.delivery_time = new Date();
         break;
 
-        case "User Cancelled":
-          order.user_cancelled = true;
-          incrementProductQuantity(order.items);
-          amount = order.total - order.discount;
-            if (order.paymentStatus == "Paid") {
-                user.transactions.push({
-                    amount: amount,
-                    type: 'credit',
-                    orderId: order._id 
-                });
-                user.wallet += amount;
-            }
-          
-            
-          
-          break;
-      
-          case "Admin Cancelled":
-            order.admin_cancelled = true;
-            incrementProductQuantity(order.items);
-             amount = order.total - order.discount;
-             console.log("admin :  :" + amount);
-            if (order.paymentStatus == "Paid") {
-                user.transactions.push({
-                    amount: amount,
-                    type: 'credit',
-                    orderId: order._id 
-                });
-                user.wallet += amount;
-            }
-          
-               
-            break;
-        
-            case "Returned":
-              order.is_returned = true;
-              incrementProductQuantity(order.items);
-              amount = order.total - order.discount;
-            if (order.paymentStatus == "Paid") {
-                user.transactions.push({
-                    amount: amount,
-                    type: 'credit',
-                    orderId: order._id 
-                });
-                user.wallet += amount;
-            }
-          
-                
-          
-              break;
-          
+      case "User Cancelled":
+        order.user_cancelled = true;
+        incrementProductQuantity(order.items);
+        amount = order.total - order.discount;
+        if (order.paymentStatus == "Paid") {
+          user.transactions.push({
+            amount: amount,
+            type: "credit",
+            orderId: order._id,
+          });
+          user.wallet += amount;
+        }
+
+        break;
+
+      case "Admin Cancelled":
+        order.admin_cancelled = true;
+        incrementProductQuantity(order.items);
+        amount = order.total - order.discount;
+        console.log("admin :  :" + amount);
+        if (order.paymentStatus == "Paid") {
+          user.transactions.push({
+            amount: amount,
+            type: "credit",
+            orderId: order._id,
+          });
+          user.wallet += amount;
+        }
+
+        break;
+
+      case "Returned":
+        order.is_returned = true;
+        incrementProductQuantity(order.items);
+        amount = order.total - order.discount;
+        if (order.paymentStatus == "Paid") {
+          user.transactions.push({
+            amount: amount,
+            type: "credit",
+            orderId: order._id,
+          });
+          user.wallet += amount;
+        }
+
+        break;
+
       case "Pending":
         order.is_delivered = false;
         order.user_cancelled = false;
@@ -949,7 +941,7 @@ const switchStatus = async (req, res) => {
       default:
         return res.status(400).json({ message: "Invalid status" });
     }
-
+    console.log(order.paymentStatus);
     await user.save(); // Save the updated user
     await order.save();
     res.status(200).json(order);
@@ -1009,8 +1001,15 @@ const getCoupon = async (req, res) => {
 
 const postCoupon = async (req, res) => {
   try {
-    const { code, discount_type, discount_value, min_amount, max_discount, startDate, expiry_date } =
-      req.body;
+    const {
+      code,
+      discount_type,
+      discount_value,
+      min_amount,
+      max_discount,
+      startDate,
+      expiry_date,
+    } = req.body;
 
     const existingCoupon = await Coupon.findOne({ code });
     if (existingCoupon) {
@@ -1059,8 +1058,14 @@ const getCouponEdit = async (req, res) => {
 };
 
 const updateCoupon = async (req, res) => {
-  const { code,  discount_value, min_amount, max_discount, startDate, expiry_date } =
-    req.body;
+  const {
+    code,
+    discount_value,
+    min_amount,
+    max_discount,
+    startDate,
+    expiry_date,
+  } = req.body;
 
   try {
     const coupon = await Coupon.findOne({ code: code });
@@ -1069,7 +1074,6 @@ const updateCoupon = async (req, res) => {
       return res.status(404).json({ message: "Coupon not found" });
     }
 
-    
     coupon.discount_value = discount_value;
     coupon.min_amount = min_amount;
     coupon.max_discount = max_discount;
@@ -1084,7 +1088,6 @@ const updateCoupon = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 const deleteCoupon = async (req, res) => {
   const { id } = req.body; // assuming you're sending the ID in the request body

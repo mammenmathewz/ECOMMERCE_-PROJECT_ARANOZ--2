@@ -82,7 +82,12 @@
                 </div>
                 <div class="col-lg-6 col-md-6">
                     <div class="offer_text">
-                        <h2>OFF upto ₹ <%=coupon.max_discount %> for above ₹ <%=coupon.min_amount %></h2>
+                        <% if(coupon.discount_type === 'amount') { %>
+                            <h2>OFF upto ₹ <%= coupon.max_discount %> for above ₹ <%= coupon.min_amount %></h2>
+                          <% } else if(coupon.discount_type === 'percentage') { %>
+                            <h2><%= coupon.discount_value %>% Off for purchase above ₹ <%= coupon.min_amount %></h2>
+                          <% } %>
+                          
                         
                             <div class="coupon_code" style="display: flex;" >
                                 <input style="border: none; height: 60px; text-align: center; font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;" type="text" value="<%= coupon.code %>" id="couponCode" readonly>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jQuery Password-Strength Plugin Demos</title>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<!-- password_strength -->
+<script type="text/javascript" src="password_strength/password_strength_lightweight.js"></script>
+<!-- <script type="text/javascript" src="password_strength/password_strength.js"></script> -->
+<!-- <script type="text/javascript" src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script> -->
+<link rel="stylesheet" type="text/css" href="password_strength/password_strength.css">
+
+<script>
+    $(document).ready(function($) {
+        $('#myPassword').strength_meter();
+
+        $('#mySecondPassword').strength_meter({
+            inputClass: 'c_strength_input',
+            strengthMeterClass: 'c_strength_meter',
+            toggleButtonClass: 'c_button_strength'
+        });
+
+        $("#myThirdPassword").strength_meter({
+            strengthMeterClass: 't_strength_meter'
+        });
+    });
+</script>
+
+</head>
+
+<body>
+<div id="jquery-script-menu">
+<div class="jquery-script-center">
+<ul>
+<li><a href="http://www.jqueryscript.net/form/jQuery-Plugin-For-Password-Strength-Checker-and-Indicator-Password-Strength.html">Download This Plugin</a></li>
+<li><a href="http://www.jqueryscript.net/">Back To jQueryScript.Net</a></li>
+</ul>
+<div class="jquery-script-ads"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<div class="jquery-script-clear"></div>
+</div>
+</div>
+<div class="container">
+    <h1>jQuery Password-Strength Plugin Demos</h1>
+
+
+<div class="effects">
+        <h2>Default Style</h2>
+        <div id="myPassword"></div>
+
+        <h2>Customized Style</h2>
+        <div id="mySecondPassword"></div>
+
+        <h2>Customized Style</h2>
+        <div id="myThirdPassword"></div>
+    </div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</div>
+</body>
+</html>

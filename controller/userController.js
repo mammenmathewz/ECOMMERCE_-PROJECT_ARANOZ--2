@@ -413,7 +413,24 @@ const postSignup = async (req, res) => {
     return res.status(400).redirect("signup");
   }
 
-  bcrypt.hash(req.body.password, saltRounds, async function (err, hash) {
+  // Password validation
+  const password = req.body.password;
+  const passwordRequirements = {
+    numCharacters: 8,
+    useLowercase: true,
+    useUppercase: true,
+    useNumbers: true,
+    useSpecial: true,
+  };
+
+  // Validate password according to requirements
+  const isValidPassword = validatePassword(password, passwordRequirements);
+  if (!isValidPassword) {
+    req.flash("info", "Your password does not meet the requirements. Please try again.");
+    return res.status(400).redirect("signup");
+  }
+
+  bcrypt.hash(password, saltRounds, async function (err, hash) {
     if (err) {
       console.log(err);
       return res
@@ -439,6 +456,38 @@ const postSignup = async (req, res) => {
     }
   });
 };
+
+// Password validation function
+function validatePassword(password, requirements) {
+  // Check length
+  if (password.length < requirements.numCharacters) {
+    return false;
+  }
+
+  // Check for lowercase letter
+  if (requirements.useLowercase && !/[a-z]/.test(password)) {
+    return false;
+  }
+
+  // Check for uppercase letter
+  if (requirements.useUppercase && !/[A-Z]/.test(password)) {
+    return false;
+  }
+
+  // Check for number
+  if (requirements.useNumbers && !/[0-9]/.test(password)) {
+    return false;
+  }
+
+  // Check for special character
+  if (requirements.useSpecial && !/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password)) {
+    return false;
+  }
+
+  // If all requirements are met
+  return true;
+}
+
 
 let otps = {};
 

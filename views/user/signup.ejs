@@ -6,7 +6,9 @@
   <%- include('../partials/navbar') %>
   <!--================Home Banner Area =================-->
   <!-- breadcrumb start-->
-  
+
+
+  <link rel="stylesheet" href="/validate-password-requirements/css/jquery.passwordRequirements.css" />
         
   <!-- breadcrumb start-->
 
@@ -60,9 +62,10 @@
               
               </div>
               <div class="col-md-12 form-group p_star">
-                <input type="password" class="form-control" placeholder="Password" id="password" name="password" style="margin-bottom: 2%;" required/>
+                <input type="password" class=" pr-password form-control" placeholder="Password" id="password" name="password" style="margin-bottom: 2%;" required/>
                 <input type="checkbox" onclick="showPassword()"> Show Password
             </div>
+           
             <div class="col-md-12 form-group p_star">
                 <input type="password" class="form-control" placeholder="Confirm Password" id="confirm_password"  name="confirm_password" required/>
                 
@@ -160,6 +163,12 @@ function checkForm(e) {
     e.preventDefault();
     alert('Please fill out the OTP and password fields');
   }
+
+  if (!$(password).passwordRequirements('isValid')) {
+        e.preventDefault();
+        alert('Your password does not meet the requirements. Please try again.');
+        return false; 
+    }
 }
 
 
@@ -222,8 +231,22 @@ function showPassword() {
   <script src="/user/js/price_rangs.js"></script>
   <!-- custom js -->
   <script src="/user/js/custom.js"></script>
+ 
+  <script src="/validate-password-requirements/js/jquery.passwordRequirements.min.js"></script>
 <script>
+
+$(".pr-password").passwordRequirements({
+  numCharacters: 8,
+  useLowercase: true,
+  useUppercase: true,
+  useNumbers: true,
+  useSpecial: true,
+  fadeTime: 500,
   
+
+});
+
+
 </script>
 
 </body>

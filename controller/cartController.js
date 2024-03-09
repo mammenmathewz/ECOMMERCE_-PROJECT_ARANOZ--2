@@ -27,7 +27,7 @@ const getCart = async(req, res) => {
       if (now - cart.discountAppliedAt > discountDuration || cart.items.length == 0) {
         cart.discount = 0;
         cart.grandTotal = cart.total;
-        cart.couponCode=""
+        cart.couponCode=null
         await cart.save();
       }
     }
@@ -107,6 +107,14 @@ const deleteItem = async(req,res)=>{
     // Subtract the total price of the item from the cart's total
     cart.total -= item.quantity * price;
 
+    // Fetch the coupon data
+    const coupon = await Coupon.findOne({ code: cart.couponCode });
+
+    // Check if the cart total is less than coupon.min_amount
+    if (coupon && cart.total < coupon.min_amount) {
+      return res.status(400).json({ message: `The minimum order value for this coupon is ${coupon.min_amount}. So remove the coupon to remove product.` });
+    }
+
     // Update the grand total
     cart.grandTotal = cart.total - cart.discount;
 
@@ -129,6 +137,7 @@ const deleteItem = async(req,res)=>{
     res.status(500).send('Error occurred while removing from cart');
   }
 }
+
 
 
 const increment = async(req,res)=>{
@@ -202,7 +211,7 @@ const decrement = async(req,res)=>{
 
     // Check if the cart total is less than coupon.min_amount
     if (coupon && cart.total < coupon.min_amount) {
-      return res.status(400).json({ message: `The minimum order value for this coupon is ${coupon.min_amount}. The cart total is less than that.` });
+      return res.status(400).json({ message: `The minimum order value for this coupon is ${coupon.min_amount}.So remove the coupon to decrement quantity` });
     }
 
     // Update the grand total
@@ -228,13 +237,16 @@ const applyCoupon = async(req,res)=>{
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
     }
+    
     const coupon = await Coupon.findOne({ code: code });
 
     // Check if the coupon exists
     if (!coupon) {
       return res.status(404).json({ message: 'Coupon not found' });
     }
-
+    if (cart.couponCode !== null) {
+      return res.status(400).json({message:'Coupon already applied'});
+    }
     // Check if the coupon is valid (not expired and not deleted)
     if (coupon.expiry_date < new Date() || coupon.is_deleted) {
       return res.status(400).json({ message: 'Coupon is not valid' });
@@ -244,10 +256,8 @@ const applyCoupon = async(req,res)=>{
       return res.status(400).json({ message: `The minimum order value for this coupon is ${coupon.min_amount}. The cart total is less than that.` });
     }
 
-    if (!coupon.users.includes(userId)) {
-      coupon.users.push(userId);
-      await coupon.save();
-    } else {
+    if (coupon.users.includes(userId)) {
+     
       return res.status(400).json({ message: 'User has already used this coupon' });
     }
 
@@ -278,7 +288,29 @@ const applyCoupon = async(req,res)=>{
   }
 };
 
+const removeCoupon = async(req,res)=>{
+  try {
+    const userId = req.session.user._id;
+    let cart = await Cart.findOne({ user: userId });
 
+    if (!cart) {
+      return res.status(404).send('Cart not found');
+    }
+
+    // Remove the coupon from the cart
+    cart.couponCode = null;
+    cart.discount = 0;
+
+    // Update the grand total
+    cart.grandTotal = cart.total;
+
+    await cart.save();
+    res.json({ total: cart.total, grandTotal: cart.grandTotal, items: cart.items }); // Send back the updated total, grand total and items
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error occurred while removing coupon');
+  }
+}
 
 module.exports={
     getCart,
@@ -286,5 +318,6 @@ module.exports={
     deleteItem,
     increment,
     decrement,
-    applyCoupon
+    applyCoupon,
+    removeCoupon
 }

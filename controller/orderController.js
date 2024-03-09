@@ -2,6 +2,7 @@
 const Product = require("../models/products");
 const Brand = require("../models/brand");
 const Cart = require("../models/cart");
+const Coupon = require('../models/coupons')
 const { User } = require("../models/users");
 const Order = require("../models/checkout");
 const moment = require("moment");
@@ -87,6 +88,23 @@ const cashOnDelivery = async (req, res) => {
       return res.status(400).send("No cart found for this user");
     }
 
+    // Check if the cart exists and has a coupon applied
+    if (cart && cart.couponCode) {
+      // Fetch the coupon
+      const coupon = await Coupon.findOne({ code: cart.couponCode });
+
+      // Add the user to the list of users who have used the coupon
+      if (coupon && !coupon.users.includes(userId)) {
+        coupon.users.push(userId);
+        await coupon.save();
+      }
+
+      // Remove the coupon from the cart
+      cart.couponCode = null;
+      cart.discount = 0;
+      cart.grandTotal = cart.total;
+    }
+
     const { selector, addressRadio } = req.body;
 
     const user = await User.findById(userId).populate("address");
@@ -132,6 +150,7 @@ const cashOnDelivery = async (req, res) => {
 };
 
 
+
 const walletPayment = async (req, res) => {
   try {
     const userId = req.session.user;
@@ -152,7 +171,23 @@ const walletPayment = async (req, res) => {
         
       });
     }
-    
+
+    // Check if the cart exists and has a coupon applied
+    if (cart && cart.couponCode) {
+      // Fetch the coupon
+      const coupon = await Coupon.findOne({ code: cart.couponCode });
+
+      // Add the user to the list of users who have used the coupon
+      if (coupon && !coupon.users.includes(userId)) {
+        coupon.users.push(userId);
+        await coupon.save();
+      }
+
+      // Remove the coupon from the cart
+      cart.couponCode = null;
+      cart.discount = 0;
+      cart.grandTotal = cart.total;
+    }
     
     const { selector, addressRadio } = req.body;
 
@@ -197,6 +232,7 @@ const walletPayment = async (req, res) => {
     res.status(500).send({ message: error.message });
   }
 };
+
 
 const generateOrderid = async(req,res)=>{
   try {
@@ -265,16 +301,8 @@ const verify = async(req,res)=>{
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
     const orderId = req.session.orderId;
 
-    console.log('secret:', secret);
-    console.log('razorpay_order_id:', razorpay_order_id);
-    console.log('razorpay_payment_id:', razorpay_payment_id);
-    console.log('Order ID retrieved from session:', orderId);
-
     const generated_signature = crypto.createHmac('sha256', secret).update(razorpay_order_id + '|' + razorpay_payment_id).digest('hex');
     
-    console.log('razorpay_signature:', razorpay_signature);
-
-
     if (generated_signature === razorpay_signature) {
       // Payment is successful, update the order status
       const order = await Order.findById(orderId);
@@ -289,15 +317,30 @@ const verify = async(req,res)=>{
           product.number -= item.quantity;
           await product.save();
         }
+
+        // Check if the cart exists and has a coupon applied
+        if (cart && cart.couponCode) {
+          // Fetch the coupon
+          const coupon = await Coupon.findOne({ code: cart.couponCode });
+
+          // Add the user to the list of users who have used the coupon
+          if (coupon && !coupon.users.includes(userId)) {
+            coupon.users.push(userId);
+            await coupon.save();
+          }
+
+          // Remove the coupon from the cart
+          cart.couponCode = null;
+          cart.discount = 0;
+          cart.grandTotal = cart.total;
+        }
+
         cart.items = [];
         cart.total = 0;
-        cart.discount = 0;
-        cart.grandTotal = 0;
         await cart.save();
       }
       let redirectUrl = `/confirmation/${orderId}`;
       res.json({ redirectUrl: redirectUrl });
-      console.log("url:" + redirectUrl);
 
     } else {
       // Signature verification failed, check the payment status
@@ -305,7 +348,6 @@ const verify = async(req,res)=>{
       const order = await Order.findById(orderId);
       if (order && order.paymentStatus !== 'Paid') {
         try {
-          console.log(orderId);
           await Order.deleteOne({ _id: orderId });
         } catch (error) {
           console.log('Error deleting order:', error);
@@ -319,6 +361,7 @@ const verify = async(req,res)=>{
     console.log(error);
   }
 }
+
 
 const addFromWallet = async(req,res)=>{
   try {
@@ -364,7 +407,6 @@ const addFromWallet = async(req,res)=>{
 
 
 
-
 const getConfirmation = async (req, res) => {
   try {
     // Fetch the order with populated product details
@@ -381,6 +423,8 @@ const getConfirmation = async (req, res) => {
     // Format the date using moment
     const formattedDate = moment(order.date).format("DD-MM-YYYY HH:mm");
 
+    // Fetch the cart
+   
     // Pass the user, order, selectedAddress, and formattedDate to the view
     res.render("user/confirmation", {
       user,

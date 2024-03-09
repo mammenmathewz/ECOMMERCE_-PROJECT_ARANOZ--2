@@ -122,14 +122,19 @@
                      
                       <div class="d-flex justify-content-between mb-3">
                         <h6 class="text-uppercase">Coupon discount</h6>
-                        <h5 style="color: red;" class="couponDiscount">
+                        <div>
+                          <h5 style="color: red;" class="couponDiscount">
+                            <% if (cart.discount > 0) { %>
+                              - ₹ <%= cart.discount.toFixed(2) %>
+                            <% } %>
+                          </h5>
                           <% if (cart.discount > 0) { %>
-                            - ₹ <%= cart.discount.toFixed(2) %>
+                            <button onclick="removeCoupon(event)" class="btn btn-danger remove-coupon">Remove</button>
                           <% } %>
-                        </h5>
-                         
-                        </h5>
+                          
+                        </div>
                       </div>
+                      
                       <hr class="my-4">
                       <div class="d-flex justify-content-between mb-5">
                         <h6 class="text-uppercase">Grand Total</h6>

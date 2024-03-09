@@ -52,6 +52,7 @@ userRouter.get('/changepass',auth.isUserLogin,userController.changePassword_Prof
 userRouter.post('/newpassword',auth.isUserLogin,userController.resetPasswordWithoutOTP)
 userRouter.get('/filterAndSortProducts',userController.filterAndSortProducts)
 userRouter.put('/applyCoupon',auth.isUserLogin,cartController.applyCoupon)
+userRouter.put('/removeCoupon', auth.isUserLogin, cartController.removeCoupon);
 userRouter.get('/wallet',auth.isUserLogin,userController.getWallet)
 userRouter.get('/addFromWallet',auth.isUserLogin,orderController.addFromWallet)
 

@@ -35,7 +35,12 @@ $(document).on('click', '.remove-from-cart', function(e) {
           $('.d-flex.justify-content-between.mb-4 h3').text('Items in cart: ' + itemCount);
         },
         error: function(err) {
-          console.error(err);
+          // Display the error message using SweetAlert
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: err.responseJSON.message,
+          });
         }
       });
     }
@@ -154,6 +159,10 @@ function applyCoupon(event) {
         title: 'Coupon applied successfully',
         text: `Your new total is ₹ ${data.grandTotal.toFixed(2)}. You saved ₹ ${data.couponAmount.toFixed(2)}!`
       });
+      const removeButton = document.createElement('button');
+      removeButton.classList.add('btn', 'btn-danger', 'remove-coupon');
+      removeButton.textContent = 'Remove';
+      document.querySelector('.couponDiscount').after(removeButton);
   })
   .catch((error) => {
     // If there was an error, get the error message from the JSON response
@@ -166,3 +175,52 @@ function applyCoupon(event) {
     });
   });
 }
+
+
+function removeCoupon(event) {
+  event.preventDefault();
+
+  fetch('/removeCoupon', {
+      method: 'PUT',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+  })
+  .then(response => {
+    if (!response.ok) {
+      // If the response status is not ok (like 400 or 500), throw an error
+      throw response;
+    }
+    return response.json();
+  })
+  .then(data => {
+      // Update the values on the page
+      document.querySelector('.priceChange').textContent = '₹ ' + data.total.toFixed(2);
+      document.querySelector('.couponDiscount').textContent = '- ₹ 0.00';
+      document.querySelector('.gtotal').textContent = '₹ ' + data.grandTotal.toFixed(2);
+
+      // Show a success message
+      Swal.fire({
+        icon: 'success',
+        title: 'Coupon removed successfully',
+        text: `Your new total is ₹ ${data.grandTotal.toFixed(2)}.`
+      });
+
+      // Remove the "Remove" button from the DOM
+      const removeButton = document.querySelector('.remove-coupon');
+      if (removeButton) {
+        removeButton.remove();
+      }
+  })
+  .catch((error) => {
+    // If there was an error, get the error message from the JSON response
+    error.json().then(errorData => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: errorData.message
+      });
+    });
+  });
+}
+$(document).on('click', '.remove-coupon', removeCoupon);

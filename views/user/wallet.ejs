@@ -21,10 +21,10 @@
         <table id="example" class="display" style="width:100%;">
           <thead>
               <tr>
-                  <th style="text-align:center;">Transaction Id</th>
-                  <th style="text-align:center;">Amount</th>
-                  <th style="text-align:center;">Type</th>
-                  <th style="text-align:center;">Date & Time</th>
+                  <th class="no-sort" style="text-align:center;">Transaction Id</th>
+                  <th class="no-sort" style="text-align:center;">Amount</th>
+                  <th class="no-sort" style="text-align:center;">Type</th>
+                  <th class="no-sort" style="text-align:center;">Date & Time</th>
               </tr>
           </thead>
           <tbody>
@@ -86,7 +86,14 @@
 
 
 <script>
-  new DataTable('#example');
+$('#example').DataTable({
+    "order": [[ 3, "desc" ]], // Set the initial sorting to the first column in descending order
+    "columnDefs": [ {
+        "targets"  : 'no-sort',  // Apply the 'no-sort' class to the columns you don't want to sort
+        "orderable": false,      // Set 'orderable' to false to disable sorting
+    }]
+});
+
 </script>
     </body>
    

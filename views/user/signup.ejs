@@ -155,21 +155,7 @@ function startCountdown() {
 }
 
 
-function checkForm(e) {
-  
-  const otp = document.querySelector('input[name="otp"]');
-  const password = document.querySelector('input[name="password"]');
-  if (!otp.value.trim() || !password.value.trim()) {
-    e.preventDefault();
-    alert('Please fill out the OTP and password fields');
-  }
 
-  if (!$(password).passwordRequirements('isValid')) {
-        e.preventDefault();
-        alert('Your password does not meet the requirements. Please try again.');
-        return false; 
-    }
-}
 
 
 // Assuming you have a button with id 'otpButton'
@@ -245,7 +231,21 @@ $(".pr-password").passwordRequirements({
   
 
 });
+function checkForm(e) {
+  
+  const otp = document.querySelector('input[name="otp"]');
+  const password = document.querySelector('input[name="password"]');
+  if (!otp.value.trim() || !password.value.trim()) {
+    e.preventDefault();
+    alert('Please fill out the OTP and password fields');
+  }
 
+  if (!$(password).passwordRequirements('isValid')) {
+        e.preventDefault();
+        alert('Your password does not meet the requirements. Please try again.');
+        return false; 
+    }
+}
 
 </script>
 

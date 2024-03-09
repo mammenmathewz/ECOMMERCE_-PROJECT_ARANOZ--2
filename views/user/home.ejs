@@ -83,7 +83,7 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="offer_text">
                         <% if(coupon.discount_type === 'amount') { %>
-                            <h2>OFF upto ₹ <%= coupon.max_discount %> for above ₹ <%= coupon.min_amount %></h2>
+                            <h2>OFF upto ₹ <%= coupon.max_discount %> for purchase above ₹ <%= coupon.min_amount %></h2>
                           <% } else if(coupon.discount_type === 'percentage') { %>
                             <h2><%= coupon.discount_value %>% Off for purchase above ₹ <%= coupon.min_amount %></h2>
                           <% } %>

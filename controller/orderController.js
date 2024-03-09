@@ -89,21 +89,7 @@ const cashOnDelivery = async (req, res) => {
     }
 
     // Check if the cart exists and has a coupon applied
-    if (cart && cart.couponCode) {
-      // Fetch the coupon
-      const coupon = await Coupon.findOne({ code: cart.couponCode });
-
-      // Add the user to the list of users who have used the coupon
-      if (coupon && !coupon.users.includes(userId)) {
-        coupon.users.push(userId);
-        await coupon.save();
-      }
-
-      // Remove the coupon from the cart
-      cart.couponCode = null;
-      cart.discount = 0;
-      cart.grandTotal = cart.total;
-    }
+    
 
     const { selector, addressRadio } = req.body;
 
@@ -134,6 +120,22 @@ const cashOnDelivery = async (req, res) => {
       const product = await Product.findById(item.productId);
       product.number -= item.quantity;
       await product.save();
+    }
+
+    if (cart && cart.couponCode) {
+      // Fetch the coupon
+      const coupon = await Coupon.findOne({ code: cart.couponCode });
+
+      // Add the user to the list of users who have used the coupon
+      if (coupon && !coupon.users.includes(userId)) {
+        coupon.users.push(userId);
+        await coupon.save();
+      }
+
+      // Remove the coupon from the cart
+      cart.couponCode = null;
+      cart.discount = 0;
+      cart.grandTotal = cart.total;
     }
 
     cart.items = [];
@@ -173,21 +175,6 @@ const walletPayment = async (req, res) => {
     }
 
     // Check if the cart exists and has a coupon applied
-    if (cart && cart.couponCode) {
-      // Fetch the coupon
-      const coupon = await Coupon.findOne({ code: cart.couponCode });
-
-      // Add the user to the list of users who have used the coupon
-      if (coupon && !coupon.users.includes(userId)) {
-        coupon.users.push(userId);
-        await coupon.save();
-      }
-
-      // Remove the coupon from the cart
-      cart.couponCode = null;
-      cart.discount = 0;
-      cart.grandTotal = cart.total;
-    }
     
     const { selector, addressRadio } = req.body;
 
@@ -219,7 +206,22 @@ const walletPayment = async (req, res) => {
       product.number -= item.quantity;
       await product.save();
     }
+    if (cart && cart.couponCode) {
+      // Fetch the coupon
+      const coupon = await Coupon.findOne({ code: cart.couponCode });
 
+      // Add the user to the list of users who have used the coupon
+      if (coupon && !coupon.users.includes(userId)) {
+        coupon.users.push(userId);
+        await coupon.save();
+      }
+
+      // Remove the coupon from the cart
+      cart.couponCode = null;
+      cart.discount = 0;
+      cart.grandTotal = cart.total;
+    }
+    
     cart.items = [];
     cart.total = 0;
     cart.discount = 0;

@@ -684,11 +684,6 @@ const filterAndSortProducts = async (req, res) => {
 const getWallet = async(req,res)=>{
   try {
     const user = await User.findById(req.session.user._id);
-
-    // Sort the transactions by date in descending order
-    user.transactions.sort((a, b) => b.date - a.date);
-
-    console.log(user);
     res.render('user/wallet', { user: user, moment: moment });
   } catch (error) {
     console.log(error);

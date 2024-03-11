@@ -22,7 +22,7 @@ var instance = new Razorpay({
 
 const saltRounds = 10;
 
-const getHome = async (req, res) => {
+const getHome = async (req, res,next) => {
   try {
     const brands = await Brand.find({ display: true });
     const banners = await Banner.find();
@@ -43,7 +43,7 @@ const getHome = async (req, res) => {
 
   } catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); // Pass the error to the next middleware
   }
 };
 
@@ -58,7 +58,7 @@ const getMostOrderedProducts = async () => {
   ]);
 };
 
-const getProducts = async (req, res) => {
+const getProducts = async (req, res,next) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
@@ -99,12 +99,12 @@ const getProducts = async (req, res) => {
     
   } catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); // Pass the error to the next middleware
   }
 };
 
 
-const getProductsByBrand = async (req, res) => {
+const getProductsByBrand = async (req, res,next) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const skip = (page - 1) * limit;
@@ -153,32 +153,32 @@ const getProductsByBrand = async (req, res) => {
     
   } catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); // Pass the error to the next middleware
   }
 };
 
 
 
-const getProduct = async (req, res) => {
+const getProduct = async (req, res, next) => {
   try {
     const id = req.params.id;
     const product = await Product.findById(id).populate("brand"); // Add .populate('brand')
     res.render("user/viewproduct", { product: product });
   } catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); // Pass the error to the next middleware
   }
 };
-
 const getLogin = async (req, res) => {
   try {
-    res.render("user/login");
-  } catch (error) {
+    res.render("user/login"); 
+  }  catch (error) {
     console.log(error);
+    next(error); // Pass the error to the next middleware
   }
 };
 
-const postLogin = async (req, res) => {
+const postLogin = async (req, res,next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     const { email, password } = req.body;
@@ -192,7 +192,7 @@ const postLogin = async (req, res) => {
       // Redirect if user not found or user is blocked
       req.flash("info", "Please contact us");
       req.flash("type", "alert alert-danger");
-
+      
       return res.redirect("/login");
     }
 
@@ -217,27 +217,33 @@ const postLogin = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("An error occurred.");
+    console.log(error);
+    next(error); // Pass the error to the next middleware
   }
 };
 
-const getAccount = async (req, res) => {
+const getAccount = async (req, res,next) => {
   try {
     const user = await User.findById(req.session.user._id);
     console.log(user);
-    // Pass userId and addressId to the EJS template
+    if (user.block) {
+      req.flash("info", "Please contact us");
+      req.flash("type", "alert alert-danger");
+      req.session.user = null;
+      return res.redirect("/login");
+    }
     res.render("user/account", {
       user: user,
       userId: req.session.user._id,
       addressId: "your_address_id",
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
+    next(error); // Pass the error to the next middleware
   }
 };
 
-const editUser = async (req, res) => {
+const editUser = async (req, res,next) => {
   try {
     const userId = req.params.userId;
     const addressId = req.params.addressId;
@@ -247,7 +253,13 @@ const editUser = async (req, res) => {
     if (!user) {
       return res.status(404).send("User not found");
     }
-
+    if (user.block) {
+      // Redirect if user not found or user is blocked
+      req.flash("info", "Please contact us");
+      req.flash("type", "alert alert-danger");
+      req.session.user = null;
+      return res.redirect("/login");
+    }
     const address = user.address.id(addressId);
 
     if (!address) {
@@ -261,12 +273,12 @@ const editUser = async (req, res) => {
       addressId: addressId,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Server error");
+    console.log(error);
+    next(error); // Pass the error to the next middleware
   }
 };
 
-const updateAddress = async (req, res) => {
+const updateAddress = async (req, res,next) => {
   try {
     const userId = req.params.userId; 
     const addressId = req.params.addressId; 
@@ -293,12 +305,12 @@ const updateAddress = async (req, res) => {
     req.flash("type", "alert alert-success");
     res.redirect("/account");
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Server error");
+    console.log(error);
+    next(error); // Pass the error to the next middleware
   }
 };
 
-const deleteAddress = async (req, res) => {
+const deleteAddress = async (req, res,next) => {
   try {
     const userId = req.params.userId; // get the user's ID from the request parameters
     const addressId = req.params.addressId; // get the address ID from the request parameters
@@ -317,13 +329,13 @@ const deleteAddress = async (req, res) => {
 
     res.status(200).json({ message: "Address deleted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.log(error);
+    next(error); // Pass the error to the next middleware
   }
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-const myOrder = async (req, res) => {
+const myOrder = async (req, res,next) => {
   try {
     const page = req.query.page || 1; // Get the page number from the query parameters
     const limit = 4; // Set the number of orders per page
@@ -343,12 +355,13 @@ const myOrder = async (req, res) => {
     res.render("user/userorders", { orders, currentPage: page, pages });
   } catch (error) {
     console.log(error);
+    next(error); // Pass the error to the next middleware
   }
 };
 
-const viewDetails = async(req,res)=>{
+const viewDetails = async(req,res,next)=>{
   try {
-   
+    
     console.log(req.params.orderId);
     const order = await Order.findById(req.params.orderId)
       .populate("items.productId")
@@ -363,40 +376,49 @@ const viewDetails = async(req,res)=>{
       order,
       date: formattedDate,
     });
-  } catch (error) {
+  }catch (error) {
     console.log(error);
-    res.status(500).send({ message: "Server error" });
+    next(error); // Pass the error to the next middleware
   }
 }
 
 
 
-const changePassword_Profile = async (req, res) => {
+const changePassword_Profile = async (req, res,next) => {
   try {
     const user_id = req.session.user._id;
     
     const user = await User.findById(user_id);
-  
+    if (user.block) {
+      // Redirect if user not found or user is blocked
+      req.flash("info", "Please contact us");
+      req.flash("type", "alert alert-danger");
+      req.session.user = null;
+      return res.redirect("/login");
+    }
     res.render("user/changepassword", { email: user.email });
   } catch (error) {
     console.log(error);
+    next(error); 
   }
 };
 
-const userLogout = async (req, res) => {
+const userLogout = async (req, res,next) => {
   try {
     req.session.user = null;
     res.redirect("/");
-  } catch (error) {
-    console.log(error.message);
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const getSignup = async (req, res) => {
+const getSignup = async (req, res,next) => {
   try {
     res.render("user/signup");
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
+    next(error); 
   }
 };
 
@@ -491,7 +513,7 @@ function validatePassword(password, requirements) {
 
 let otps = {};
 
-const postOtp = async (req, res) => {
+const postOtp = async (req, res,next) => {
   try {
     const otp = crypto.randomBytes(3).toString("hex");
     otps[req.body.email] = otp;
@@ -515,13 +537,13 @@ const postOtp = async (req, res) => {
     await transporter.sendMail(mailOptions);
 
     res.sendStatus(200);
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred.");
+    next(error); 
   }
 };
 
-const resetPassword = async (req, res) => {
+const resetPassword = async (req, res,next) => {
   try {
     const { email, otp, newPassword } = req.body;
 
@@ -551,12 +573,13 @@ const resetPassword = async (req, res) => {
         res.status(500).send("An error occurred while updating the password.");
       }
     });
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
+    next(error); 
   }
 };
 
-const viewOrder = async (req, res) => {
+const viewOrder = async (req, res,next) => {
   try {
     // Get the user's ID from the session
     const userId = req.session.userId;
@@ -570,12 +593,13 @@ const viewOrder = async (req, res) => {
 
     // Render the 'user/myorder' view with the orders
     res.render("user/myorder", { orders: orders });
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
+    next(error); 
   }
 };
 
-const resetPasswordWithoutOTP = async (req, res) => {
+const resetPasswordWithoutOTP = async (req, res,next) => {
   try {
     const { email, currentPassword, newPassword } = req.body;
 
@@ -610,13 +634,13 @@ const resetPasswordWithoutOTP = async (req, res) => {
       req.flash("type", "alert alert-success");
       res.redirect("/account");
     });
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred.");
+    next(error); 
   }
 };
 
-const filterAndSortProducts = async (req, res) => {
+const filterAndSortProducts = async (req, res,next) => {
   try {
     const { page = 1, limit = 10, sort = "1", categories, brands, search = "" } = req.query;
     const skip = (page - 1) * limit;
@@ -676,17 +700,25 @@ const filterAndSortProducts = async (req, res) => {
     res.json({ product: product, currentPage: page, pages: pages, mostOrderedProducts: productIds });
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error occurred while fetching data");
+    next(error); 
   }
 };
 
 
-const getWallet = async(req,res)=>{
+const getWallet = async(req,res,next)=>{
   try {
     const user = await User.findById(req.session.user._id);
+    if (user.block) {
+      // Redirect if user not found or user is blocked
+      req.flash("info", "Please contact us");
+      req.flash("type", "alert alert-danger");
+      req.session.user = null;
+      return res.redirect("/login");
+    }
     res.render('user/wallet', { user: user, moment: moment });
   } catch (error) {
     console.log(error);
+    next(error); 
   }
 }
 const generateOrderid = async(req,res)=>{
@@ -805,7 +837,7 @@ const generateInvoice = async (orderId) => {
     console.error('Error creating invoice:', error);
   }
 };
-const downlodeInvoice = async(req,res)=>{
+const downlodeInvoice = async(req,res,next)=>{
   try {
     const orderId = req.params.orderId;
     const filePath = path.join(__dirname, '..', 'public', 'Invoice', `${orderId}.pdf`);
@@ -819,8 +851,9 @@ const downlodeInvoice = async(req,res)=>{
       res.contentType("application/pdf");
       res.send(data);
     });
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
+    next(error); 
   }
 }
 

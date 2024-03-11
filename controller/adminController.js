@@ -12,16 +12,16 @@ const path = require("path");
 const easyinvoice = require("easyinvoice");
 const { json } = require("express");
 
-const getAdminLogin = async (req, res) => {
+const getAdminLogin = async (req, res,next) => {
   try {
     res.render("admin/signin");
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); 
   }
 };
 
-const postAdminLogin = async (req, res) => {
+const postAdminLogin = async (req, res,next) => {
   try {
     const { email, password } = req.body;
 
@@ -47,22 +47,22 @@ const postAdminLogin = async (req, res) => {
       // Redirect to account
       res.redirect("/admin/dash");
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("An error occurred");
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const getAdminSignup = async (req, res) => {
+const getAdminSignup = async (req, res,next) => {
   try {
     res.render("admin/signup");
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); 
   }
 };
 
-const postAdminSignup = async (req, res) => {
+const postAdminSignup = async (req, res,next) => {
   const existingUser = await Admin.findOne({ email: req.body.email });
   if (existingUser) {
     //  req.flash('info', 'Admin already exists');
@@ -84,9 +84,9 @@ const postAdminSignup = async (req, res) => {
 
     // Redirect or respond as necessary
     res.redirect("/admin/dash");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("An error occurred while signing up.");
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
@@ -204,7 +204,7 @@ const getYearlyDeliveredOrders = async () => {
 
 ////GET ADMIN DASH/////
 
-const adminDash = async (req, res) => {
+const adminDash = async (req, res,next) => {
   try {
     const [
       dailySales,
@@ -277,13 +277,13 @@ const adminDash = async (req, res) => {
       codOrders,
       onlineOrders,
     });
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); 
   }
 };
 
-const salesReport = async (req, res) => {
+const salesReport = async (req, res,next) => {
   try {
     let salesData;
 
@@ -315,13 +315,13 @@ const salesReport = async (req, res) => {
     }
 
     res.json({ salesData });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error occurred while fetching sales data");
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const dataPerDate = async (req, res) => {
+const dataPerDate = async (req, res,next) => {
   try {
     const { startDate, endDate } = req.body;
     console.log(startDate + "  " + endDate);
@@ -355,13 +355,13 @@ const dataPerDate = async (req, res) => {
     }
     console.log(JSON.stringify(salesPerDay));
     res.json(salesPerDay);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error occurred while fetching data");
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const adminLogout = async (req, res) => {
+const adminLogout = async (req, res,next) => {
   try {
     if (req.session.admin) {
       req.session.admin = null;
@@ -371,14 +371,14 @@ const adminLogout = async (req, res) => {
     } else {
       res.redirect("/error");
     }
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); 
   }
 };
 
 //USER FUNCTIONS//
-const getUsers = async (req, res) => {
+const getUsers = async (req, res,next) => {
   try {
     const page = req.query.page || 1; // Get the page number from the query parameters
     const limit = 10; // Set the number of users per page
@@ -398,9 +398,9 @@ const getUsers = async (req, res) => {
       currentPage: page,
       pages,
     });
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); 
   }
 };
 
@@ -422,7 +422,7 @@ const blockUser = async (req, res) => {
   }
 };
 
-const getProducts = async (req, res) => {
+const getProducts = async (req, res,next) => {
   try {
     const page = req.query.page || 1; // Get the page number from the query parameters
     const limit = 10; // Set the number of products per page
@@ -452,9 +452,9 @@ const getProducts = async (req, res) => {
       pages,
       mostOrderedProducts: mostOrderedProducts.map((p) => p._id.toString()),
     });
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
-    res.send("Error occurred while fetching data");
+    next(error); 
   }
 };
 
@@ -467,7 +467,7 @@ const getMostOrderedProducts = async () => {
   ]);
 };
 
-const editProduct = async (req, res) => {
+const editProduct = async (req, res,next) => {
   try {
     const id = req.params.id;
     const product = await Product.findById(id).populate("brand");
@@ -481,13 +481,13 @@ const editProduct = async (req, res) => {
       active: "productmanagement",
       selectedCategory: product.category,
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Server error");
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const updateProduct = async (req, res) => {
+const updateProduct = async (req, res,next) => {
   try {
     console.log(req.body);
     // Validate the brand ID
@@ -542,19 +542,19 @@ const updateProduct = async (req, res) => {
     await product.save();
 
     res.redirect("/admin/productmanagement");
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("An error occurred while updating the product.");
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const addProduct = async (req, res) => {
+const addProduct = async (req, res,next) => {
   try {
     const brands = await Brand.find();
     res.render("admin/addproducts", { brands: brands, active: "addproduct" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("An error occurred while fetching the brands.");
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
@@ -644,7 +644,7 @@ function saveImageToFile(base64String) {
 
   return filename;
 }
-const uploadProduct = async (req, res) => {
+const uploadProduct = async (req, res,next) => {
   try {
     // Validate the brand ID
     const brand = await Brand.findById(req.body.brand);
@@ -701,13 +701,13 @@ const uploadProduct = async (req, res) => {
 
     await product.save();
     res.redirect("/admin/addproduct");
-  } catch (err) {
-    console.log(err);
-    res.status(500).send("An error occurred while saving the product.");
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const deleteImage = async (req, res) => {
+const deleteImage = async (req, res,next) => {
   try {
     const productId = req.params.productId;
     const imageIndex = req.params.imageIndex;
@@ -727,13 +727,13 @@ const deleteImage = async (req, res) => {
     } else {
       res.status(404).json({ message: "Product not found" });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error occurred while deleting image" });
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const deleteProduct = async (req, res) => {
+const deleteProduct = async (req, res,next) => {
   try {
     const id = req.params.id;
     const product = await Product.findById(id);
@@ -744,26 +744,26 @@ const deleteProduct = async (req, res) => {
     } else {
       res.send("Product not found");
     }
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
-    res.send("Error occurred while deleting product");
+    next(error); 
   }
 };
 
-const getBrands = async (req, res) => {
+const getBrands = async (req, res,next) => {
   try {
     // Fetch the brands from the database
     const brands = await Brand.find();
 
     // Render the view and pass the brands to it
     res.render("admin/brand", { brands: brands, active: "brands" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("An error occurred while fetching the brands.");
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const addBrands = async (req, res) => {
+const addBrands = async (req, res,next) => {
   const existingBrand = await Brand.findOne({
     name: { $regex: new RegExp(`^${req.body.name}$`, "i") },
   });
@@ -789,13 +789,13 @@ const addBrands = async (req, res) => {
 
     // Send the updated list of brands back to the client
     res.json(brands);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("An error occurred while saving the brand.");
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const toggleBrandDisplay = async (req, res) => {
+const toggleBrandDisplay = async (req, res,next) => {
   try {
     const brand = await Brand.findById(req.params.brandId);
     if (!brand) {
@@ -809,23 +809,23 @@ const toggleBrandDisplay = async (req, res) => {
       ? "Brand added to home page"
       : "Brand removed from home page";
     res.json({ message: message });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("An error occurred while toggling the display.");
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const deleteBrand = async (req, res) => {
+const deleteBrand = async (req, res,next) => {
   try {
     await Brand.findByIdAndDelete(req.params.id);
     res.redirect("/admin/brands");
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("An error occurred while deleting the brand.");
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const getOrderManagement = async (req, res) => {
+const getOrderManagement = async (req, res,next) => {
   try {
     const page = req.query.page || 1; // Get the page number from the query parameters
     const limit = 10; // Set the number of orders per page
@@ -853,8 +853,9 @@ const getOrderManagement = async (req, res) => {
       currentPage: page,
       pages,
     });
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
+    next(error); 
   }
 };
 
@@ -958,7 +959,7 @@ async function incrementProductQuantity(items) {
   }
 }
 
-const vieworder = async (req, res) => {
+const vieworder = async (req, res,next) => {
   try {
     // Fetch the order by its ID, populate product details and user data
     console.log(req.params.orderId);
@@ -980,13 +981,13 @@ const vieworder = async (req, res) => {
       active: "orders",
       date: formattedDate,
     });
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
-    res.status(500).send({ message: "Server error" });
+    next(error); 
   }
 };
 
-const getCoupon = async (req, res) => {
+const getCoupon = async (req, res,next) => {
   try {
     const coupons = await Coupon.find();
     res.render("admin/coupons", {
@@ -994,8 +995,9 @@ const getCoupon = async (req, res) => {
       coupons: coupons,
       moment: moment,
     });
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
+    next(error); 
   }
 };
 
@@ -1039,7 +1041,7 @@ const postCoupon = async (req, res) => {
   }
 };
 
-const getCouponEdit = async (req, res) => {
+const getCouponEdit = async (req, res,next) => {
   console.log(req.params.id); // log the ID
 
   try {
@@ -1051,13 +1053,13 @@ const getCouponEdit = async (req, res) => {
     }
 
     res.render("admin/editeCoupon", { active: "coupons", coupon: coupon });
-  } catch (err) {
-    console.log(err); // log any errors
-    res.status(500).send("Server error");
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const updateCoupon = async (req, res) => {
+const updateCoupon = async (req, res,next) => {
   const {
     code,
     discount_value,
@@ -1083,13 +1085,13 @@ const updateCoupon = async (req, res) => {
     await coupon.save();
 
     res.redirect("/admin/coupons");
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
-const deleteCoupon = async (req, res) => {
+const deleteCoupon = async (req, res,next) => {
   const { id } = req.body; // assuming you're sending the ID in the request body
 
   try {
@@ -1102,9 +1104,9 @@ const deleteCoupon = async (req, res) => {
     await coupon.remove();
 
     res.json({ message: "Coupon deleted successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
@@ -1177,15 +1179,16 @@ const deleteBanner = async (req, res) => {
   }
 };
 
-const switchCoupon = async (req, res) => {
+const switchCoupon = async (req, res,next) => {
   try {
     const { couponId } = req.body;
 
     await Coupon.updateMany({}, { display_home: false });
     await Coupon.findByIdAndUpdate(couponId, { display_home: true });
     res.json({ message: "Coupon selected successfully" });
-  } catch (error) {
-    console.log(err);
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 module.exports = {

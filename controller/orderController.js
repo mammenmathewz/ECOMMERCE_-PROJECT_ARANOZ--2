@@ -15,7 +15,7 @@ var instance = new Razorpay({
   key_secret: process.env.API_KEY,
 });
 
-const getOrder = async (req, res) => {
+const getOrder = async (req, res,next) => {
   try {
     const userId = req.session.user._id;
     const justuser = await User.findById(userId); // Fetch the latest user data from the database
@@ -25,7 +25,13 @@ const getOrder = async (req, res) => {
         path: "brand",
       },
     }); // Populate the products in the cart
-
+    if (justuser .block) {
+      // Redirect if user not found or user is blocked
+      req.flash("info", "Please contact us");
+      req.flash("type", "alert alert-danger");
+      req.session.user = null;
+      return res.redirect("/login");
+    }
     console.log(justuser); // This will now log the latest user data
 
     for (let item of cart.items) {
@@ -40,13 +46,14 @@ const getOrder = async (req, res) => {
     }
 
     res.render("user/checkout", {justuser:justuser, cart: cart ,addMoneySuccess: req.query.addMoneySuccess}); // Pass the cart to the view
-  } catch (err) {
-    console.log(err);
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
 
-const addAddress = async (req, res) => {
+const addAddress = async (req, res,next) => {
   try {
     const user = await User.findById(req.session.user._id);
 
@@ -67,14 +74,14 @@ const addAddress = async (req, res) => {
 
     const redirectPage = req.body.redirect || "/checkout";
     res.status(200).redirect(redirectPage);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("An error occurred while adding the address.");
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
 // Handle cash on delivery orders
-const cashOnDelivery = async (req, res) => {
+const cashOnDelivery = async (req, res,next) => {
   try {
     const userId = req.session.user;
     console.log("userid:"+userId);
@@ -94,6 +101,14 @@ const cashOnDelivery = async (req, res) => {
     const { selector, addressRadio } = req.body;
 
     const user = await User.findById(userId).populate("address");
+
+    if (user.block) {
+      // Redirect if user not found or user is blocked
+      req.flash("info", "Please contact us");
+      req.flash("type", "alert alert-danger");
+      req.session.user = null;
+      return  res.json({ redirectUrl: `/login` });
+    }
 
     const selectedAddressIndex = user.address.findIndex(
       (address) => address._id.toString() === req.body.selectedAddress
@@ -146,14 +161,15 @@ const cashOnDelivery = async (req, res) => {
 
     res.json({ redirectUrl: `/confirmation/${newOrder._id}` });
 
-  } catch (error) {
-    res.status(500).send({ message: error.message });
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
 
 
-const walletPayment = async (req, res) => {
+const walletPayment = async (req, res,next) => {
   try {
     const userId = req.session.user;
     console.log("userid:"+userId);
@@ -179,7 +195,13 @@ const walletPayment = async (req, res) => {
     const { selector, addressRadio } = req.body;
 
     const user = await User.findById(userId).populate("address");
-
+    if (user.block) {
+      // Redirect if user not found or user is blocked
+      req.flash("info", "Please contact us");
+      req.flash("type", "alert alert-danger");
+      req.session.user = null;
+      return  res.json({ redirectUrl: `/login` });
+    }
     const selectedAddressIndex = user.address.findIndex(
       (address) => address._id.toString() === req.body.selectedAddress
     ); // Use addressRadio to get the selected address
@@ -230,13 +252,14 @@ const walletPayment = async (req, res) => {
 
     res.json({ redirectUrl: `/confirmation/${newOrder._id}` });
 
-  } catch (error) {
-    res.status(500).send({ message: error.message });
+  }   catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 
 
-const generateOrderid = async(req,res)=>{
+const generateOrderid = async(req,res,next)=>{
   try {
     const userId = req.session.user;
     console.log("user..."+req.session.user);
@@ -290,12 +313,13 @@ const generateOrderid = async(req,res)=>{
       res.json({ orderId: order.id });
     });
 
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
+    next(error); 
   }
 }
 
-const verify = async(req,res)=>{
+const verify = async(req,res,next)=>{
   try {
     const secret = instance.key_secret; // Replace with your Razorpay secret key
     const userId = req.session.user;
@@ -359,13 +383,14 @@ const verify = async(req,res)=>{
     }
    
 
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
+    next(error); 
   }
 }
 
 
-const addFromWallet = async(req,res)=>{
+const addFromWallet = async(req,res,next)=>{
   try {
     const userId = req.session.user._id;
 
@@ -401,15 +426,15 @@ const addFromWallet = async(req,res)=>{
 
 
     res.redirect('/checkout?addMoneySuccess=true');
-  } catch (error) {
-    console.error('Error in addFromWallet:', error);
-    res.status(500).json({ message: 'Server error', error: error.toString() });
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 }
 
 
 
-const getConfirmation = async (req, res) => {
+const getConfirmation = async (req, res,next) => {
   try {
     // Fetch the order with populated product details
     const order = await Order.findById(req.params.orderId).populate(
@@ -434,8 +459,9 @@ const getConfirmation = async (req, res) => {
       selectedAddress,
       date: formattedDate,
     });
-  } catch (error) {
-    res.status(500).send({ message: error.message });
+  }  catch (error) {
+    console.log(error);
+    next(error); 
   }
 };
 

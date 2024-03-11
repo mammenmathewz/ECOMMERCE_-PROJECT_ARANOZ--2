@@ -61,15 +61,37 @@ app.use(function(req, res, next) {
 
 // error handler
 // error handler
+// error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  // If the error is a CastError, set the status to 500
+  if (err.name === 'CastError') {
+    err.status = 500;
+  }
+
   // render the error page
+  let errorPage = 'error';
+  let templateData = { error: err }; // Initialize template data with the error object
+
+  if (req.originalUrl.startsWith('/admin')) {
+    templateData.active = "dash"; // Add 'active' variable to the template data for all admin routes
+    if (err.status === 404) {
+      errorPage = 'admin/404'; // Render a different error page for 404 errors in admin routes
+    } else if(err.status === 500) {
+      errorPage = 'admin/500'; // Render a different error page for 500 errors in admin routes
+    } else {
+      errorPage = 'admin/error'; // Render a different error page for other errors in admin routes
+    }
+  } else if(err.status === 500) {
+    errorPage = '500'; // Render a different error page for 500 errors
+  }
   res.status(err.status || 500);
-  res.render('error', { error: err }); // Pass the error object to your EJS template
+  res.render(errorPage, templateData); // Pass the template data to your EJS template
 });
+
 
 
 module.exports = app;

@@ -2,11 +2,20 @@ const Product = require('../models/products')
 const Brand = require('../models/brand') 
 const Cart = require('../models/cart')
 const Coupon = require('../models/coupons')
+const { User } = require("../models/users");
 
 
-const getCart = async(req, res) => {
+const getCart = async(req, res,next) => {
   try {
     const userId = req.session.user._id; // Get the user's id from the session
+    const user = await User.findById(userId); 
+    if (user.block) {
+      // Redirect if user not found or user is blocked
+      req.flash("info", "Please contact us");
+      req.flash("type", "alert alert-danger");
+      req.session.user = null;
+      return res.redirect("/login");
+    }
     let cart = await Cart.findOne({ user: userId })
       .populate({
         path: 'items.productId',
@@ -33,15 +42,15 @@ const getCart = async(req, res) => {
     }
 
     res.render('user/cart', { cart: cart }); // Pass the cart to the view
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
-    res.send('Error occurred while fetching the cart');
+    next(error); 
   }
 }
 
 
   
-const addCart = async(req, res) => {
+const addCart = async(req, res,next) => {
   try {
     const userId = req.session.user._id;
     const productId = req.params.id;
@@ -77,13 +86,13 @@ const addCart = async(req, res) => {
     await cart.save();
 
     res.redirect('/cart');
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
-    res.send('Error occurred while adding to cart');
+    next(error); 
   }
 }
 
-const deleteItem = async(req,res)=>{
+const deleteItem = async(req,res,next)=>{
   try {
     const userId = req.session.user._id;
     const productId = req.params.id;
@@ -132,15 +141,15 @@ const deleteItem = async(req,res)=>{
 
     await cart.save();
     res.json({ total: cart.total, grandTotal: cart.grandTotal, items: cart.items }); // Send back the updated total, grand total and items
-  } catch (error) {
+  }  catch (error) {
     console.log(error);
-    res.status(500).send('Error occurred while removing from cart');
+    next(error); 
   }
 }
 
 
 
-const increment = async(req,res)=>{
+const increment = async(req,res,next)=>{
   try{
     const userId = req.session.user._id;
     const productId = req.params.productId;
@@ -178,11 +187,12 @@ const increment = async(req,res)=>{
     await cart.save();
     res.json({ total: cart.total, grandTotal: cart.grandTotal });
   
-  } catch(error){
+  }  catch (error) {
     console.log(error);
+    next(error); 
   }
 }
-const decrement = async(req,res)=>{
+const decrement = async(req,res,next)=>{
   try{
     const userId = req.session.user._id;
     const productId = req.params.productId;
@@ -220,13 +230,14 @@ const decrement = async(req,res)=>{
     await cart.save();
     res.json({ total: cart.total, grandTotal: cart.grandTotal });
   
-  } catch(error){
+  }  catch (error) {
     console.log(error);
+    next(error); 
   }
 };
 
 
-const applyCoupon = async(req,res)=>{
+const applyCoupon = async(req,res,next)=>{
   const { code } = req.body; // assuming you're sending the coupon code in the request body
   const userId = req.session.user._id;
 
@@ -285,10 +296,12 @@ const applyCoupon = async(req,res)=>{
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
+    next(err); 
   }
 };
 
-const removeCoupon = async(req,res)=>{
+
+const removeCoupon = async(req,res,next)=>{
   try {
     const userId = req.session.user._id;
     let cart = await Cart.findOne({ user: userId });
@@ -306,9 +319,9 @@ const removeCoupon = async(req,res)=>{
 
     await cart.save();
     res.json({ total: cart.total, grandTotal: cart.grandTotal, items: cart.items }); // Send back the updated total, grand total and items
-  } catch (error) {
+  }   catch (error) {
     console.log(error);
-    res.status(500).send('Error occurred while removing coupon');
+    next(error); 
   }
 }
 

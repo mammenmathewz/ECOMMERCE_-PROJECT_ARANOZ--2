@@ -218,8 +218,9 @@
                     const description = row.find('td:nth-child(3)').text();
 
                     $('#editId').val(id);
-                    $('#editMainDescription').val(mainDescription);
-                    $('#editDescription').val(description);
+                    $('#editMainDescription').val(mainDescription.trim());
+                    $('#editDescription').val(description.trim());
+
                 });
             });
 

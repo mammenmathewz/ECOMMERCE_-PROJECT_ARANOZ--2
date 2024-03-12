@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Admin = require("../models/admins");
-const { User, Address } = require("../models/users");
+const { User } = require("../models/users");
 const Product = require("../models/products");
 const Brand = require("../models/brand");
 const Order = require("../models/checkout");
@@ -9,7 +9,6 @@ const Banner = require("../models/banners");
 const moment = require("moment");
 const fs = require("fs");
 const path = require("path");
-const easyinvoice = require("easyinvoice");
 const { json } = require("express");
 
 const getAdminLogin = async (req, res,next) => {
@@ -309,7 +308,7 @@ const salesReport = async (req, res,next) => {
           salesData = await getYearlyDeliveredOrders();
           break;
         default:
-          // Handle invalid time periods
+         
           break;
       }
     }
@@ -1042,11 +1041,11 @@ const postCoupon = async (req, res) => {
 };
 
 const getCouponEdit = async (req, res,next) => {
-  console.log(req.params.id); // log the ID
+  console.log(req.params.id); 
 
   try {
     const coupon = await Coupon.findById(req.params.id);
-    console.log(coupon); // log the coupon
+    console.log(coupon);
 
     if (!coupon) {
       return res.status(404).send("Coupon not found");
@@ -1092,7 +1091,7 @@ const updateCoupon = async (req, res,next) => {
 };
 
 const deleteCoupon = async (req, res,next) => {
-  const { id } = req.body; // assuming you're sending the ID in the request body
+  const { id } = req.body; 
 
   try {
     const coupon = await Coupon.deleteOne({ _id: id });
@@ -1148,16 +1147,16 @@ const addBanner = async (req, res) => {
 const updateBanner = async (req, res) => {
   try {
     const { mainDescription, Description } = req.body;
-    let image = "";
+    let updateObject = {
+      mainDescription,
+      Description
+    };
+
     if (req.file) {
-      image = "/user/img/product/" + req.file.filename;
+      updateObject.image = "/user/img/product/" + req.file.filename;
     }
 
-    await Banner.findByIdAndUpdate(req.body.id, {
-      mainDescription,
-      Description,
-      image,
-    });
+    await Banner.findByIdAndUpdate(req.body.id, updateObject);
     res.redirect("/admin/homeSettings");
   } catch (error) {
     console.log(error);

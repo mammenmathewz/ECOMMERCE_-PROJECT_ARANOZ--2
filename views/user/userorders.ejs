@@ -42,7 +42,7 @@
         background-color: rgb(0, 0, 0);
         animation: loader-bar-animation 2s ease-in-out infinite;
       }
-      
+
 
       @keyframes loader-bar-animation {
         0% {
@@ -60,18 +60,16 @@
           transform: translateX(-100%);
         }
       }
-
-      
     </style>
-<style>
-  .hoverable {
-    transition: box-shadow .3s;
-  }
-  
-  .hoverable:hover {
-    box-shadow: 0 0 11px rgba(33,33,33,.2); 
-  }
-  </style>
+    <style>
+      .hoverable {
+        transition: box-shadow .3s;
+      }
+
+      .hoverable:hover {
+        box-shadow: 0 0 11px rgba(33, 33, 33, .2);
+      }
+    </style>
 
 
     <section style="background-color: #ffffff; margin-top: 5%;">
@@ -133,7 +131,7 @@
                               <input type="hidden" name="redirect" value="/account">
                               <div class="col-md-6 form-group p_star">
                                 <input type="text" class="form-control" id="first" name="first_name"
-                                  placeholder="First name" required />
+                                  placeholder="First name"  oninput="if (this.value.trim() === '') {this.value = '';}" required />
 
                               </div>
                               <div class="col-md-6 form-group p_star">
@@ -237,7 +235,7 @@
                     </div>
                     <div>
                       <h5>
-                        ₹<%= order.total - order.discount  %>
+                        ₹<%= order.total - order.discount %>
                       </h5>
                     </div>
                     <div>
@@ -267,14 +265,14 @@
                     <div>
                       <h5>
                         <% order.items.forEach(function(item) { %>
-                    
+
                           <li style="display: flex; justify-content: space-between;">
                             <span>
-                              <%= item.productId.productname  %> : 
+                              <%= item.productId.productname %> :
                             </span>
                             <span>× <%= item.quantity %></span>
                           </li>
-                    
+
                           <% }); %>
                       </h5>
                     </div>
@@ -545,26 +543,7 @@
         });
       });
 
-      $('g_pdf').click(function () {
-        // Show the loader
-        $(this).siblings('.loader').show();
 
-        // Download the file
-        $.ajax({
-          url: $(this).attr('href'),
-          success: function () {
-            // Hide the loader
-            $(this).siblings('.loader').hide();
-          }.bind(this),
-          error: function () {
-            // Hide the loader
-            $(this).siblings('.loader').hide();
-          }.bind(this)
-        });
-
-        // Prevent the default action
-        return false;
-      });
     </script>
 
     </body>

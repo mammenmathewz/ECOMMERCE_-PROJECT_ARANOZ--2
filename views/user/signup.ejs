@@ -34,22 +34,22 @@
           
             <form class="row contact_form"  onsubmit="checkForm(event)" action="signup" method="post" >
               <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="first" placeholder="first name"  name="first_name" required/>
+                <input type="text" class="form-control" id="first" placeholder="first name"  name="first_name"  oninput="if (this.value.trim() === '') {this.value = '';}"  required/>
                 
               </div>
               <div class="col-md-6 form-group p_star">
-                <input type="text" class="form-control" id="last" placeholder="last name" name="last_name"  required/>
+                <input type="text" class="form-control" id="last" placeholder="last name" name="last_name"  oninput="if (this.value.trim() === '') {this.value = '';}"   required/>
               
               </div>
              
               <div class="col-md-6 form-group p_star">
-                <input type="number" class="form-control" id="number" placeholder="phone no" name="phone"  required/>
+                <input type="number" class="form-control" id="number" placeholder="phone no" name="phone"   oninput="if (this.value.trim() === '') {this.value = '';}"  required/>
                 
               </div>
               <div class="col-md-6 form-group p_star">
                 <p id="mess"></p>
                 <div style="display: flex; justify-content: space-between;">
-                  <input type="email" class="form-control" id="email" placeholder="email" name="email" style="flex-grow: 1; margin-right: 10px;"  required/>
+                  <input type="email" class="form-control" id="email" placeholder="email" name="email"  style="flex-grow: 1; margin-right: 10px;"  oninput="if (this.value.trim() === '') {this.value = '';}"   required/>
                   <button class="btn btn-outline-secondary" type="button" id="otpButton">OTP</button>
                   
                 </div>

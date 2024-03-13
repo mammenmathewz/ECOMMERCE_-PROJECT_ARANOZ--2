@@ -35,7 +35,7 @@
                     <h4>Edit coupon</h4>
                     <div class="mb-3" >
                         <label for="couponCode" class="form-label">Coupon Code:</label>
-                        <input type="text" class="form-control" value="<%= coupon.code %>" id="couponCode" name="code" placeholder="Enter coupon code" oninput="this.value = this.value.toUpperCase()" required>
+                        <input type="text" class="form-control" value="<%= coupon.code %>" id="couponCode" name="code" placeholder="Enter coupon code"  oninput="if (this.value.trim() === '') {this.value = '';} else {this.value = this.value.toUpperCase();}" required>
                     </div>
                     <% if(coupon.discount_type === 'amount') { %>
                         <div class="mb-3">

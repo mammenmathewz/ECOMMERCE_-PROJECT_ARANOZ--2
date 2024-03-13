@@ -59,8 +59,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="productName" class="form-label">Product Name</label>
-                                    <input id="productName" name="productname" class="form-control mb-3" type="text" placeholder="" aria-label="default input example" required>
+                                    <input id="productName" name="productname" class="form-control mb-3" type="text" placeholder="" aria-label="default input example" oninput="if (this.value.trim() === '') {this.value = '';}" required>
                                 </div>
+                                
                                 <div class="form-floating">
                                     <textarea class="form-control" name="description" placeholder="Details" id="floatingTextarea" style="height: 150px;"></textarea>
                                     <label for="floatingTextarea">Product description</label>

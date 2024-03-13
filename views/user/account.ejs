@@ -59,51 +59,51 @@
                               <input type="hidden" name="redirect" value="/account">
                               <div class="col-md-6 form-group p_star">
                                 <input type="text" class="form-control" id="first" name="first_name"
-                                  placeholder="First name" required />
+                                  placeholder="First name"  oninput="if (this.value.trim() === '') {this.value = '';}"  required />
 
                               </div>
                               <div class="col-md-6 form-group p_star">
                                 <input type="text" class="form-control" id="last" name="last_name"
-                                  placeholder="Last name" required />
+                                  placeholder="Last name"  oninput="if (this.value.trim() === '') {this.value = '';}"  required />
 
                               </div>
 
                               <div class="col-md-6 form-group p_star">
                                 <input type="text" class="form-control" id="number" name="phone"
-                                  placeholder="Phone number" required />
+                                  placeholder="Phone number"  oninput="if (this.value.trim() === '') {this.value = '';}"  required />
 
                               </div>
 
 
                               <div class="col-md-12 form-group p_star">
                                 <input type="text" class="form-control" id="add1" name="address1"
-                                  placeholder="Address line 01" required />
+                                  placeholder="Address line 01"  oninput="if (this.value.trim() === '') {this.value = '';}"  required />
 
                               </div>
                               <div class="col-md-12 form-group p_star">
                                 <input type="text" class="form-control" id="add2" name="address2"
-                                  placeholder="Address line 02" required />
+                                  placeholder="Address line 02"  oninput="if (this.value.trim() === '') {this.value = '';}"  required />
 
                               </div>
                               <div class="col-md-12 form-group p_star">
-                                <input type="text" class="form-control" id="city" name="city" placeholder="Town/City"
+                                <input type="text" class="form-control" id="city" name="city" placeholder="Town/City"  oninput="if (this.value.trim() === '') {this.value = '';}" 
                                   required />
 
                               </div>
                               <div class="col-md-12 form-group p_star">
                                 <input type="text" class="form-control" id="district" name="district"
-                                  placeholder="District" required />
+                                oninput="if (this.value.trim() === '') {this.value = '';}"  placeholder="District" required />
 
                               </div>
                               <div class="col-md-12 form-group p_star">
                                 <input type="text" class="form-control" id="state" name="state" placeholder="State"
-                                  required />
+                                oninput="if (this.value.trim() === '') {this.value = '';}"  required />
 
                               </div>
 
                               <div class="col-md-12 form-group">
                                 <input type="text" class="form-control" id="zip" name="pin" placeholder="Postcode/ZIP"
-                                  required />
+                                oninput="if (this.value.trim() === '') {this.value = '';}"  required />
                               </div>
 
                               <button style="margin-left: auto; margin-right: auto;" class="tp_btn" type="submit">ADD

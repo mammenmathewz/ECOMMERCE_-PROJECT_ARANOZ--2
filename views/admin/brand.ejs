@@ -28,11 +28,11 @@
                                     <form id="brandForm" action="/admin/addbrand" method="post"
                                         onsubmit="checkForm(event)" enctype="multipart/form-data">
                                         <div class="mb-3">
-                                            <input id="brand" name="name" style="width: 50%;" type="text" placeholder=""
-                                                aria-label="default input example" required>
+                                            <input id="brand" name="name" style="width: 50%; " type="text" placeholder=""
+                                                aria-label="default input example" oninput="if (this.value.trim() === '') {this.value = '';}" required>
                                             <!-- Add this input field for image upload -->
                                             <input type="file" id="brandImage" name="brandImage" accept="image/*"
-                                                required>
+                                                 required>
                                             <button type="submit" class="btn btn-primary">Add</button>
                                         </div>
                                     </form>
@@ -48,15 +48,16 @@
                                                 </td>
                                                 <!-- Column for brand name -->
                                                 <td>
-                                                    <%= brand.name %>
+                                                  <h6 style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 150px;"> <%= brand.name %></h6>
+
                                                 </td>
                                                 <!-- Column for switch -->
                                                 <td>
                                                   <div class="form-check form-switch">
-                                                    <input class="form-check-input" type="checkbox" role="switch"
+                                                    <input class="form-check-input" type="checkbox" role="switch" 
                                                         id="flexSwitchCheckDefault"
                                                         onchange="toggleDisplay('<%= brand._id %>')"
-                                                        <% if (brand.display) { %> checked <% } %>>
+                                                        <% if (brand.display) { %> checked <% } %> >
                                                     <label class="form-check-label" for="flexSwitchCheckDefault"></label>
                                                 </div>
                                                 

@@ -6,6 +6,7 @@ const flash = require('express-flash')
 
 
 const auth = require('../middleware/auth')
+const block = require('../middleware/userBlock')
 userRouter.use(flash());
 userRouter.use(bodyParser.json());
 userRouter.use(bodyParser.urlencoded({extended:true}));
@@ -35,13 +36,13 @@ userRouter.get('/checkout',auth.isUserLogin,orderController.getOrder)
 userRouter.post('/addAddress',auth.isUserLogin,orderController.addAddress)
 userRouter.post('/confirmOrder',auth.isUserLogin,orderController.cashOnDelivery)
 userRouter.post('/confirmWalletPayment',auth.isUserLogin,orderController.walletPayment)
-userRouter.post('/create/orderId',auth.isUserLogin,orderController.generateOrderid)
+userRouter.post('/create/orderId',auth.isUserLogin,block.blockUser, orderController.generateOrderid)
 userRouter.post('/paymentverify',auth.isUserLogin,orderController.verify)
 
 userRouter.get('/confirmation/:orderId',auth.isUserLogin,orderController.getConfirmation)
 userRouter.get('/myorder',auth.isUserLogin,userController.myOrder)
 userRouter.get('/viewdetails/:orderId',auth.isUserLogin,userController.viewDetails)
-userRouter.post('/getOrderDetails',auth.isUserLogin,userController.generateOrderid)
+userRouter.post('/getOrderDetails',auth.isUserLogin,block.blockUser, userController.generateOrderid)
 
 userRouter.get('/editUser/:userId/address/:addressId', auth.isUserLogin, userController.editUser);
 userRouter.post('/reset-password',auth.isUserLogout,userController.resetPassword)

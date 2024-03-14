@@ -80,6 +80,7 @@
                         <img width="50%" height="90%" src="\user\img\product\pngwing.com.png" alt="">
                     </div>
                 </div>
+                <% if(coupon) { %>
                 <div class="col-lg-6 col-md-6">
                     <div class="offer_text">
                         <% if(coupon.discount_type === 'amount') { %>
@@ -111,6 +112,12 @@
                         </div>
                     </div>
                 </div>
+                <% } else { %>
+                    <!-- Code to execute when coupon is not found -->
+                    <div class="col-lg-6 col-md-6">
+                        <h2>BIG OFFERS COMMING SOON...</h2>
+                    </div>
+                <% } %>
             </div>
         </div>
     </section>
@@ -219,13 +226,10 @@
   <script>
 $(document).ready(function() {
   // Get the expiry date from the server
-  var expiryDate = "<%= coupon.expiry_date %>";
-
+  var expiryDate = "<%= coupon ? coupon.expiry_date : '' %>";
   $('#timer').downCount({
     date: expiryDate,
     offset: +5.5
-  }, function () {
-    alert('Countdown ended!');
   });
 
   function makeTimer() {

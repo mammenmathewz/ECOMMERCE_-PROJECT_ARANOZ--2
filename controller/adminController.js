@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Admin = require("../models/admins");
-const { User } = require("../models/users");
+const User = require("../models/users");
 const Product = require("../models/products");
 const Brand = require("../models/brand");
 const Order = require("../models/checkout");
@@ -9,18 +9,17 @@ const Banner = require("../models/banners");
 const moment = require("moment");
 const fs = require("fs");
 const path = require("path");
-const { json } = require("express");
 
-const getAdminLogin = async (req, res,next) => {
+const getAdminLogin = async (req, res, next) => {
   try {
     res.render("admin/signin");
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const postAdminLogin = async (req, res,next) => {
+const postAdminLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
@@ -46,22 +45,22 @@ const postAdminLogin = async (req, res,next) => {
       // Redirect to account
       res.redirect("/admin/dash");
     }
-  }  catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const getAdminSignup = async (req, res,next) => {
+const getAdminSignup = async (req, res, next) => {
   try {
     res.render("admin/signup");
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const postAdminSignup = async (req, res,next) => {
+const postAdminSignup = async (req, res, next) => {
   const existingUser = await Admin.findOne({ email: req.body.email });
   if (existingUser) {
     //  req.flash('info', 'Admin already exists');
@@ -83,9 +82,9 @@ const postAdminSignup = async (req, res,next) => {
 
     // Redirect or respond as necessary
     res.redirect("/admin/dash");
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
@@ -203,7 +202,7 @@ const getYearlyDeliveredOrders = async () => {
 
 ////GET ADMIN DASH/////
 
-const adminDash = async (req, res,next) => {
+const adminDash = async (req, res, next) => {
   try {
     const [
       dailySales,
@@ -276,13 +275,13 @@ const adminDash = async (req, res,next) => {
       codOrders,
       onlineOrders,
     });
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const salesReport = async (req, res,next) => {
+const salesReport = async (req, res, next) => {
   try {
     let salesData;
 
@@ -308,19 +307,18 @@ const salesReport = async (req, res,next) => {
           salesData = await getYearlyDeliveredOrders();
           break;
         default:
-         
           break;
       }
     }
 
     res.json({ salesData });
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const dataPerDate = async (req, res,next) => {
+const dataPerDate = async (req, res, next) => {
   try {
     const { startDate, endDate } = req.body;
     console.log(startDate + "  " + endDate);
@@ -354,13 +352,13 @@ const dataPerDate = async (req, res,next) => {
     }
     console.log(JSON.stringify(salesPerDay));
     res.json(salesPerDay);
-  }  catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const adminLogout = async (req, res,next) => {
+const adminLogout = async (req, res, next) => {
   try {
     if (req.session.admin) {
       req.session.admin = null;
@@ -370,14 +368,14 @@ const adminLogout = async (req, res,next) => {
     } else {
       res.redirect("/error");
     }
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
 //USER FUNCTIONS//
-const getUsers = async (req, res,next) => {
+const getUsers = async (req, res, next) => {
   try {
     const page = req.query.page || 1; // Get the page number from the query parameters
     const limit = 10; // Set the number of users per page
@@ -397,9 +395,9 @@ const getUsers = async (req, res,next) => {
       currentPage: page,
       pages,
     });
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
@@ -421,274 +419,20 @@ const blockUser = async (req, res) => {
   }
 };
 
-const getProducts = async (req, res,next) => {
-  try {
-    const page = req.query.page || 1; // Get the page number from the query parameters
-    const limit = 10; // Set the number of products per page
-    const skip = (page - 1) * limit; // Calculate the number of products to skip
-
-    // Fetch the products for the current page
-    let product = await Product.find({ deleted: false })
-      .skip(skip)
-      .limit(limit)
-      .populate("brand");
-
-    // Calculate the total number of pages
-    const count = await Product.countDocuments({ deleted: false });
-    const pages = Math.ceil(count / limit);
-
-    let brands = await Brand.find(); // Fetch the brands
-
-    // Get the most ordered products
-    const mostOrderedProducts = await getMostOrderedProducts();
-
-    // Pass the products, current page, total pages, and most ordered products to the view
-    res.render("admin/manageproducts", {
-      product: product,
-      brands: brands,
-      active: "productmanagement",
-      currentPage: page,
-      pages,
-      mostOrderedProducts: mostOrderedProducts.map((p) => p._id.toString()),
-    });
-  }   catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const getMostOrderedProducts = async () => {
-  return await Order.aggregate([
-    { $unwind: "$items" },
-    { $group: { _id: "$items.productId", total: { $sum: "$items.quantity" } } },
-    { $sort: { total: -1 } },
-    { $limit: 10 },
-  ]);
-};
-
-const editProduct = async (req, res,next) => {
-  try {
-    const id = req.params.id;
-    const product = await Product.findById(id).populate("brand");
-    const brands = await Brand.find();
-    if (!product) {
-      return res.status(404).send("Product not found");
-    }
-    res.render("admin/editproduct", {
-      product: product,
-      brands: brands,
-      active: "productmanagement",
-      selectedCategory: product.category,
-    });
-  }   catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const updateProduct = async (req, res,next) => {
-  try {
-    console.log(req.body);
-    // Validate the brand ID
-    const brand = await Brand.findById(req.body.brand);
-    if (!brand) {
-      return res.status(400).send("Invalid brand ID.");
-    }
-
-    // Find the product by id
-    const product = await Product.findById(req.params.productId);
-    if (!product) {
-      return res.status(404).send("Product not found.");
-    }
-
-    // Update the product details
-    product.brand = req.body.brand;
-    product.productname = req.body.productname;
-    product.description = req.body.description;
-    product.category = req.body.category;
-    product.regularprice = req.body.regularprice;
-    product.saleprice = req.body.saleprice;
-    product.number = req.body.number;
-
-    // If there are new images, add them to the product
-    if (req.body.croppedImage) {
-      // Check if req.body.croppedImage is an array
-      if (Array.isArray(req.body.croppedImage)) {
-        // If it's an array, iterate over it with forEach
-        req.body.croppedImage.forEach((imageData) => {
-          // Check if imageData is not empty
-          if (imageData.trim() !== "") {
-            // Save the image data to a file and get the file path
-            const filePath = saveImageToFile(imageData);
-
-            // Add the file path to the product images
-            product.images.push("/user/img/product/" + filePath);
-          }
-        });
-      } else {
-        // If it's not an array, directly process the single image
-        if (req.body.croppedImage.trim() !== "") {
-          // Save the image data to a file and get the file path
-          const filePath = saveImageToFile(req.body.croppedImage);
-
-          // Add the file path to the product images
-          product.images.push("/user/img/product/" + filePath);
-        }
-      }
-    }
-
-    // Save the updated product
-    await product.save();
-
-    res.redirect("/admin/productmanagement");
-  }  catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const addProduct = async (req, res,next) => {
-  try {
-    const brands = await Brand.find();
-    res.render("admin/addproducts", { brands: brands, active: "addproduct" });
-  }   catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-
-function saveImageToFile(base64String) {
-  // Remove header from base64 string
-  const base64Image = base64String.split(";base64,").pop();
-
-  // Generate a unique filename
-  const filename = Date.now() + ".png";
-
-  // Create the path to the output file
-  const filepath = path.join(
-    __dirname,
-    "../public/user/img/product/",
-    filename
-  );
-
-  // Write the image file
-  fs.writeFileSync(filepath, base64Image, { encoding: "base64" });
-
-  return filename;
-}
-const uploadProduct = async (req, res,next) => {
-  try {
-    // Validate the brand ID
-    const brand = await Brand.findById(req.body.brand);
-    if (!brand) {
-      return res.status(400).send("Invalid brand ID.");
-    }
-
- 
-
-    const product = new Product({
-      brand: req.body.brand,
-      productname: req.body.productname,
-      description: req.body.description,
-      category: req.body.category,
-      regularprice: req.body.regularprice,
-      saleprice: req.body.saleprice,
-      number: req.body.number,
-      createdon: Date.now(),
-    });
-
-    if (req.body.croppedImage) {
-      // Check if req.body.croppedImage is an array
-      if (Array.isArray(req.body.croppedImage)) {
-        // If it's an array, iterate over it with forEach
-        req.body.croppedImage.forEach((imageData) => {
-          // Check if imageData is not empty
-          if (imageData.trim() !== "") {
-            // Save the image data to a file and get the file path
-            const filePath = saveImageToFile(imageData);
-
-            // Add the file path to the product images
-            product.images.push("/user/img/product/" + filePath);
-          }
-        });
-      } else {
-        // If it's not an array, directly process the single image
-        if (req.body.croppedImage.trim() !== "") {
-          // Save the image data to a file and get the file path
-          const filePath = saveImageToFile(req.body.croppedImage);
-
-          // Add the file path to the product images
-          product.images.push("/user/img/product/" + filePath);
-        }
-      }
-    }
-
-    await product.save();
-    res.redirect("/admin/addproduct");
-  }   catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const deleteImage = async (req, res,next) => {
-  try {
-    const productId = req.params.productId;
-    const imageIndex = req.params.imageIndex;
-
-    // Find the product by id
-    const product = await Product.findById(productId);
-
-    if (product) {
-      // Remove the image at the specified index
-      product.images.splice(imageIndex, 1);
-
-      // Save the product with the updated images array
-      await product.save();
-
-      // Send a JSON response
-      res.json({ message: "Image deleted successfully" });
-    } else {
-      res.status(404).json({ message: "Product not found" });
-    }
-  }  catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const deleteProduct = async (req, res,next) => {
-  try {
-    const id = req.params.id;
-    const product = await Product.findById(id);
-    if (product) {
-      product.deleted = true;
-      await product.save();
-      res.redirect("/admin/productmanagement");
-    } else {
-      res.send("Product not found");
-    }
-  }   catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const getBrands = async (req, res,next) => {
+const getBrands = async (req, res, next) => {
   try {
     // Fetch the brands from the database
     const brands = await Brand.find();
 
     // Render the view and pass the brands to it
     res.render("admin/brand", { brands: brands, active: "brands" });
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const addBrands = async (req, res,next) => {
+const addBrands = async (req, res, next) => {
   const existingBrand = await Brand.findOne({
     name: { $regex: new RegExp(`^${req.body.name}$`, "i") },
   });
@@ -714,13 +458,13 @@ const addBrands = async (req, res,next) => {
 
     // Send the updated list of brands back to the client
     res.json(brands);
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const toggleBrandDisplay = async (req, res,next) => {
+const toggleBrandDisplay = async (req, res, next) => {
   try {
     const brand = await Brand.findById(req.params.brandId);
     if (!brand) {
@@ -734,23 +478,23 @@ const toggleBrandDisplay = async (req, res,next) => {
       ? "Brand added to home page"
       : "Brand removed from home page";
     res.json({ message: message });
-  }  catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const deleteBrand = async (req, res,next) => {
+const deleteBrand = async (req, res, next) => {
   try {
     await Brand.findByIdAndDelete(req.params.id);
     res.redirect("/admin/brands");
-  }  catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
-const getOrderManagement = async (req, res,next) => {
+const getOrderManagement = async (req, res, next) => {
   try {
     const page = req.query.page || 1; // Get the page number from the query parameters
     const limit = 10; // Set the number of orders per page
@@ -778,9 +522,9 @@ const getOrderManagement = async (req, res,next) => {
       currentPage: page,
       pages,
     });
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
@@ -884,7 +628,7 @@ async function incrementProductQuantity(items) {
   }
 }
 
-const vieworder = async (req, res,next) => {
+const vieworder = async (req, res, next) => {
   try {
     // Fetch the order by its ID, populate product details and user data
     console.log(req.params.orderId);
@@ -906,130 +650,9 @@ const vieworder = async (req, res,next) => {
       active: "orders",
       date: formattedDate,
     });
-  }   catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const getCoupon = async (req, res,next) => {
-  try {
-    const coupons = await Coupon.find();
-    res.render("admin/coupons", {
-      active: "coupons",
-      coupons: coupons,
-      moment: moment,
-    });
-  }  catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const postCoupon = async (req, res) => {
-  try {
-    const {
-      code,
-      discount_type,
-      discount_value,
-      min_amount,
-      max_discount,
-      startDate,
-      expiry_date,
-    } = req.body;
-
-    const existingCoupon = await Coupon.findOne({ code });
-    if (existingCoupon) {
-      return res
-        .status(400)
-        .json({ message: "A coupon with this code already exists" });
-    }
-
-    const coupon = new Coupon({
-      code,
-      discount_type,
-      discount_value,
-      min_amount,
-      max_discount,
-      startDate,
-      expiry_date,
-    });
-    console.log(coupon);
-    await coupon.save();
-
-    res.redirect("/admin/coupons");
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while creating the coupon" });
-  }
-};
-
-const getCouponEdit = async (req, res,next) => {
-  console.log(req.params.id); 
-
-  try {
-    const coupon = await Coupon.findById(req.params.id);
-    console.log(coupon);
-
-    if (!coupon) {
-      return res.status(404).send("Coupon not found");
-    }
-
-    res.render("admin/editeCoupon", { active: "coupons", coupon: coupon });
-  }   catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const updateCoupon = async (req, res,next) => {
-  const {
-    code,
-    discount_value,
-    min_amount,
-    max_discount,
-    startDate,
-    expiry_date,
-  } = req.body;
-
-  try {
-    const coupon = await Coupon.findOne({ code: code });
-
-    if (!coupon) {
-      return res.status(404).json({ message: "Coupon not found" });
-    }
-
-    coupon.discount_value = discount_value;
-    coupon.min_amount = min_amount;
-    coupon.max_discount = max_discount;
-    coupon.startDate = new Date(startDate);
-    coupon.expiry_date = new Date(expiry_date);
-
-    await coupon.save();
-
-    res.redirect("/admin/coupons");
-  }  catch (error) {
-    console.log(error);
-    next(error); 
-  }
-};
-
-const deleteCoupon = async (req, res, next) => {
-  const { id } = req.body; 
-
-  try {
-    const result = await Coupon.deleteOne({ _id: id });
-
-    if (result.deletedCount === 0) {
-      return res.status(404).json({ message: "Coupon not found" });
-    }
-
-    res.json({ message: "Coupon deleted successfully" });
-  } catch (error) {
-    console.log(error);
-    next(error); 
+    next(error);
   }
 };
 
@@ -1073,7 +696,7 @@ const updateBanner = async (req, res) => {
     const { mainDescription, Description } = req.body;
     let updateObject = {
       mainDescription,
-      Description
+      Description,
     };
 
     if (req.file) {
@@ -1102,16 +725,16 @@ const deleteBanner = async (req, res) => {
   }
 };
 
-const switchCoupon = async (req, res,next) => {
+const switchCoupon = async (req, res, next) => {
   try {
     const { couponId } = req.body;
 
     await Coupon.updateMany({}, { display_home: false });
     await Coupon.findByIdAndUpdate(couponId, { display_home: true });
     res.json({ message: "Coupon selected successfully" });
-  }   catch (error) {
+  } catch (error) {
     console.log(error);
-    next(error); 
+    next(error);
   }
 };
 module.exports = {
@@ -1123,13 +746,6 @@ module.exports = {
   adminLogout,
   getUsers,
   blockUser,
-  getProducts,
-  editProduct,
-  updateProduct,
-  addProduct,
-  uploadProduct,
-  deleteImage,
-  deleteProduct,
   getBrands,
   addBrands,
   deleteBrand,
@@ -1137,11 +753,6 @@ module.exports = {
   switchStatus,
   vieworder,
   dataPerDate,
-  getCoupon,
-  postCoupon,
-  getCouponEdit,
-  updateCoupon,
-  deleteCoupon,
   salesReport,
   toggleBrandDisplay,
   getHomeSettings,

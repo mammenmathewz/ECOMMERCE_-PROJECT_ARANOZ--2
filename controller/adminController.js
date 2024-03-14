@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Admin = require("../models/admins");
-const User = require("../models/users");
+const { User } = require("../models/users");
 const Product = require("../models/products");
 const Brand = require("../models/brand");
 const Order = require("../models/checkout");

@@ -83,7 +83,7 @@ app.use(function(err, req, res, next) {
     } else if(err.status === 500) {
       errorPage = 'admin/500'; // Render a different error page for 500 errors in admin routes
     } else {
-      errorPage = 'admin/error'; // Render a different error page for other errors in admin routes
+      errorPage = 'admin/500'; // Render a different error page for other errors in admin routes
     }
   } else if(err.status === 500) {
     errorPage = '500'; // Render a different error page for 500 errors

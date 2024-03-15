@@ -24,9 +24,10 @@ const getCart = async(req, res,next) => {
         }
       }); // Find the cart by userId and populate productId and brand
 
-    if (!cart) {
-      return res.status(404).send('Cart not found');
-    }
+      if (!cart) {
+        cart = new Cart({ user: userId, items: [] });
+        await cart.save();
+      }
 
     // Add your discount reset logic here
     if (cart.discount > 0) {

@@ -27,7 +27,7 @@ const getCart = async(req, res,next) => {
       if (!cart) {
         cart = new Cart({ user: userId, items: [] });
         await cart.save();
-      }
+            }
 
     // Add your discount reset logic here
     if (cart.discount > 0) {

@@ -165,25 +165,27 @@
               </div>
 
               <div class="col-sm-12" style="margin-top: 4%">
-                <% if (user.address) { %>
-                  <% user.address.forEach(function(address) { %>
+                <% if (justuser.address) { %>
+                  <% justuser.address.forEach(function(address) { %>
                     <div class="form-check">
                       <input class="form-check-input" type="radio" name="addressRadio" id="<%= address._id %>"
                         value="<%= address._id %>" onclick="updateAddress(this.value)" />
-
+                
                       <label class="form-check-label" for="<%= address._id %>">
                         <h4>
                           <%= address.first_name %>
                             <%=" "+ address.last_name %></h4>
-                <span><%=` MOB: ${address.phone}` %></span>
-                <p><%= address.address1 %></p>
-                <p><%= address.address2 %></p>
-                <p><%= address.district %>, <%= address.state %></p>
-                <p><%= address.pin %></p>
-              </label>
-            </div>
-            <hr />
-            <% }) %> <% } %>
+                        <span><%=` MOB: ${address.phone}` %></span>
+                        <p><%= address.address1 %></p>
+                        <p><%= address.address2 %></p>
+                        <p><%= address.district %>, <%= address.state %></p>
+                        <p><%= address.pin %></p>
+                      </label>
+                    </div>
+                    <hr />
+                  <% }) %> 
+                <% } %>
+                
           </div>
         </div>
 

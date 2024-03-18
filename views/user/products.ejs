@@ -288,40 +288,43 @@ $(document).ready(function() {
     var searchTerm = $('#search-input').val();
 
     $.ajax({
-      url: '/filterAndSortProducts',
-      type: 'GET',
-      data: { categories: selectedCategories, brands: selectedBrands, sort: sortOption, page: currentPage, limit: limit, search: searchTerm },
-      success: function(data) {
-        // Clear the current products
-        $('.latest_product_inner').empty();
+  url: '/filterAndSortProducts',
+  type: 'GET',
+  data: { categories: selectedCategories, brands: selectedBrands, sort: sortOption, page: currentPage, limit: limit, search: searchTerm },
+  success: function(data) {
+    // Clear the current products
+    $('.latest_product_inner').empty();
 
-        // Check if there are any products in the response
-        if (data.product.length > 0) {
-          // Loop through the products and add them to the page
-          data.product.forEach(function(product) {
-            var isBestSeller = data.mostOrderedProducts.includes(product._id);
-            $('.latest_product_inner').append(`
-              <div class="col-lg-4 col-sm-6">
-                <div class="single_product_item">
-                    ${isBestSeller ? '<div style="position: absolute; top: 0; left: 0;"><img style="height: 55px; width: 35px;" src="/user/img/best-seller.png" alt="Best Selling" /></div>' : ''}
-                  <div style="margin-left: 20%;"> 
-                    <a href="/viewproduct/${product._id}">
-                      <img src="${product.images[0]}" alt="watch" style="object-fit:scale-down"; height="300px">
-                    </a>
-                  </div>
-                  <div class="single_product_text">
-                    <h4>${product.productname}</h4>
-                    <h3>₹ ${product.saleprice}</h3>
-                    <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
-                  </div>
-                </div>
+    // Update the total number of products
+    $('.single_product_menu p span').text(data.totalProducts);
+
+    // Check if there are any products in the response
+    if (data.product.length > 0) {
+      // Loop through the products and add them to the page
+      data.product.forEach(function(product) {
+        var isBestSeller = data.mostOrderedProducts.includes(product._id);
+        $('.latest_product_inner').append(`
+          <div class="col-lg-4 col-sm-6">
+            <div class="single_product_item">
+                ${isBestSeller ? '<div style="position: absolute; top: 0; left: 0;"><img style="height: 55px; width: 35px;" src="/user/img/best-seller.png" alt="Best Selling" /></div>' : ''}
+              <div style="margin-left: 20%;"> 
+                <a href="/viewproduct/${product._id}">
+                  <img src="${product.images[0]}" alt="watch" style="object-fit:scale-down"; height="300px">
+                </a>
               </div>
-            `);
-          });
-        } else {
-          // If there are no products, display a message
-          $('.latest_product_inner').append('<p>No products found for your search.</p>');
-        }
+              <div class="single_product_text">
+                <h4>${product.productname}</h4>
+                <h3>₹ ${product.saleprice}</h3>
+                <a href="#" class="add_cart">+ add to cart<i class="ti-heart"></i></a>
+              </div>
+            </div>
+          </div>
+        `);
+      });
+    } else {
+      // If there are no products, display a message
+      $('.latest_product_inner').append('<p>No products found for your search.</p>');
+    }
 
         // Update the pagination links
         var pagination = $('.pagination');

@@ -771,6 +771,7 @@ const filterAndSortProducts = async (req, res, next) => {
       currentPage: page,
       pages: pages,
       mostOrderedProducts: productIds,
+      totalProducts: totalProducts, 
     });
   } catch (error) {
     console.log(error);

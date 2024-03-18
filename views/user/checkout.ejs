@@ -252,8 +252,8 @@
                                       </p>
                                     </div>
 
-                                    <a href="/addFromWallet" id="addMoneyButton"> <button class="addmoney"><span
-                                          class="plussign">+</span>Add Money</button></a>
+                                    <a  id="addMoneyButton"> <button class="addmoney"><span
+                                          class="plussign">+</span>Use wallet</button></a>
                                   </div>
 
                                   <form id="paymentForm" style="padding-top: 2%">
@@ -264,8 +264,8 @@
 
 
                                 </div>
-                                <% if (cart.grandTotal> justuser.wallet ) { %>
-                                  <% if (cart.grandTotal <=1000 && !addMoneySuccess) { %>
+                              
+                                  <% if (cart.grandTotal <=1000 && cart.grandTotal>=100 && cart.walletAmount==0) { %>
                                     <div class="payment_item">
                                       <div class="radion_btn">
                                         <input type="radio" id="f-option5" name="selector" value="Cash on delivery" />
@@ -273,14 +273,14 @@
                                       </div>
                                     </div>
                                     <% } %>
-
+                                    <% if (cart.grandTotal> justuser.wallet ) { %>
                                       <div class="payment_item active">
                                         <div class="radion_btn">
                                           <input type="radio" id="f-option7" name="selector" value="Online payment" />
                                           <label for="f-option7">Online Payment</label>
                                         </div>
                                       </div>
-                                      <% } else if (locals.addMoneySuccess) { %>
+                                      <% } else { %>
                                         <div class="payment_item1">
                                           <div class="radion_btn">
                                             <input type="radio" id="f-option6" name="selector" value="Wallet payment" />
@@ -327,6 +327,48 @@
 
 
     <script>
+
+document.getElementById('addMoneyButton').addEventListener('click', function(event) {
+  event.preventDefault();
+
+  Swal.fire({ 
+    title: 'Processing...',
+    text: 'Please wait',
+    allowOutsideClick: false,
+    onBeforeOpen: () => {
+      Swal.showLoading()
+    },
+  });
+
+  fetch('/addFromWallet', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+      Swal.close(); // Close the previous Sweet Alert
+      if (data.message) {
+        Swal.fire({ // Show a Sweet Alert with the message from the server
+          title: 'Alert',
+          text: data.message,
+          icon: 'info',
+        }).then(() => {
+          location.reload(); // Reload the page after the Sweet Alert is closed
+        });
+      } else {
+        location.reload();
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      Swal.fire({ // Show a Sweet Alert with the error message
+        title: 'Error',
+        text: 'An error occurred',
+        icon: 'error',
+      });
+    });
+});
+
+
+
+
       window.onload = function () {
         var cashOnDelivery = document.getElementById("f-option5");
         var walletPayment = document.getElementById("f-option6");

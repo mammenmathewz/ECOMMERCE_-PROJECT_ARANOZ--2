@@ -72,6 +72,10 @@ delivery_time: {
 invoice:{
   type:String
 },
+walletAmount:{
+  type:Number,
+  default:0
+} 
   });
   orderSchema.index({ user: 1, orderId: 1 });
 

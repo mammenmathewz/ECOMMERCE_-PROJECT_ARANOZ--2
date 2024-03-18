@@ -34,6 +34,10 @@ const cartSchema = new mongoose.Schema({
   couponCode:{
     type:String,
     default:null
+  },
+  walletAmount:{
+    type:Number,
+    default:0
   }
  
 });

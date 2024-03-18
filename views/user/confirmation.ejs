@@ -90,11 +90,7 @@
                         <th colspan="3">Wallet</th>
                         <th>
                           <h4 style="color: red;">
-                            <% if(order.grandTotal == 0) { %>
-                              - ₹<%= order.total - order.discount - order.grandTotal %>
-                            <% } else { %>
-                              - ₹<%= order.total-order.discount -order.grandTotal %>
-                            <% } %>
+                           - <%= order.walletAmount %>
                           </h4>
                         </th>
                       </tr>

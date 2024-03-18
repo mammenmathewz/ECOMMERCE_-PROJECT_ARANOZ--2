@@ -55,7 +55,7 @@ userRouter.get('/filterAndSortProducts',userController.filterAndSortProducts)
 userRouter.put('/applyCoupon',auth.isUserLogin,cartController.applyCoupon)
 userRouter.put('/removeCoupon', auth.isUserLogin, cartController.removeCoupon);
 userRouter.get('/wallet',auth.isUserLogin,userController.getWallet)
-userRouter.get('/addFromWallet',auth.isUserLogin,orderController.addFromWallet)
+userRouter.post('/addFromWallet',auth.isUserLogin,orderController.addFromWallet)
 
 userRouter.get('/invoice/:orderId',userController.downlodeInvoice)
 

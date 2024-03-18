@@ -30,6 +30,13 @@ const getOrder = async (req, res, next) => {
       req.session.user = null;
       return res.redirect("/login");
     }
+if (cart.items==0) {
+  req.flash(
+    "error",
+    "Cart is empty"
+  );
+  return res.redirect("/cart");
+}
 
     for (let item of cart.items) {
       const product = await Product.findById(item.productId);
@@ -135,7 +142,7 @@ const cashOnDelivery = async (req, res, next) => {
     }
 
     if (cart && cart.couponCode) {
-      // Fetch the coupon
+      
       const coupon = await Coupon.findOne({ code: cart.couponCode });
 
       if (coupon && !coupon.users.includes(userId)) {

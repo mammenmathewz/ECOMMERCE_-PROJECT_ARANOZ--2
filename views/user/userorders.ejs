@@ -95,7 +95,7 @@
 
                 <div class="d-flex justify-content-center mb-2">
                   <div class="btn-group d-flex flex-column align-items-stretch" role="group" style="gap: 1%;">
-                    <a href="/account"><button type="button" class="btn btn-outline-primary btn-edit my-2">Edit
+                    <a href="/account"><button type="button" class="btn btn-outline-primary btn-edit my-2">
                         Profile</button></a>
                     <a href="/myorder"><button type="button" class="btn btn-outline-primary btn-order my-2">My
                         orders</button></a>
@@ -206,19 +206,19 @@
                 <div class="card text-center  hoverable" style="margin-top: 1%;">
                   <div class="card-header">
                     <ul class="nav nav-pills card-header-pills">
-                      <li class="nav-item">
+                      <li class="nav-item" style="margin-top: 4px;">
                         <% if (order.is_delivered) { %>
                           <h4> Delivered </h4>
                           <% } else if (order.paymentStatus==='Failed' ) { %>
                             <h4>Payment Pending</h4>
                             <% } else if (order.user_cancelled) { %>
-                              <h4> User Cancelled</h4>
+                              <h4 style="color: red;"> User Cancelled</h4>
                               <% } else if (order.admin_cancelled) { %>
-                                <h4> Admin Cancelled</h4>
+                                <h4 style="color: red;"> Admin Cancelled</h4>
                                 <% } else if (order.is_returned) { %>
-                                  <h4> Returned</h4>
+                                  <h4 style="color: rgb(201, 188, 0);"> Returned</h4>
                                   <% } else { %>
-                                    <h4>Pending</h4>
+                                    <h4>Pending..</h4>
                                     <% } %>
                       </li>
                       <li class="nav-item">
@@ -241,34 +241,34 @@
                     <div>
                       <% if (order.paymentStatus==='Failed' ) { %>
                         <% var hoursSinceOrder=(new Date() - new Date(order.date)) / 1000 / 60 / 60; %>
-                          <% if (hoursSinceOrder <=24) { %>
-                            <button type="button" class="butten-1" id="rzp-button1"
-                              onclick="completePayment('<%= order._id %>', '<%= order.grandTotal %>')">
-                              <div class="container"> Pay </div>
-                            </button>
-                            <% } %>
-                              <% } else { %>
-                                <select class="form-control order-status" id="status<%= order._id %>"
-                                  onchange="changeOrderStatus('<%= order._id %>', this.value)">
-                                  <option value="">Status</option>
-                                  <% if(!order.is_delivered && !order.user_cancelled && !order.admin_cancelled &&
-                                    order.paymentStatus !=='Failed' ) { %>
-                                    <option value="User Cancelled">Cancel</option>
-                                    <% } %>
-                                      <% if(order.is_delivered && !order.is_returned ) { %>
-                                        <option value="Returned">Return</option>
-                                        <% } %>
-                                </select>
-
-                                <% } %>
+                        <% if (hoursSinceOrder <=24) { %>
+                          <button type="button" class="butten-1" id="rzp-button1"
+                            onclick="completePayment('<%= order._id %>', '<%= order.grandTotal %>')">
+                            <div class="container"> Pay </div>
+                          </button>
+                        <% } %>
+                      <% } else if(!order.admin_cancelled && !order.is_returned && !order.user_cancelled) { %>
+                        <select class="form-control order-status" id="status<%= order._id %>"
+                          onchange="changeOrderStatus('<%= order._id %>', this.value)">
+                          <option value="">Status</option>
+                          <% if(!order.is_delivered && !order.user_cancelled && !order.admin_cancelled &&
+                            order.paymentStatus !=='Failed' ) { %>
+                            <option value="User Cancelled">Cancel</option>
+                          <% } %>
+                          <% if(order.is_delivered && order.delivery_time ) { %>
+                            <option value="Returned">Return</option>
+                          <% } %>
+                        </select>
+                      <% } %>
                     </div>
+                    
                     <div>
                       <h5>
                         <% order.items.forEach(function(item) { %>
 
                           <li style="display: flex; justify-content: space-between;">
                             <span>
-                              <%= item.productId.productname %> :
+                              <%= item.productId.productname %>  :
                             </span>
                             <span>× <%= item.quantity %></span>
                           </li>

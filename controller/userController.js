@@ -558,6 +558,25 @@ const resetPassword = async (req, res, next) => {
       return res.status(400).redirect("login");
     }
 
+    // Password validation
+    const passwordRequirements = {
+      numCharacters: 8,
+      useLowercase: true,
+      useUppercase: true,
+      useNumbers: true,
+      useSpecial: true,
+    };
+
+    // Validate new password according to requirements
+    const isValidPassword = validatePassword(newPassword, passwordRequirements);
+    if (!isValidPassword) {
+      req.flash(
+        "info",
+        "Your new password does not meet the requirements. Please try again."
+      );
+      return res.status(400).redirect("login");
+    }
+
     // Hash the new password
     bcrypt.hash(newPassword, saltRounds, async function (err, hash) {
       if (err) {
@@ -583,6 +602,7 @@ const resetPassword = async (req, res, next) => {
     next(error);
   }
 };
+
 
 const viewOrder = async (req, res, next) => {
   try {
@@ -622,6 +642,26 @@ const resetPasswordWithoutOTP = async (req, res, next) => {
       return res.status(400).redirect("/account");
     }
 
+    // Password validation
+    const passwordRequirements = {
+      numCharacters: 8,
+      useLowercase: true,
+      useUppercase: true,
+      useNumbers: true,
+      useSpecial: true,
+    };
+
+    // Validate new password according to requirements
+    const isValidPassword = validatePassword(newPassword, passwordRequirements);
+    if (!isValidPassword) {
+      req.flash(
+        "info",
+        "Your new password does not meet the requirements. Please try again."
+      );
+      req.flash("type", "alert alert-danger");
+      return res.status(400).redirect("/account");
+    }
+
     // Hash the new password
     bcrypt.hash(newPassword, saltRounds, async function (err, hash) {
       if (err) {
@@ -644,6 +684,7 @@ const resetPasswordWithoutOTP = async (req, res, next) => {
     next(error);
   }
 };
+
 
 const filterAndSortProducts = async (req, res, next) => {
   try {

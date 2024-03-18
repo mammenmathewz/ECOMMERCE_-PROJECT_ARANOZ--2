@@ -27,7 +27,11 @@
                     height: 50px;  /* Adjust as needed */
                   }
                   </style>
-                  
+                  <% if (messages.info) { %>
+                    <div style="margin-top: 2% ;" class="<%= messages.type %>" id="alert">
+                      <%= messages.info %>
+                    </div>
+                    <% } %>
                   <div class="d-flex justify-content-center mb-2">
                     <div class="btn-group d-flex flex-column align-items-stretch" role="group" style="gap: 1%;">
                       <a href="/account"><button type="button" class="btn btn-outline-primary btn-edit my-2">Profile</button></a>
@@ -38,11 +42,7 @@
                   </div>
                
                 <button data-toggle="modal" class="btn_3" data-target="#addressModal">CLICK TO ADD NEW ADDRESS</button>
-                <% if (messages.info) { %>
-                  <div style="margin-top: 2% ;" class="<%= messages.type %>" id="alert">
-                    <%= messages.info %>
-                  </div>
-                  <% } %>
+                
                     <!-- Modal -->
                     <div class="modal fade" id="addressModal" tabindex="-1" role="dialog"
                       aria-labelledby="addressModalLabel" aria-hidden="true">

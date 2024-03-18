@@ -1,0 +1,159 @@
+<%- include('../partials/adminHead') %>
+<link href="/Admin/img/favicon.ico" rel="icon">
+
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Icon Font Stylesheet -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<!-- Libraries Stylesheet -->
+<link href="/admin/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+<link href="/admin/lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet" />
+
+<!-- Customized Bootstrap Stylesheet -->
+<link href="/admin/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Template Stylesheet -->
+<link href="/admin/css/style.css" rel="stylesheet">
+    <body>
+        <div class="container-xxl position-relative bg-white d-flex p-0">
+            <!-- Spinner Start -->
+            <%- include('../partials/adminspinner') %>
+
+                <!-- Spinner End -->
+
+                <style>
+                    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                      padding-left: 10px;
+                    }
+                    
+                    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+                      padding-left: 10px;
+                    }
+                    
+                    ::-ms-input-placeholder { /* Microsoft Edge */
+                      padding-left: 10px;
+                    }
+                    </style>
+                <!-- Sidebar Start -->
+                <%- include('../partials/adminsidebar') %>
+
+                    <!-- Sidebar End -->
+
+
+                    <!-- Content Start -->
+                    <div class="content">
+                        <!-- Navbar Start -->
+                        <%- include('../partials/adminnavbar') %>
+
+                            <!-- Navbar End -->
+
+
+                            
+                                <!-- Spinner End -->
+                        
+                        
+                                <!-- Sign Up Start -->
+                                <div class="container-fluid">
+                                    <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+                                      <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                                        <div class="bg-light rounded p-4 p-sm-5 my-8 mx-8">
+                                          <div class="d-flex align-items-center justify-content-center mb-3">
+                                            <h3 class="text-primary">ADD ADMIN</h3>
+                                          </div>
+                                         
+                                          <form class="row contact_form" onsubmit="checkForm(event)" action="/admin/signup" method="post" novalidate="novalidate">
+                                            <div class="form-floating mb-3">
+                                              <input name="email" type="email" class="form-control" id="floatingInput" placeholder="Email address">
+                                              <label for="floatingInput">Email address</label>
+                                            </div>
+                                            <div class="form-floating mb-4">
+                                              <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                                              <label for="floatingPassword">Password</label>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4">ADD NEW</button>
+                                         
+                                          </form>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  
+                                  
+                                <!-- Sign Up End -->
+                         
+
+
+
+                            <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+                            <script src="/admin/lib/chart/chart.min.js"></script>
+                            <script src="/admin/lib/easing/easing.min.js"></script>
+                            <script src="/admin/lib/waypoints/waypoints.min.js"></script>
+                            <script src="/admin/lib/owlcarousel/owl.carousel.min.js"></script>
+                            <script src="/admin/lib/tempusdominus/js/moment.min.js"></script>
+                            <script src="/admin/lib/tempusdominus/js/moment-timezone.min.js"></script>
+                            <script src="/admin/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+                            <script src="/admin/js/main.js"></script>
+                            <script>
+                                function checkForm(e) {
+                                    let inputs = document.getElementsByTagName('input');
+                                    console.log(inputs)
+                                    for (let i = 0; i < inputs.length; i++) {
+                                        if (!inputs[i].value.trim()) {
+                                            e.preventDefault();
+                                            alert('Please fill out the form completely');
+                                            return;
+                                        }
+                                    }
+                                }
+                            </script>
+                            <script>
+                                window.onload = function () {
+                                    setTimeout(function () {
+                                        var alert = document.getElementById('alert');
+                                        if (alert) alert.remove()
+                                    }, 3000);
+                                }
+                            </script>
+
+
+
+
+                    </div>
+
+
+
+
+        </div>
+        </div>
+
+        <!-- JavaScript Libraries -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="lib/chart/chart.min.js"></script>
+        <script src="lib/easing/easing.min.js"></script>
+        <script src="lib/waypoints/waypoints.min.js"></script>
+        <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+        <script src="lib/tempusdominus/js/moment.min.js"></script>
+        <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+        <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+        <!-- Template Javascript -->
+        <script src="js/main.js"></script>
+
+   
+
+
+        </script>
+
+
+
+    </body>
+
+    </html>

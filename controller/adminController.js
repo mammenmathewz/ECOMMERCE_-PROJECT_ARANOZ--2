@@ -53,7 +53,7 @@ const postAdminLogin = async (req, res, next) => {
 
 const getAdminSignup = async (req, res, next) => {
   try {
-    res.render("admin/signup");
+    res.render("admin/addAdmin",{active: "dash"});
   } catch (error) {
     console.log(error);
     next(error);

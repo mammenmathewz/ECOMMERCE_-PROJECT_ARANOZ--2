@@ -5,15 +5,15 @@ const { User, Address } = require("../models/users");
 const Banner = require("../models/banners");
 const Coupon = require("../models/coupons");
 const bcrypt = require("bcrypt");
-const session = require("express-session");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-const flash = require("express-flash");
 const Order = require("../models/checkout");
 const moment = require("moment");
 const Razorpay = require("razorpay");
 const path = require("path");
 const fs = require("fs");
+const easyinvoice = require('easyinvoice');
+
 
 var instance = new Razorpay({
   key_id: process.env.KEY_ID,
@@ -868,8 +868,7 @@ const generateInvoice = async (orderId) => {
     }));
 
     var data = {
-      apiKey:
-        "9IfEYtA5Bc3sS6gaj7W85B4JjtctPTihRY3uUmyW34Ezwvmh6SChsPxL7d18AYEB",
+      apiKey:process.env.EASY_INVOICE_API_KEY,
       mode: "development",
       images: {
         logo: "https://themewagon.github.io/aranoz/img/logo.png",

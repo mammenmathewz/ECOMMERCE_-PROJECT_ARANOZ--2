@@ -22,9 +22,8 @@ const getOrder = async (req, res, next) => {
       populate: {
         path: "brand",
       },
-    }); // Populate the products in the cart
+    }); 
     if (justuser.block) {
-      // Redirect if user not found or user is blocked
       req.flash("info", "Please contact us");
       req.flash("type", "alert alert-danger");
       req.session.user = null;

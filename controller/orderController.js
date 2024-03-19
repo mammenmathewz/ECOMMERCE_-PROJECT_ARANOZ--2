@@ -239,10 +239,12 @@ const walletPayment = async (req, res, next) => {
       cart.discount = 0;
       cart.grandTotal = cart.total;
     }
-    user.transactions.push({
-      amount: cart.walletAmount,
-      type: "debit",
-    });
+    if (cart.walletAmount>0) {
+      user.transactions.push({
+        amount: cart.walletAmount,
+        type: "debit",
+      });
+     }
     await user.save()
 
     cart.walletAmount=0
@@ -369,10 +371,12 @@ const verify = async (req, res, next) => {
           cart.discount = 0;
           cart.grandTotal = cart.total;
         }
+       if (cart.walletAmount>0) {
         user.transactions.push({
           amount: cart.walletAmount,
           type: "debit",
         });
+       }
         await user.save()
 
         cart.walletAmount=0

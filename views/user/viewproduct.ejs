@@ -108,45 +108,25 @@
                 </div>
                 <div class="row align-items-center justify-content-between">
                     <div class="col-lg-12">
-                        <div class="best_product_slider owl-carousel">
-                            <div class="single_product_item">
-                                <img src="" alt="">
-                                <div class="single_product_text">
-                                    <h4>Quartz Belt Watch</h4>
-                                    <h3>$150.00</h3>
-                                </div>
+                      <div class="best_product_slider owl-carousel">
+                        <% mostOrderedProductsDisplay.forEach((product) => { %>
+                          <div class="single_product_item">
+                            <a href="/viewproduct/<%= product._id %>">
+                                <img src="<%= product.images[0] %>" alt="watch" style="object-fit:scale-down"; height="300px">
+                            </a>
+                            <div class="single_product_text">
+                              <h4><%= product.productname %></h4>
+                              <h3>$<%= product.saleprice %></h3>
                             </div>
-                            <div class="single_product_item">
-                                <img src="" alt="">
-                                <div class="single_product_text">
-                                    <h4>Quartz Belt Watch</h4>
-                                    <h3>$150.00</h3>
-                                </div>
-                            </div>
-                            <div class="single_product_item">
-                                <img src="" alt="">
-                                <div class="single_product_text">
-                                    <h4>Quartz Belt Watch</h4>
-                                    <h3>$150.00</h3>
-                                </div>
-                            </div>
-                            <div class="single_product_item">
-                                <img src="" alt="">
-                                <div class="single_product_text">
-                                    <h4>Quartz Belt Watch</h4>
-                                    <h3>$150.00</h3>
-                                </div>
-                            </div>
-                            <div class="single_product_item">
-                                <img src="" alt="">
-                                <div class="single_product_text">
-                                    <h4>Quartz Belt Watch</h4>
-                                    <h3>$150.00</h3>
-                                </div>
-                            </div>
-                        </div>
+                          </div>
+                        <% }) %>
+                      </div>
                     </div>
-                </div>
+                  </div>
+                  
+                  
+                  
+                  
             </div>
         </section>
         <!-- product_list part end-->

@@ -166,31 +166,12 @@ const getProduct = async (req, res, next) => {
   try {
     const id = req.params.id;
     const product = await Product.findById(id).populate("brand"); // Add .populate('brand')
-
-    // Get the most ordered products
-    const mostOrderedProducts = await getMostOrderedProducts();
-
-    // Get the product IDs
-    const productIds = mostOrderedProducts.map((item) => item._id);
-    console.log("id:" + productIds);
-
-    // Get the most ordered products for display
-    let mostOrderedProductsDisplay = await Product.find({
-      _id: { $in: productIds },
-    });
-
-    res.render("user/viewproduct", { 
-      product: product,
-      mostOrderedProducts: JSON.stringify(productIds), // Convert the array to a JSON string
-      mostOrderedProductsDisplay: mostOrderedProductsDisplay
-    });
+    res.render("user/viewproduct", { product: product });
   } catch (error) {
     console.log(error);
     next(error); // Pass the error to the next middleware
   }
 };
-
-
 const getLogin = async (req, res) => {
   try {
     res.render("user/login");

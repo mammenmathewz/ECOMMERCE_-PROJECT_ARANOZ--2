@@ -5,7 +5,6 @@ const blockUser = async (req, res, next) => {
       const userId = req.session.user._id;
       const user = await User.findById(userId);
       if (user.block) {
-        // Send a response if user is blocked
         return res.status(403).json({ message: "User is blocked please contact us" });
         
       } else {

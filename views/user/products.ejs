@@ -3,307 +3,321 @@
 
 
 <%- include('../partials/navbar') %>
-    <!-- Header part end-->
+<!-- Header part end-->
 
-    <!--================Home Banner Area =================-->
-    <!-- breadcrumb start-->
+<!--================Home Banner Area =================-->
+<!-- breadcrumb start-->
 
-    <!-- breadcrumb start-->
+<!-- breadcrumb start-->
 
-    <!--================Category Product Area =================-->
-    <section class="cat_product_area section_padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="left_sidebar_area">
-                        <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Browse Categories</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <li>
-                                        <a href="#" class="category">Mens</a>
-                                        <input type="checkbox" name="" id="" class="category-checkbox">
-                                    </li>
-                                    <li>
-                                        <a href="#" class="category">Womens</a>
-                                        <input type="checkbox" name="" id="" class="category-checkbox">
-                                    </li>
-                                </ul>
-                            </div>
-                        </aside>
-                        
-                        
-
-                        <aside class="left_widgets p_filter_widgets">
-                            <div class="l_w_title">
-                                <h3>Filter Brands</h3>
-                            </div>
-                            <div class="widgets_inner">
-                                <ul class="list">
-                                    <% brands.forEach(function(brand) { %>
-                                        <li>
-                                            <a style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 150px;" href="#"><%= brand.name %></a>
-                                            <input type="checkbox" name="" id="" class="brand-checkbox">
-                                        </li>
-                                    <% }); %>
-                                </ul>
-                            </div>
-                        </aside>
-                        
-
-                        
-                        <!-- price range -->
-                        
-                    </div>
-                </div>
-                <div class="col-lg-9">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="product_top_bar d-flex justify-content-between align-items-center">
-                                <div class="single_product_menu">
-                                    <% if (totalProducts && totalProducts > 0) { %>
-                                        <p><span><%= totalProducts %></span> Products Found</p>
-                                    <% } %>
-                                    
-                                    
-                                </div>
-                                <div class="d-flex align-items-center" style=" padding: 10px; border-radius: 5px;">
-                                    <h5 style="margin-right: 10px;">Sort by:</h5>
-                                    <select style="padding: 5px; border-radius: 5px; border: none;">
-                                        <option data-display="Select">Price...</option>
-                                        <option value="1">Low to high</option>
-                                        <option value="2">High to low</option>
-                                        <option value="3">Aa-Zz</option>
-                                        <option value="4">Zz-Aa</option>
-
-                                    </select>
-                                </div>
-                                
-                                
-                                <div class="single_product_menu d-flex">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="search-input" placeholder="search" aria-describedby="inputGroupPrepend">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text" id="inputGroupPrepend"><i class="ti-search"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row align-items-center latest_product_inner">
-                        <% product.forEach((product)=> { %>
-                            <div class="col-lg-4 col-sm-6">
-                                <div class="single_product_item">
-                                 
-                                    <div style="margin-left: 20%; position: relative;"> 
-                                        <% if (mostOrderedProducts.includes(product._id.toString())) { %>
-                                            <div style="position: absolute; top: 0; left: 0;">
-                                                <img style="height: 55px; width: 35px;" src="\user\img\best-seller.png" alt="Best Selling" />
-                                            </div>
-                                        <% } %>
-                                        <a href="/viewproduct/<%= product._id %>">
-                                            <img src="<%= product.images[0] %>" alt="watch" style="object-fit:scale-down"; height="300px">
-                                        </a>
-                                    </div>
-                                    <div class="single_product_text">
-                                        <h4>
-                                            <%= product.productname %>
-                                        </h4>
-                                        <h3> ₹ <%= product.saleprice %>
-                                        </h3>
-                                        <form id="add-to-cart-form-<%= product._id %>" action="/addcart/<%= product._id %>" method="post" style="display: none;">
-                                        </form>
-                                        <a href="#" onclick="document.getElementById('add-to-cart-form-<%= product._id %>').submit();">+ add to cart</a>
-                                          
-                                    </div>
-                                </div>
-                            </div>
-                        <% }) %>
-                        
-                        
-                        
-                        
-                            
-                            
-                            
-                              
-                    </div>
-                </div>
+<!--================Category Product Area =================-->
+<section class="cat_product_area section_padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="left_sidebar_area">
+          <aside class="left_widgets p_filter_widgets">
+            <div class="l_w_title">
+              <h3>Browse Categories</h3>
             </div>
-        </div>
-    </section>
-    <div class="col-lg-12">
-        <div class="pageination">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    <% if (currentPage > 1) { %>
-                        <li class="page-item">
-                            <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
-                                <i class="ti-angle-double-left"></i>
-                            </a>
-                        </li>
-                    <% } %>
-                    <% for(let i = 1; i <= pages; i++) { %>
-                        <li class="page-item <%= i == currentPage ? 'active' : '' %>">
-                            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-                        </li>
-                    <% } %>
-                    <% if (currentPage < pages) { %>
-                        <li class="page-item">
-                            <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
-                                <i class="ti-angle-double-right"></i>
-                            </a>
-                        </li>
-                    <% } %>
-                </ul>
-            </nav>
-        </div>
-    </div>
-    <!--================End Category Product Area =================-->
-
-    <!-- product_list part start-->
-    <section class="product_list best_seller">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-12">
-                    <div class="section_tittle text-center">
-                        <h2>Best Sellers <span>shop</span></h2>
-                    </div>
-                </div>
+            <div class="widgets_inner">
+              <ul class="list">
+                <li>
+                  <a href="#" class="category">Mens</a>
+                  <input type="checkbox" name="" id="" class="category-checkbox">
+                </li>
+                <li>
+                  <a href="#" class="category">Womens</a>
+                  <input type="checkbox" name="" id="" class="category-checkbox">
+                </li>
+              </ul>
             </div>
-            <div class="row align-items-center justify-content-between">
-                <div class="col-lg-12">
-                  <div class="best_product_slider owl-carousel">
-                    <% mostOrderedProductsDisplay.forEach((product) => { %>
-                      <div class="single_product_item">
-                        <a href="/viewproduct/<%= product._id %>">
-                            <img src="<%= product.images[0] %>" alt="watch" style="object-fit:scale-down"; height="300px">
-                        </a>
-                        <div class="single_product_text">
-                          <h4><%= product.productname %></h4>
-                          <h3>$<%= product.saleprice %></h3>
-                        </div>
-                      </div>
-                    <% }) %>
+          </aside>
+
+
+
+          <aside class="left_widgets p_filter_widgets">
+            <div class="l_w_title">
+              <h3>Filter Brands</h3>
+            </div>
+            <div class="widgets_inner">
+              <ul class="list">
+                <% brands.forEach(function(brand) { %>
+                <li>
+                  <a style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 150px;" href="#">
+                    <%= brand.name %>
+                  </a>
+                  <input type="checkbox" name="" id="" class="brand-checkbox">
+                </li>
+                <% }); %>
+              </ul>
+            </div>
+          </aside>
+
+
+
+          <!-- price range -->
+
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="product_top_bar d-flex justify-content-between align-items-center">
+              <div class="single_product_menu">
+                <% if (totalProducts && totalProducts> 0) { %>
+                <p><span>
+                    <%= totalProducts %>
+                  </span> Products Found</p>
+                <% } %>
+
+
+              </div>
+              <div class="d-flex align-items-center" style=" padding: 10px; border-radius: 5px;">
+                <h5 style="margin-right: 10px;">Sort by:</h5>
+                <select style="padding: 5px; border-radius: 5px; border: none;">
+                  <option data-display="Select">Price...</option>
+                  <option value="1">Low to high</option>
+                  <option value="2">High to low</option>
+                  <option value="3">Aa-Zz</option>
+                  <option value="4">Zz-Aa</option>
+
+                </select>
+              </div>
+
+
+              <div class="single_product_menu d-flex">
+                <div class="input-group">
+                  <input type="text" class="form-control" id="search-input" placeholder="search" aria-describedby="inputGroupPrepend">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupPrepend"><i class="ti-search"></i></span>
                   </div>
                 </div>
               </div>
-              
-              
-              
-              
+            </div>
+          </div>
         </div>
-    </section>
-    <!-- product_list part end-->
- 
 
-    <!--::footer_part start::-->
-    <%- include('../partials/footer') %>
-    <!--::footer_part end::-->
+        <div class="row align-items-center latest_product_inner">
+          <% product.forEach((product)=> { %>
+          <div class="col-lg-4 col-sm-6">
+            <div class="single_product_item">
 
-    <!-- jquery plugins here-->
-    <!-- jquery -->
-    <script src="/user/js/jquery-1.12.1.min.js"></script>
-    <!-- popper js -->
-    <script src="/user/js/popper.min.js"></script>
-    <!-- bootstrap js -->
-    <script src="/user/js/bootstrap.min.js"></script>
-    <!-- easing js -->
-    <script src="/user/js/jquery.magnific-popup.js"></script>
-    <!-- swiper js -->
-    <script src="/user/js/swiper.min.js"></script>
-    <!-- swiper js -->
-    <script src="/user/js/masonry.pkgd.js"></script>
-    <!-- particles js -->
-    <script src="/user/js/owl.carousel.min.js"></script>
-    <script src="/user/js/jquery.nice-select.min.js"></script>
-    <!-- slick js -->
-    <script src="/user/js/slick.min.js"></script>
-    <script src="/user/js/jquery.counterup.min.js"></script>
-    <script src="/user/js/waypoints.min.js"></script>
-    <script src="/user/js/contact.js"></script>
-    <script src="/user/js/jquery.ajaxchimp.min.js"></script>
-    <script src="/user/js/jquery.form.js"></script>
-    <script src="/user/js/jquery.validate.min.js"></script>
-    <script src="/user/js/mail-script.js"></script>
-    <script src="/user/js/stellar.js"></script>
-    <script src="/user/js/price_rangs.js"></script>
-    <!-- custom js -->
-    <script src="/user/js/custom.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        var mostOrderedProducts = <%= mostOrderedProducts %>; // Parse the JSON string to a JavaScript array
-      </script>
-      
+              <div style="margin-left: 20%; position: relative;">
+                <% if (mostOrderedProducts.includes(product._id.toString())) { %>
+                <div style="position: absolute; top: 0; left: 0;">
+                  <img style="height: 55px; width: 35px;" src="\user\img\best-seller.png" alt="Best Selling" />
+                </div>
+                <% } %>
+                <a href="/viewproduct/<%= product._id %>">
+                  <img src="<%= product.images[0] %>" alt="watch" style="object-fit:scale-down" ; height="300px">
+                </a>
+              </div>
+              <div class="single_product_text">
+                <h4>
+                  <%= product.productname %>
+                </h4>
+                <h3> ₹ <%= product.saleprice %>
+                </h3>
+                <form id="add-to-cart-form-<%= product._id %>" action="/addcart/<%= product._id %>" method="post" style="display: none;">
+                </form>
+                <a href="#" onclick="document.getElementById('add-to-cart-form-<%= product._id %>').submit();">+
+                  add to cart</a>
 
-    <script>
-$(document).ready(function() {
-  var selectedCategories = [];
-  var selectedBrands = [];
-  var sortOption = '';
-  var currentPage = 1;
-  var limit = 10;
+              </div>
+            </div>
+          </div>
+          <% }) %>
 
-  // Set up an event handler for the pagination links
-  $(document).on('click', '.pagination a', function(event) {
-    event.preventDefault();
-    var page = $(this).attr('href').split('=')[1];
-    currentPage = parseInt(page);
-    $('.category-checkbox, .brand-checkbox, select').trigger('change');
-  });
 
-  $('#search-input').on('input', function() {
-    $('.category-checkbox, .brand-checkbox, select').trigger('change');
-  });
 
-  $('.category-checkbox, .brand-checkbox, select').change(function() {
-    if ($(this).hasClass('category-checkbox')) {
-            var category = $(this).siblings('a').text();
-            if ($(this).is(':checked')) {
-                selectedCategories.push(category);
-            } else {
-                var index = selectedCategories.indexOf(category);
-                if (index > -1) {
-                    selectedCategories.splice(index, 1);
-                }
-            }
-        } else if ($(this).hasClass('brand-checkbox')) {
-            var brandName = $(this).siblings('a').text();
-            if ($(this).is(':checked')) {
-                selectedBrands.push(brandName);
-            } else {
-                var index = selectedBrands.indexOf(brandName);
-                if (index > -1) {
-                    selectedBrands.splice(index, 1);
-                }
-            }
-        } else if ($(this).is('select')) {
-            sortOption = $(this).val();
-        } 
 
-    var searchTerm = $('#search-input').val();
 
-    $.ajax({
-  url: '/filterAndSortProducts',
-  type: 'GET',
-  data: { categories: selectedCategories, brands: selectedBrands, sort: sortOption, page: currentPage, limit: limit, search: searchTerm },
-  success: function(data) {
-    // Clear the current products
-    $('.latest_product_inner').empty();
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="col-lg-12">
+  <div class="pageination">
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <% if (currentPage> 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage - 1 %>" aria-label="Previous">
+            <i class="ti-angle-double-left"></i>
+          </a>
+        </li>
+        <% } %>
+        <% for(let i=1; i <=pages; i++) { %>
+        <li class="page-item <%= i == currentPage ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>">
+            <%= i %>
+          </a>
+        </li>
+        <% } %>
+        <% if (currentPage < pages) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= currentPage + 1 %>" aria-label="Next">
+            <i class="ti-angle-double-right"></i>
+          </a>
+        </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
+</div>
+<!--================End Category Product Area =================-->
 
-    // Update the total number of products
-    $('.single_product_menu p span').text(data.totalProducts);
+<!-- product_list part start-->
+<section class="product_list best_seller">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-12">
+        <div class="section_tittle text-center">
+          <h2>Best Sellers <span>shop</span></h2>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center justify-content-between">
+      <div class="col-lg-12">
+        <div class="best_product_slider owl-carousel">
+          <% mostOrderedProductsDisplay.forEach((product)=> { %>
+          <div class="single_product_item">
+            <a href="/viewproduct/<%= product._id %>">
+              <img src="<%= product.images[0] %>" alt="watch" style="object-fit:scale-down" ; height="300px">
+            </a>
+            <div class="single_product_text">
+              <h4>
+                <%= product.productname %>
+              </h4>
+              <h3>$<%= product.saleprice %>
+              </h3>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
 
-    // Check if there are any products in the response
-    if (data.product.length > 0) {
-      // Loop through the products and add them to the page
-      data.product.forEach(function(product) {
-        var isBestSeller = data.mostOrderedProducts.includes(product._id);
-        $('.latest_product_inner').append(`
+
+
+
+  </div>
+</section>
+<!-- product_list part end-->
+
+
+<!--::footer_part start::-->
+<%- include('../partials/footer') %>
+<!--::footer_part end::-->
+
+<!-- jquery plugins here-->
+<!-- jquery -->
+<script src="/user/js/jquery-1.12.1.min.js"></script>
+<!-- popper js -->
+<script src="/user/js/popper.min.js"></script>
+<!-- bootstrap js -->
+<script src="/user/js/bootstrap.min.js"></script>
+<!-- easing js -->
+<script src="/user/js/jquery.magnific-popup.js"></script>
+<!-- swiper js -->
+<script src="/user/js/swiper.min.js"></script>
+<!-- swiper js -->
+<script src="/user/js/masonry.pkgd.js"></script>
+<!-- particles js -->
+<script src="/user/js/owl.carousel.min.js"></script>
+<script src="/user/js/jquery.nice-select.min.js"></script>
+<!-- slick js -->
+<script src="/user/js/slick.min.js"></script>
+<script src="/user/js/jquery.counterup.min.js"></script>
+<script src="/user/js/waypoints.min.js"></script>
+<script src="/user/js/contact.js"></script>
+<script src="/user/js/jquery.ajaxchimp.min.js"></script>
+<script src="/user/js/jquery.form.js"></script>
+<script src="/user/js/jquery.validate.min.js"></script>
+<script src="/user/js/mail-script.js"></script>
+<script src="/user/js/stellar.js"></script>
+<script src="/user/js/price_rangs.js"></script>
+<!-- custom js -->
+<script src="/user/js/custom.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  var mostOrderedProducts = <%= mostOrderedProducts %>; // Parse the JSON string to a JavaScript array
+</script>
+
+
+<script>
+  $(document).ready(function() {
+    var selectedCategories = [];
+    var selectedBrands = [];
+    var sortOption = '';
+    var currentPage = 1;
+    var limit = 10;
+
+    // Set up an event handler for the pagination links
+    $(document).on('click', '.pagination a', function(event) {
+      event.preventDefault();
+      var page = $(this).attr('href').split('=')[1];
+      currentPage = parseInt(page);
+      $('.category-checkbox, .brand-checkbox, select').trigger('change');
+    });
+
+    $('#search-input').on('input', function() {
+      $('.category-checkbox, .brand-checkbox, select').trigger('change');
+    });
+
+    $('.category-checkbox, .brand-checkbox, select').change(function() {
+      if ($(this).hasClass('category-checkbox')) {
+        var category = $(this).siblings('a').text();
+        if ($(this).is(':checked')) {
+          selectedCategories.push(category);
+        } else {
+          var index = selectedCategories.indexOf(category);
+          if (index > -1) {
+            selectedCategories.splice(index, 1);
+          }
+        }
+      } else if ($(this).hasClass('brand-checkbox')) {
+        var brandName = $(this).siblings('a').text();
+        if ($(this).is(':checked')) {
+          selectedBrands.push(brandName);
+        } else {
+          var index = selectedBrands.indexOf(brandName);
+          if (index > -1) {
+            selectedBrands.splice(index, 1);
+          }
+        }
+      } else if ($(this).is('select')) {
+        sortOption = $(this).val();
+      }
+
+      var searchTerm = $('#search-input').val();
+
+      $.ajax({
+        url: '/filterAndSortProducts',
+        type: 'GET',
+        data: {
+          categories: selectedCategories,
+          brands: selectedBrands,
+          sort: sortOption,
+          page: currentPage,
+          limit: limit,
+          search: searchTerm
+        },
+        success: function(data) {
+          // Clear the current products
+          $('.latest_product_inner').empty();
+
+          // Update the total number of products
+          $('.single_product_menu p span').text(data.totalProducts);
+
+          // Check if there are any products in the response
+          if (data.product.length > 0) {
+            // Loop through the products and add them to the page
+            data.product.forEach(function(product) {
+              var isBestSeller = data.mostOrderedProducts.includes(product._id);
+              $('.latest_product_inner').append(`
           <div class="col-lg-4 col-sm-6">
             <div class="single_product_item">
                 ${isBestSeller ? '<div style="position: absolute; top: 0; left: 0;"><img style="height: 55px; width: 35px;" src="/user/img/best-seller.png" alt="Best Selling" /></div>' : ''}
@@ -320,32 +334,28 @@ $(document).ready(function() {
             </div>
           </div>
         `);
-      });
-    } else {
-      // If there are no products, display a message
-      $('.latest_product_inner').append('<p>No products found for your search.</p>');
-    }
+            });
+          } else {
+            $('.latest_product_inner').append('<p>No products found for your search.</p>');
+          }
 
-        // Update the pagination links
-        var pagination = $('.pagination');
-        pagination.empty();
-        if (data.currentPage > 1) {
-          pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage - 1) + '"><i class="ti-angle-double-left"></i></a></li>');
+          // Update the pagination links
+          var pagination = $('.pagination');
+          pagination.empty();
+          if (data.currentPage > 1) {
+            pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage - 1) + '"><i class="ti-angle-double-left"></i></a></li>');
+          }
+          for (var i = 1; i <= data.pages; i++) {
+            pagination.append('<li class="page-item' + (i == data.currentPage ? ' active' : '') + '"><a class="page-link" href="?page=' + i + '">' + i + '</a></li>');
+          }
+          if (data.currentPage < data.pages) {
+            pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage + 1) + '"><i class="ti-angle-double-right"></i></a></li>');
+          }
         }
-        for (var i = 1; i <= data.pages; i++) {
-          pagination.append('<li class="page-item' + (i == data.currentPage ? ' active' : '') + '"><a class="page-link" href="?page=' + i + '">' + i + '</a></li>');
-        }
-        if (data.currentPage < data.pages) {
-          pagination.append('<li class="page-item"><a class="page-link" href="?page=' + (data.currentPage + 1) + '"><i class="ti-angle-double-right"></i></a></li>');
-        }
-      }
+      });
     });
   });
-});
-
-
-
-    </script>
+</script>
 </body>
 
 </html>

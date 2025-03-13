@@ -12,7 +12,7 @@ config.mongooseConnection();
 const userRouter = require('./routes/user');
 const adminRouter = require('./routes/admin')
 
-// view engine setup
+// view engine setup 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 

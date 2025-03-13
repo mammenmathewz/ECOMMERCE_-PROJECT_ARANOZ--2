@@ -1,0 +1,466 @@
+Date : 2024-11-04 20:15:44
+Directory : c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT
+Total : 368 files,  133860 codes, 9177 comments, 16093 blanks, all 159130 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| CSS        |         48 |     73,562 |      1,607 |      7,355 |     82,524 |
+| JavaScript |         77 |     20,952 |      4,276 |      3,709 |     28,937 |
+| SCSS       |        193 |     18,333 |      2,758 |      3,757 |     24,848 |
+| XML        |          5 |      9,824 |         12 |          3 |      9,839 |
+| JSON       |          3 |      5,732 |          0 |          2 |      5,734 |
+| HTML       |         39 |      5,361 |        524 |      1,255 |      7,140 |
+| Markdown   |          1 |         86 |          0 |         10 |         96 |
+| PHP        |          2 |         10 |          0 |          2 |         12 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                           | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                              |        368 |    133,860 |      9,177 |     16,093 |    159,130 |
+| . (Files)                                                                                                                      |          3 |      5,767 |          9 |         21 |      5,797 |
+| config                                                                                                                         |          1 |         11 |          0 |          3 |         14 |
+| controller                                                                                                                     |          6 |      2,410 |        182 |        418 |      3,010 |
+| middleware                                                                                                                     |          2 |         67 |          0 |          7 |         74 |
+| models                                                                                                                         |          8 |        339 |          0 |         50 |        389 |
+| public                                                                                                                         |        307 |    119,804 |      8,468 |     14,308 |    142,580 |
+| public\Admin                                                                                                                   |        111 |     37,817 |      2,570 |      4,288 |     44,675 |
+| public\Admin\cropper                                                                                                           |          2 |          2 |         17 |          0 |         19 |
+| public\Admin\css                                                                                                               |          2 |        222 |         13 |         49 |        284 |
+| public\Admin\js                                                                                                                |          1 |         26 |        146 |         41 |        213 |
+| public\Admin\lib                                                                                                               |         19 |      5,061 |      1,068 |        846 |      6,975 |
+| public\Admin\lib\chart                                                                                                         |          1 |          2 |         11 |          1 |         14 |
+| public\Admin\lib\easing                                                                                                        |          2 |        154 |          9 |          8 |        171 |
+| public\Admin\lib\owlcarousel                                                                                                   |          8 |      2,118 |        967 |        489 |      3,574 |
+| public\Admin\lib\owlcarousel (Files)                                                                                           |          2 |      1,903 |        913 |        467 |      3,283 |
+| public\Admin\lib\owlcarousel\assets                                                                                            |          6 |        215 |         54 |         22 |        291 |
+| public\Admin\lib\tempusdominus                                                                                                 |          6 |      2,781 |         75 |        347 |      3,203 |
+| public\Admin\lib\tempusdominus\css                                                                                             |          2 |        396 |         10 |          8 |        414 |
+| public\Admin\lib\tempusdominus\js                                                                                              |          4 |      2,385 |         65 |        339 |      2,789 |
+| public\Admin\lib\waypoints                                                                                                     |          2 |          6 |          6 |          1 |         13 |
+| public\Admin\scss                                                                                                              |         87 |     32,506 |      1,326 |      3,352 |     37,184 |
+| public\Admin\scss (Files)                                                                                                      |          2 |      9,752 |         28 |        741 |     10,521 |
+| public\Admin\scss\bootstrap                                                                                                    |         85 |     22,754 |      1,298 |      2,611 |     26,663 |
+| public\Admin\scss\bootstrap\scss                                                                                               |         85 |     22,754 |      1,298 |      2,611 |     26,663 |
+| public\Admin\scss\bootstrap\scss (Files)                                                                                       |         43 |     21,128 |        965 |      2,270 |     24,363 |
+| public\Admin\scss\bootstrap\scss\forms                                                                                         |          9 |        569 |         96 |        114 |        779 |
+| public\Admin\scss\bootstrap\scss\helpers                                                                                       |          7 |         77 |         12 |         19 |        108 |
+| public\Admin\scss\bootstrap\scss\mixins                                                                                        |         24 |        749 |        161 |        142 |      1,052 |
+| public\Admin\scss\bootstrap\scss\utilities                                                                                     |          1 |         29 |         12 |          7 |         48 |
+| public\Admin\scss\bootstrap\scss\vendor                                                                                        |          1 |        202 |         52 |         59 |        313 |
+| public\user                                                                                                                    |        190 |     81,584 |      5,838 |      9,983 |     97,405 |
+| public\user\css                                                                                                                |         17 |     13,243 |      1,205 |      3,077 |     17,525 |
+| public\user\fonts                                                                                                              |          2 |      1,047 |          0 |          0 |      1,047 |
+| public\user\js                                                                                                                 |         32 |      8,839 |      1,876 |      1,483 |     12,198 |
+| public\user\lib                                                                                                                |         19 |      5,061 |      1,068 |        846 |      6,975 |
+| public\user\lib\chart                                                                                                          |          1 |          2 |         11 |          1 |         14 |
+| public\user\lib\easing                                                                                                         |          2 |        154 |          9 |          8 |        171 |
+| public\user\lib\owlcarousel                                                                                                    |          8 |      2,118 |        967 |        489 |      3,574 |
+| public\user\lib\owlcarousel (Files)                                                                                            |          2 |      1,903 |        913 |        467 |      3,283 |
+| public\user\lib\owlcarousel\assets                                                                                             |          6 |        215 |         54 |         22 |        291 |
+| public\user\lib\tempusdominus                                                                                                  |          6 |      2,781 |         75 |        347 |      3,203 |
+| public\user\lib\tempusdominus\css                                                                                              |          2 |        396 |         10 |          8 |        414 |
+| public\user\lib\tempusdominus\js                                                                                               |          4 |      2,385 |         65 |        339 |      2,789 |
+| public\user\lib\waypoints                                                                                                      |          2 |          6 |          6 |          1 |         13 |
+| public\user\sass                                                                                                               |         30 |     12,111 |        351 |      1,222 |     13,684 |
+| public\user\scss                                                                                                               |         87 |     32,506 |      1,326 |      3,352 |     37,184 |
+| public\user\scss (Files)                                                                                                       |          2 |      9,752 |         28 |        741 |     10,521 |
+| public\user\scss\bootstrap                                                                                                     |         85 |     22,754 |      1,298 |      2,611 |     26,663 |
+| public\user\scss\bootstrap\scss                                                                                                |         85 |     22,754 |      1,298 |      2,611 |     26,663 |
+| public\user\scss\bootstrap\scss (Files)                                                                                        |         43 |     21,128 |        965 |      2,270 |     24,363 |
+| public\user\scss\bootstrap\scss\forms                                                                                          |          9 |        569 |         96 |        114 |        779 |
+| public\user\scss\bootstrap\scss\helpers                                                                                        |          7 |         77 |         12 |         19 |        108 |
+| public\user\scss\bootstrap\scss\mixins                                                                                         |         24 |        749 |        161 |        142 |      1,052 |
+| public\user\scss\bootstrap\scss\utilities                                                                                      |          1 |         29 |         12 |          7 |         48 |
+| public\user\scss\bootstrap\scss\vendor                                                                                         |          1 |        202 |         52 |         59 |        313 |
+| public\user\webfonts                                                                                                           |          3 |      8,777 |         12 |          3 |      8,792 |
+| public\validate-password-requirements                                                                                          |          6 |        403 |         60 |         37 |        500 |
+| public\validate-password-requirements (Files)                                                                                  |          3 |        190 |          6 |         16 |        212 |
+| public\validate-password-requirements\css                                                                                      |          1 |         84 |          8 |          0 |         92 |
+| public\validate-password-requirements\js                                                                                       |          2 |        129 |         46 |         21 |        196 |
+| routes                                                                                                                         |          2 |        108 |          0 |         21 |        129 |
+| views                                                                                                                          |         38 |      5,291 |        518 |      1,249 |      7,058 |
+| views (Files)                                                                                                                  |          2 |         18 |          4 |          8 |         30 |
+| views\admin                                                                                                                    |         15 |      2,288 |        269 |        619 |      3,176 |
+| views\partials                                                                                                                 |          7 |        269 |         71 |         32 |        372 |
+| views\user                                                                                                                     |         14 |      2,716 |        174 |        590 |      3,480 |
+| workers                                                                                                                        |          1 |         63 |          0 |         16 |         79 |
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                                                       | language   | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\app.js                                                                      | JavaScript |         69 |          9 |         19 |         97 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\config\config.js                                                            | JavaScript |         11 |          0 |          3 |         14 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\controller\adminController.js                                               | JavaScript |        636 |         39 |         89 |        764 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\controller\adminCouponController.js                                         | JavaScript |        121 |          0 |         22 |        143 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\controller\adminProductController.js                                        | JavaScript |        201 |         34 |         38 |        273 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\controller\cartController.js                                                | JavaScript |        281 |         34 |         64 |        379 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\controller\orderController.js                                               | JavaScript |        393 |         18 |         70 |        481 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\controller\userController.js                                                | JavaScript |        778 |         57 |        135 |        970 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\middleware\auth.js                                                          | JavaScript |         50 |          0 |          2 |         52 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\middleware\userBlock.js                                                     | JavaScript |         17 |          0 |          5 |         22 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\models\admins.js                                                            | JavaScript |         12 |          0 |          7 |         19 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\models\banners.js                                                           | JavaScript |         15 |          0 |          5 |         20 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\models\brand.js                                                             | JavaScript |         16 |          0 |          5 |         21 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\models\cart.js                                                              | JavaScript |         43 |          0 |          3 |         46 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\models\checkout.js                                                          | JavaScript |         76 |          0 |          6 |         82 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\models\coupons.js                                                           | JavaScript |         41 |          0 |          7 |         48 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\models\products.js                                                          | JavaScript |         41 |          0 |          8 |         49 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\models\users.js                                                             | JavaScript |         95 |          0 |          9 |        104 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\package-lock.json                                                           | JSON       |      5,666 |          0 |          1 |      5,667 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\package.json                                                                | JSON       |         32 |          0 |          1 |         33 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\cropper\cropper.min.css                                        | CSS        |          1 |          8 |          0 |          9 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\cropper\cropper.min.js                                         | JavaScript |          1 |          9 |          0 |         10 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\css\bootstrap.min.css                                          | CSS        |          1 |          5 |          1 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\css\style.css                                                  | CSS        |        221 |          8 |         48 |        277 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\js\main.js                                                     | JavaScript |         26 |        146 |         41 |        213 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\chart\chart.min.js                                         | JavaScript |          2 |         11 |          1 |         14 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\easing\easing.js                                           | JavaScript |        153 |          9 |          7 |        169 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\easing\easing.min.js                                       | JavaScript |          1 |          0 |          1 |          2 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\owlcarousel\assets\owl.carousel.css                        | CSS        |        132 |         23 |         16 |        171 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\owlcarousel\assets\owl.carousel.min.css                    | CSS        |          1 |          5 |          0 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\owlcarousel\assets\owl.theme.default.css                   | CSS        |         40 |          8 |          3 |         51 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\owlcarousel\assets\owl.theme.default.min.css               | CSS        |          1 |          5 |          0 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\owlcarousel\assets\owl.theme.green.css                     | CSS        |         40 |          8 |          3 |         51 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\owlcarousel\assets\owl.theme.green.min.css                 | CSS        |          1 |          5 |          0 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\owlcarousel\owl.carousel.js                                | JavaScript |      1,901 |        908 |        467 |      3,276 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\owlcarousel\owl.carousel.min.js                            | JavaScript |          2 |          5 |          0 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\tempusdominus\css\tempusdominus-bootstrap-4.css            | CSS        |        198 |          5 |          4 |        207 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\tempusdominus\css\tempusdominus-bootstrap-4.min.css        | CSS        |        198 |          5 |          4 |        207 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\tempusdominus\js\moment-timezone.min.js                    | JavaScript |          1 |          0 |          0 |          1 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\tempusdominus\js\moment.min.js                             | JavaScript |          1 |          0 |          0 |          1 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\tempusdominus\js\tempusdominus-bootstrap-4.js              | JavaScript |      2,381 |         60 |        339 |      2,780 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\tempusdominus\js\tempusdominus-bootstrap-4.min.js          | JavaScript |          2 |          5 |          0 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\waypoints\links.php                                        | PHP        |          5 |          0 |          1 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\lib\waypoints\waypoints.min.js                                 | JavaScript |          1 |          6 |          0 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap.css                                             | CSS        |      9,739 |         27 |        730 |     10,496 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap.scss                                            | SCSS       |         13 |          1 |         11 |         25 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_accordion.scss                            | SCSS       |         89 |          8 |         22 |        119 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_alert.scss                                | SCSS       |         34 |         13 |         11 |         58 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_badge.scss                                | SCSS       |         20 |          6 |          4 |         30 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_breadcrumb.scss                           | SCSS       |         24 |          1 |          4 |         29 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_button-group.scss                         | SCSS       |         90 |         23 |         27 |        140 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_buttons.scss                              | SCSS       |         74 |         16 |         22 |        112 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_card.scss                                 | SCSS       |        153 |         27 |         36 |        216 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_carousel.scss                             | SCSS       |        158 |         41 |         31 |        230 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_close.scss                                | SCSS       |         30 |          5 |          6 |         41 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_containers.scss                           | SCSS       |         27 |          8 |          7 |         42 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_dropdown.scss                             | SCSS       |        186 |         19 |         36 |        241 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_forms.scss                                | SCSS       |          9 |          0 |          1 |         10 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_functions.scss                            | SCSS       |        133 |         38 |         35 |        206 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_grid.scss                                 | SCSS       |         11 |          6 |          6 |         23 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_helpers.scss                              | SCSS       |          7 |          0 |          1 |          8 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_images.scss                               | SCSS       |         22 |         13 |          8 |         43 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_list-group.scss                           | SCSS       |        111 |         27 |         37 |        175 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_mixins.scss                               | SCSS       |         25 |         10 |          8 |         43 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_modal.scss                                | SCSS       |        160 |         35 |         34 |        229 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_nav.scss                                  | SCSS       |         96 |         20 |         24 |        140 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_navbar.scss                               | SCSS       |        204 |         47 |         56 |        307 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_offcanvas.scss                            | SCSS       |         68 |          0 |         10 |         78 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_pagination.scss                           | SCSS       |         51 |          3 |         11 |         65 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_popover.scss                              | SCSS       |        134 |          5 |         20 |        159 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_progress.scss                             | SCSS       |         39 |          3 |          7 |         49 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_reboot.scss                               | SCSS       |        334 |        146 |        142 |        622 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_root.scss                                 | SCSS       |         11 |          3 |          3 |         17 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_spinners.scss                             | SCSS       |         49 |         12 |          9 |         70 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_tables.scss                               | SCSS       |         78 |         43 |         30 |        151 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_toasts.scss                               | SCSS       |         44 |          0 |          8 |         52 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_tooltip.scss                              | SCSS       |         93 |          5 |         18 |        116 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_transitions.scss                          | SCSS       |         16 |          2 |          4 |         22 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_type.scss                                 | SCSS       |         67 |         16 |         22 |        105 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_utilities.scss                            | SCSS       |        551 |         41 |          3 |        595 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\_variables.scss                            | SCSS       |        955 |        231 |        279 |      1,465 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\bootstrap-grid.css                         | CSS        |      3,855 |          6 |        190 |      4,051 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\bootstrap-grid.scss                        | SCSS       |         50 |          8 |          8 |         66 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\bootstrap-reboot.css                       | CSS        |        346 |         15 |         63 |        424 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\bootstrap-reboot.scss                      | SCSS       |          6 |          8 |          2 |         16 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\bootstrap-utilities.css                    | CSS        |      3,627 |          8 |        321 |      3,956 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\bootstrap-utilities.scss                   | SCSS       |          6 |          9 |          4 |         19 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\bootstrap.css                              | CSS        |      9,049 |         26 |        695 |      9,770 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\bootstrap.scss                             | SCSS       |         36 |         12 |          5 |         53 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\forms\_floating-labels.scss                | SCSS       |         51 |          4 |          7 |         62 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\forms\_form-check.scss                     | SCSS       |        119 |          9 |         25 |        153 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\forms\_form-control.scss                   | SCSS       |        156 |         33 |         31 |        220 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\forms\_form-range.scss                     | SCSS       |         71 |          7 |         14 |         92 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\forms\_form-select.scss                    | SCSS       |         54 |          6 |          8 |         68 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\forms\_form-text.scss                      | SCSS       |          7 |          3 |          2 |         12 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\forms\_input-group.scss                    | SCSS       |         81 |         21 |         20 |        122 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\forms\_labels.scss                         | SCSS       |         27 |          5 |          5 |         37 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\forms\_validation.scss                     | SCSS       |          3 |          8 |          2 |         13 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\helpers\_clearfix.scss                     | SCSS       |          3 |          0 |          1 |          4 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\helpers\_colored-links.scss                | SCSS       |         11 |          0 |          2 |         13 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\helpers\_position.scss                     | SCSS       |         24 |          2 |          5 |         31 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\helpers\_ratio.scss                        | SCSS       |         21 |          1 |          5 |         27 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\helpers\_stretched-link.scss               | SCSS       |         11 |          3 |          2 |         16 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\helpers\_text-truncation.scss              | SCSS       |          3 |          3 |          2 |          8 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\helpers\_visually-hidden.scss              | SCSS       |          4 |          3 |          2 |          9 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_alert.scss                         | SCSS       |          8 |          2 |          2 |         12 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_border-radius.scss                 | SCSS       |         63 |          5 |         11 |         79 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_box-shadow.scss                    | SCSS       |         16 |          0 |          3 |         19 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_breakpoints.scss                   | SCSS       |         73 |         44 |         11 |        128 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_buttons.scss                       | SCSS       |        104 |         16 |         14 |        134 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_caret.scss                         | SCSS       |         55 |          2 |          8 |         65 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_clearfix.scss                      | SCSS       |          7 |          2 |          1 |         10 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_color-scheme.scss                  | SCSS       |          5 |          2 |          1 |          8 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_container.scss                     | SCSS       |          7 |          1 |          2 |         10 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_deprecate.scss                     | SCSS       |          5 |          5 |          1 |         11 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_forms.scss                         | SCSS       |        116 |          5 |         17 |        138 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_gradients.scss                     | SCSS       |         27 |         11 |         10 |         48 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_grid.scss                          | SCSS       |         88 |         21 |         17 |        126 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_image.scss                         | SCSS       |          4 |          9 |          4 |         17 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_list-group.scss                    | SCSS       |         18 |          3 |          4 |         25 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_lists.scss                         | SCSS       |          4 |          2 |          2 |          8 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_pagination.scss                    | SCSS       |         24 |          4 |          4 |         32 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_reset-text.scss                    | SCSS       |         16 |          1 |          1 |         18 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_resize.scss                        | SCSS       |          4 |          1 |          2 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_table-variants.scss                | SCSS       |         17 |          2 |          3 |         22 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_text-truncate.scss                 | SCSS       |          5 |          2 |          2 |          9 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_transition.scss                    | SCSS       |         22 |          1 |          4 |         27 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_utilities.scss                     | SCSS       |         45 |         11 |         13 |         69 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\mixins\_visually-hidden.scss               | SCSS       |         16 |          9 |          5 |         30 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\utilities\_api.scss                        | SCSS       |         29 |         12 |          7 |         48 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\Admin\scss\bootstrap\scss\vendor\_rfs.scss                           | SCSS       |        202 |         52 |         59 |        313 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\all.css                                                     | CSS        |      2,918 |          6 |      1,406 |      4,330 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\animate.css                                                 | CSS        |      3,055 |         11 |        558 |      3,624 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\aos.css                                                     | CSS        |          1 |          0 |          0 |          1 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\bootstrap.min.css                                           | CSS        |          1 |          6 |          0 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\flaticon.css                                                | CSS        |         24 |          4 |          4 |         32 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\font-awesome.min.css                                        | CSS        |          1 |          3 |          1 |          5 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\lightslider.min.css                                         | CSS        |          1 |          2 |          0 |          3 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\magnific-popup.css                                          | CSS        |          1 |          0 |          0 |          1 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\nice-select.css                                             | CSS        |        136 |          0 |          3 |        139 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\owl.carousel.min.css                                        | CSS        |          1 |          5 |          0 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\price_rangs.css                                             | CSS        |        224 |         13 |         30 |        267 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\slick-theme.min.css                                         | CSS        |          1 |          0 |          0 |          1 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\slick.css                                                   | CSS        |        100 |          1 |         15 |        116 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\slick.min.css                                               | CSS        |        100 |          1 |         15 |        116 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\style.css                                                   | CSS        |      5,601 |      1,138 |      1,041 |      7,780 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\swiper.min.css                                              | CSS        |          1 |         14 |          0 |         15 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\css\themify-icons.css                                           | CSS        |      1,077 |          1 |          4 |      1,082 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\fonts\fontawesome-webfont.svg                                   | XML        |        685 |          0 |          0 |        685 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\fonts\themify.svg                                               | XML        |        362 |          0 |          0 |        362 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\aos.js                                                       | JavaScript |          1 |          0 |          0 |          1 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\bootstrap.min.js                                             | JavaScript |          1 |          6 |          0 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\cartscript.js                                                | JavaScript |        170 |         23 |         33 |        226 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\contact.js                                                   | JavaScript |         79 |          1 |          5 |         85 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\custom.js                                                    | JavaScript |        209 |         96 |         55 |        360 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\gmaps.min.js                                                 | JavaScript |          1 |          1 |          0 |          2 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery-1.12.1.min.js                                         | JavaScript |          4 |          1 |          1 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery-3.3.1.slim.min.js                                     | JavaScript |          1 |          1 |          1 |          3 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery.ajaxchimp.min.js                                      | JavaScript |        106 |          2 |         12 |        120 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery.counterup.min.js                                      | JavaScript |         43 |         10 |          3 |         56 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery.downCount.js                                          | JavaScript |         56 |         26 |         22 |        104 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery.easing.min.js                                         | JavaScript |          1 |         43 |          0 |         44 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery.form.js                                               | JavaScript |        822 |        238 |        115 |      1,175 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery.magnific-popup.js                                     | JavaScript |          1 |          3 |          0 |          4 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery.nice-select.min.js                                    | JavaScript |          1 |          3 |          0 |          4 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\jquery.validate.min.js                                       | JavaScript |          1 |          1 |          0 |          2 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\lightslider.min.js                                           | JavaScript |          1 |          3 |          0 |          4 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\mail-script.js                                               | JavaScript |         26 |          2 |          3 |         31 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\main.js                                                      | JavaScript |        168 |         12 |         28 |        208 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\masonry.pkgd.js                                              | JavaScript |      1,514 |        605 |        386 |      2,505 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\masonry.pkgd.min.js                                          | JavaScript |          1 |          7 |          1 |          9 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\owl.carousel.min.js                                          | JavaScript |          2 |          5 |          0 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\particles.min.js                                             | JavaScript |          1 |          8 |          0 |          9 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\popper.min.js                                                | JavaScript |          1 |          4 |          1 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\price_rangs.js                                               | JavaScript |      1,735 |        208 |        500 |      2,443 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\slick.min.js                                                 | JavaScript |          2 |         16 |          1 |         19 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\stellar.js                                                   | JavaScript |          2 |         13 |          3 |         18 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\swiper.jquery.js                                             | JavaScript |      3,864 |        516 |        309 |      4,689 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\swiper.min.js                                                | JavaScript |          1 |         12 |          1 |         14 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\swiper_custom.js                                             | JavaScript |         20 |          3 |          1 |         24 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\theme.js                                                     | JavaScript |          3 |          0 |          2 |          5 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\js\waypoints.min.js                                             | JavaScript |          1 |          7 |          0 |          8 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\chart\chart.min.js                                          | JavaScript |          2 |         11 |          1 |         14 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\easing\easing.js                                            | JavaScript |        153 |          9 |          7 |        169 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\easing\easing.min.js                                        | JavaScript |          1 |          0 |          1 |          2 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\owlcarousel\assets\owl.carousel.css                         | CSS        |        132 |         23 |         16 |        171 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\owlcarousel\assets\owl.carousel.min.css                     | CSS        |          1 |          5 |          0 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\owlcarousel\assets\owl.theme.default.css                    | CSS        |         40 |          8 |          3 |         51 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\owlcarousel\assets\owl.theme.default.min.css                | CSS        |          1 |          5 |          0 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\owlcarousel\assets\owl.theme.green.css                      | CSS        |         40 |          8 |          3 |         51 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\owlcarousel\assets\owl.theme.green.min.css                  | CSS        |          1 |          5 |          0 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\owlcarousel\owl.carousel.js                                 | JavaScript |      1,901 |        908 |        467 |      3,276 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\owlcarousel\owl.carousel.min.js                             | JavaScript |          2 |          5 |          0 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\tempusdominus\css\tempusdominus-bootstrap-4.css             | CSS        |        198 |          5 |          4 |        207 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\tempusdominus\css\tempusdominus-bootstrap-4.min.css         | CSS        |        198 |          5 |          4 |        207 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\tempusdominus\js\moment-timezone.min.js                     | JavaScript |          1 |          0 |          0 |          1 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\tempusdominus\js\moment.min.js                              | JavaScript |          1 |          0 |          0 |          1 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\tempusdominus\js\tempusdominus-bootstrap-4.js               | JavaScript |      2,381 |         60 |        339 |      2,780 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\tempusdominus\js\tempusdominus-bootstrap-4.min.js           | JavaScript |          2 |          5 |          0 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\waypoints\links.php                                         | PHP        |          5 |          0 |          1 |          6 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\lib\waypoints\waypoints.min.js                                  | JavaScript |          1 |          6 |          0 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_about_us.scss                                             | SCSS       |        113 |          1 |         20 |        134 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_banner.scss                                               | SCSS       |        138 |          2 |          3 |        143 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_best_seller.scss                                          | SCSS       |         48 |          1 |          2 |         51 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_blog.scss                                                 | SCSS       |      1,033 |        187 |        279 |      1,499 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_blog_part.scss                                            | SCSS       |        159 |          1 |          8 |        168 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_breadcrumb.scss                                           | SCSS       |         47 |          0 |         12 |         59 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_button.scss                                               | SCSS       |        148 |          8 |         18 |        174 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_client_logo.scss                                          | SCSS       |         51 |          1 |          7 |         59 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_common.scss                                               | SCSS       |        255 |          2 |         68 |        325 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_confirmation_part.scss                                    | SCSS       |         70 |          1 |          2 |         73 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_contact.scss                                              | SCSS       |        162 |          9 |         20 |        191 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_copyright_part.scss                                       | SCSS       |         64 |          1 |          4 |         69 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_cource_details.scss                                       | SCSS       |        204 |          0 |          9 |        213 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_cta_part.scss                                             | SCSS       |         55 |          1 |          2 |         58 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_elements.scss                                             | SCSS       |      1,054 |          1 |         46 |      1,101 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_extends.scss                                              | SCSS       |         31 |          2 |          6 |         39 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_feature_part.scss                                         | SCSS       |         91 |          1 |         18 |        110 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_footer.scss                                               | SCSS       |        187 |          1 |         48 |        236 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_menu.scss                                                 | SCSS       |        267 |          1 |         52 |        320 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_mixins.scss                                               | SCSS       |         73 |          1 |          3 |         77 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_our_offer.scss                                            | SCSS       |         70 |          1 |          5 |         76 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_product.scss                                              | SCSS       |      1,725 |         35 |        300 |      2,060 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_product_list.scss                                         | SCSS       |        100 |          1 |         13 |        114 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_review.scss                                               | SCSS       |         89 |          2 |         28 |        119 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_single_blog.scss                                          | SCSS       |         50 |          0 |          4 |         54 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_special_cource.scss                                       | SCSS       |        127 |          1 |         37 |        165 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_subscribe_area.scss                                       | SCSS       |         70 |          1 |          7 |         78 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\_variables.scss                                            | SCSS       |         50 |          1 |          8 |         59 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\style.css                                                  | CSS        |      5,558 |         81 |        171 |      5,810 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\sass\style.scss                                                 | SCSS       |         22 |          6 |         22 |         50 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap.css                                              | CSS        |      9,739 |         27 |        730 |     10,496 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap.scss                                             | SCSS       |         13 |          1 |         11 |         25 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_accordion.scss                             | SCSS       |         89 |          8 |         22 |        119 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_alert.scss                                 | SCSS       |         34 |         13 |         11 |         58 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_badge.scss                                 | SCSS       |         20 |          6 |          4 |         30 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_breadcrumb.scss                            | SCSS       |         24 |          1 |          4 |         29 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_button-group.scss                          | SCSS       |         90 |         23 |         27 |        140 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_buttons.scss                               | SCSS       |         74 |         16 |         22 |        112 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_card.scss                                  | SCSS       |        153 |         27 |         36 |        216 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_carousel.scss                              | SCSS       |        158 |         41 |         31 |        230 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_close.scss                                 | SCSS       |         30 |          5 |          6 |         41 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_containers.scss                            | SCSS       |         27 |          8 |          7 |         42 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_dropdown.scss                              | SCSS       |        186 |         19 |         36 |        241 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_forms.scss                                 | SCSS       |          9 |          0 |          1 |         10 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_functions.scss                             | SCSS       |        133 |         38 |         35 |        206 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_grid.scss                                  | SCSS       |         11 |          6 |          6 |         23 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_helpers.scss                               | SCSS       |          7 |          0 |          1 |          8 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_images.scss                                | SCSS       |         22 |         13 |          8 |         43 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_list-group.scss                            | SCSS       |        111 |         27 |         37 |        175 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_mixins.scss                                | SCSS       |         25 |         10 |          8 |         43 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_modal.scss                                 | SCSS       |        160 |         35 |         34 |        229 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_nav.scss                                   | SCSS       |         96 |         20 |         24 |        140 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_navbar.scss                                | SCSS       |        204 |         47 |         56 |        307 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_offcanvas.scss                             | SCSS       |         68 |          0 |         10 |         78 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_pagination.scss                            | SCSS       |         51 |          3 |         11 |         65 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_popover.scss                               | SCSS       |        134 |          5 |         20 |        159 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_progress.scss                              | SCSS       |         39 |          3 |          7 |         49 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_reboot.scss                                | SCSS       |        334 |        146 |        142 |        622 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_root.scss                                  | SCSS       |         11 |          3 |          3 |         17 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_spinners.scss                              | SCSS       |         49 |         12 |          9 |         70 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_tables.scss                                | SCSS       |         78 |         43 |         30 |        151 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_toasts.scss                                | SCSS       |         44 |          0 |          8 |         52 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_tooltip.scss                               | SCSS       |         93 |          5 |         18 |        116 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_transitions.scss                           | SCSS       |         16 |          2 |          4 |         22 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_type.scss                                  | SCSS       |         67 |         16 |         22 |        105 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_utilities.scss                             | SCSS       |        551 |         41 |          3 |        595 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\_variables.scss                             | SCSS       |        955 |        231 |        279 |      1,465 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\bootstrap-grid.css                          | CSS        |      3,855 |          6 |        190 |      4,051 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\bootstrap-grid.scss                         | SCSS       |         50 |          8 |          8 |         66 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\bootstrap-reboot.css                        | CSS        |        346 |         15 |         63 |        424 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\bootstrap-reboot.scss                       | SCSS       |          6 |          8 |          2 |         16 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\bootstrap-utilities.css                     | CSS        |      3,627 |          8 |        321 |      3,956 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\bootstrap-utilities.scss                    | SCSS       |          6 |          9 |          4 |         19 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\bootstrap.css                               | CSS        |      9,049 |         26 |        695 |      9,770 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\bootstrap.scss                              | SCSS       |         36 |         12 |          5 |         53 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\forms\_floating-labels.scss                 | SCSS       |         51 |          4 |          7 |         62 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\forms\_form-check.scss                      | SCSS       |        119 |          9 |         25 |        153 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\forms\_form-control.scss                    | SCSS       |        156 |         33 |         31 |        220 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\forms\_form-range.scss                      | SCSS       |         71 |          7 |         14 |         92 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\forms\_form-select.scss                     | SCSS       |         54 |          6 |          8 |         68 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\forms\_form-text.scss                       | SCSS       |          7 |          3 |          2 |         12 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\forms\_input-group.scss                     | SCSS       |         81 |         21 |         20 |        122 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\forms\_labels.scss                          | SCSS       |         27 |          5 |          5 |         37 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\forms\_validation.scss                      | SCSS       |          3 |          8 |          2 |         13 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\helpers\_clearfix.scss                      | SCSS       |          3 |          0 |          1 |          4 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\helpers\_colored-links.scss                 | SCSS       |         11 |          0 |          2 |         13 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\helpers\_position.scss                      | SCSS       |         24 |          2 |          5 |         31 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\helpers\_ratio.scss                         | SCSS       |         21 |          1 |          5 |         27 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\helpers\_stretched-link.scss                | SCSS       |         11 |          3 |          2 |         16 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\helpers\_text-truncation.scss               | SCSS       |          3 |          3 |          2 |          8 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\helpers\_visually-hidden.scss               | SCSS       |          4 |          3 |          2 |          9 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_alert.scss                          | SCSS       |          8 |          2 |          2 |         12 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_border-radius.scss                  | SCSS       |         63 |          5 |         11 |         79 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_box-shadow.scss                     | SCSS       |         16 |          0 |          3 |         19 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_breakpoints.scss                    | SCSS       |         73 |         44 |         11 |        128 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_buttons.scss                        | SCSS       |        104 |         16 |         14 |        134 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_caret.scss                          | SCSS       |         55 |          2 |          8 |         65 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_clearfix.scss                       | SCSS       |          7 |          2 |          1 |         10 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_color-scheme.scss                   | SCSS       |          5 |          2 |          1 |          8 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_container.scss                      | SCSS       |          7 |          1 |          2 |         10 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_deprecate.scss                      | SCSS       |          5 |          5 |          1 |         11 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_forms.scss                          | SCSS       |        116 |          5 |         17 |        138 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_gradients.scss                      | SCSS       |         27 |         11 |         10 |         48 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_grid.scss                           | SCSS       |         88 |         21 |         17 |        126 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_image.scss                          | SCSS       |          4 |          9 |          4 |         17 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_list-group.scss                     | SCSS       |         18 |          3 |          4 |         25 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_lists.scss                          | SCSS       |          4 |          2 |          2 |          8 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_pagination.scss                     | SCSS       |         24 |          4 |          4 |         32 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_reset-text.scss                     | SCSS       |         16 |          1 |          1 |         18 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_resize.scss                         | SCSS       |          4 |          1 |          2 |          7 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_table-variants.scss                 | SCSS       |         17 |          2 |          3 |         22 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_text-truncate.scss                  | SCSS       |          5 |          2 |          2 |          9 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_transition.scss                     | SCSS       |         22 |          1 |          4 |         27 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_utilities.scss                      | SCSS       |         45 |         11 |         13 |         69 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\mixins\_visually-hidden.scss                | SCSS       |         16 |          9 |          5 |         30 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\utilities\_api.scss                         | SCSS       |         29 |         12 |          7 |         48 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\scss\bootstrap\scss\vendor\_rfs.scss                            | SCSS       |        202 |         52 |         59 |        313 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\webfonts\fa-brands-400.svg                                      | XML        |      3,455 |          4 |          1 |      3,460 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\webfonts\fa-regular-400.svg                                     | XML        |        799 |          4 |          1 |        804 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\user\webfonts\fa-solid-900.svg                                       | XML        |      4,523 |          4 |          1 |      4,528 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\validate-password-requirements\README.md                             | Markdown   |         86 |          0 |         10 |         96 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\validate-password-requirements\css\jquery.passwordRequirements.css   | CSS        |         84 |          8 |          0 |         92 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\validate-password-requirements\demo.html                             | HTML       |         70 |          6 |          6 |         82 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\validate-password-requirements\js\jquery.passwordRequirements.js     | JavaScript |        128 |         38 |         20 |        186 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\validate-password-requirements\js\jquery.passwordRequirements.min.js | JavaScript |          1 |          8 |          1 |         10 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\public\validate-password-requirements\passwordRequirements.jquery.json      | JSON       |         34 |          0 |          0 |         34 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\routes\admin.js                                                             | JavaScript |         56 |          0 |         10 |         66 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\routes\user.js                                                              | JavaScript |         52 |          0 |         11 |         63 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\500.ejs                                                               | HTML       |          9 |          2 |          4 |         15 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\404.ejs                                                         | HTML       |         34 |         15 |         18 |         67 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\500.ejs                                                         | HTML       |         33 |         15 |         19 |         67 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\addAdmin.ejs                                                    | HTML       |         98 |         17 |         44 |        159 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\addproducts.ejs                                                 | HTML       |        219 |         33 |         59 |        311 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\brand.ejs                                                       | HTML       |        150 |         15 |         32 |        197 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\coupons.ejs                                                     | HTML       |        234 |         16 |         54 |        304 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\editeCoupon.ejs                                                 | HTML       |         60 |         12 |         27 |         99 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\editproduct.ejs                                                 | HTML       |        225 |         33 |         44 |        302 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\index.ejs                                                       | HTML       |        335 |         25 |         96 |        456 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\manageproducts.ejs                                              | HTML       |        146 |         16 |         51 |        213 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\ordermanagement.ejs                                             | HTML       |        171 |         16 |         44 |        231 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\settings.ejs                                                    | HTML       |        244 |         12 |         48 |        304 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\signin.ejs                                                      | HTML       |         90 |         12 |         19 |        121 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\usermanag.ejs                                                   | HTML       |        164 |         18 |         29 |        211 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\admin\viewmore.ejs                                                    | HTML       |         85 |         14 |         35 |        134 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\error.ejs                                                             | HTML       |          9 |          2 |          4 |         15 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\partials\adminHead.ejs                                                | HTML       |         19 |          6 |          7 |         32 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\partials\adminnavbar.ejs                                              | HTML       |         48 |         35 |          1 |         84 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\partials\adminsidebar.ejs                                             | HTML       |         27 |          0 |          1 |         28 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\partials\adminspinner.ejs                                             | HTML       |          0 |          5 |          0 |          5 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\partials\footer.ejs                                                   | HTML       |        109 |          1 |          3 |        113 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\partials\head.ejs                                                     | HTML       |         21 |         11 |          3 |         35 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\partials\navbar.ejs                                                   | HTML       |         45 |         13 |         17 |         75 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\account.ejs                                                      | HTML       |        231 |         14 |         57 |        302 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\cart.ejs                                                         | HTML       |        149 |         18 |         39 |        206 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\changepassword.ejs                                               | HTML       |         66 |          0 |         11 |         77 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\checkout.ejs                                                     | HTML       |        496 |          6 |        100 |        602 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\confirmation.ejs                                                 | HTML       |        101 |          1 |         19 |        121 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\edituser.ejs                                                     | HTML       |         38 |          1 |         17 |         56 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\home.ejs                                                         | HTML       |        256 |         24 |         49 |        329 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\login.ejs                                                        | HTML       |        202 |         36 |         36 |        274 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\products.ejs                                                     | HTML       |        295 |         21 |         45 |        361 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\signup.ejs                                                       | HTML       |        174 |         18 |         62 |        254 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\userorders.ejs                                                   | HTML       |        465 |          3 |         83 |        551 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\viewDetails.ejs                                                  | HTML       |         69 |          1 |         18 |         88 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\viewproduct.ejs                                                  | HTML       |        104 |         22 |         32 |        158 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\views\user\wallet.ejs                                                       | HTML       |         70 |          9 |         22 |        101 |
+| c:\Users\mamme\OneDrive\Desktop\ECOMMERCE_ PROJECT\workers\child.js                                                            | JavaScript |         63 |          0 |         16 |         79 |
+| Total                                                                                                                          |            |    133,860 |      9,177 |     16,093 |    159,130 |
++--------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+

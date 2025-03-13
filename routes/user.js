@@ -12,7 +12,7 @@ userRouter.use(bodyParser.json());
 userRouter.use(bodyParser.urlencoded({extended:true}));
 
 const userController = require('../controller/userController'); 
-const cartController = require('../controller/cartController')
+const cartController = require('../controller/cartController')   
 const orderController = require('../controller/orderController')
 
 

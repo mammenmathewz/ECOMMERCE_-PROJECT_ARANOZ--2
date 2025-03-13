@@ -107,7 +107,7 @@ function aggregateDailySales() {
     },
     {
       $group: {
-        _id: { $hour: { date: "$date", timezone: "Asia/Kolkata" } }, // replace with your local time zone
+        _id: { $hour: { date: "$date", timezone: "Asia/Kolkata" } }, 
         totalSales: { $sum: "$total" },
       },
     },

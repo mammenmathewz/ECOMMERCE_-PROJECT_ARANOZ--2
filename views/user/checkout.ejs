@@ -442,7 +442,6 @@ document.getElementById('addMoneyButton').addEventListener('click', function(eve
 
 
       function handleCashOnDelivery(selectedAddress) {
-        // Send a POST request to the server to confirm the order
         $.ajax({
           url: "/confirmOrder",
           method: "POST",
@@ -452,7 +451,6 @@ document.getElementById('addMoneyButton').addEventListener('click', function(eve
             selectedAddress: selectedAddress,
           }),
           success: function (response) {
-            // Redirect the user to the confirmation page
             window.location.href = response.redirectUrl;
           },
         });
@@ -467,7 +465,7 @@ document.getElementById('addMoneyButton').addEventListener('click', function(eve
             selectedAddress: selectedAddress,
           }),
           success: function (response) {
-            // Redirect the user to the appropriate page
+           
             window.location.href = response.redirectUrl;
           },
         });

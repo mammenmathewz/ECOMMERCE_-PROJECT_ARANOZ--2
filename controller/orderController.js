@@ -192,7 +192,6 @@ const walletPayment = async (req, res, next) => {
 
     const user = await User.findById(userId).populate("address");
     if (user.block) {
-      // Redirect if user not found or user is blocked
       req.flash("info", "Please contact us");
       req.flash("type", "alert alert-danger");
       req.session.user = null;
@@ -325,7 +324,7 @@ const generateOrderid = async (req, res, next) => {
 
 const verify = async (req, res, next) => {
   try {
-    const secret = instance.key_secret; // Replace with your Razorpay secret key
+    const secret = instance.key_secret; 
     const userId = req.session.user;
     const user = await User.findById(userId);
 

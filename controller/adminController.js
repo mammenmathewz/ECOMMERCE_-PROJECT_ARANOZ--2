@@ -22,10 +22,10 @@ const getAdminLogin = async (req, res, next) => {
 const postAdminLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
+    
     // Find user by email
     const admin = await Admin.findOne({ email });
-
+    
     if (!admin) {
       req.flash("info", "User does not exist");
       req.flash("type", "alert alert-danger");
